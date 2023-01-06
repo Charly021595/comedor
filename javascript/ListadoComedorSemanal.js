@@ -177,6 +177,7 @@ function BuscarEmpleadoLogeado(){
 }
 
 $("#txtNumEmpleadoLogeado").on('change',function(e){
+	$("#DivComentarioglobal").hide();
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
 	$("#txtFechaPedido").val(fechaActual2);
@@ -190,7 +191,7 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
             },
             url: "../../utileria.php",
             dataType: 'JSON',
-             success: function(data) {
+            success: function(data) {
 				if(data.length != 0){
 					for(i=0;i<data.length;i++){
 						
@@ -204,6 +205,9 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
 					$("#txtTotalPlatillo").val(1);
 					$("#txtComentarioPlatillo").val("");
 					TipoPlatillo();
+					if (empleado == 20000) {
+						$("#DivComentarioglobal").show();
+					}
 				}else{
 					Swal.fire( 
 						'El número de empleado proporcionado no coincide con nuestros registros.',
@@ -214,7 +218,6 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
 					$("#txtNombreEmpleadoLogeado").val("");
 					$("#txtNumEmpleadoLogeado").val("");
 				}
-				
 			}
 		});
 	
@@ -428,7 +431,7 @@ function MostrarInforme(){
 					}
 					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-					// tablacontenido +="<td data-label= 'Comentarios' style='display:none;'>"+datos[i].Comentarios+"</td>"
+					tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
 					switch (datos[i]['Ubicacion']) {
 						case 1:
 							tablacontenido +="<td data-label= 'Ubicación'>Torre TOP</td>"
@@ -904,7 +907,8 @@ function GuardarOrden(){
 	CantidadArreglo = 0;
 	let Total = $("#txtTotalPlatillo").val();
 	let Precio= $("#txtPrecioPlatillo").val();
-	let Tipo_Empleado= $("#tipo_empleado").val();
+	let Tipo_Empleado= $("#tipo_empleado").val(),
+	comentario_global= $("#txtComentarioGlobalPlatillo").val();
 	$("#GuardarOrden").prop("disabled", true);
 	//
 	let arrayListadoGreenSpot = {};
@@ -970,9 +974,12 @@ function GuardarOrden(){
 		ValidarPlatillos();
         return false;
     }
+	if (comentario_global == '' && NoEmpleadoLogeado == 20000) {
+        Swal.fire('Comentario no puede ir vació', "","info");
+		$("#GuardarOrden").prop("disabled", false);
+        return false;
+    }
 	if((NoEmpleadoLogeado !="" && NombreEmpleado !="" && TipoPlatillo !="0" && TipoPlatillo !="4" && Ubicacion !="0" && Total != "0.00" && Tipo_Empleado != "0")||(CantidadArreglo > 0)){
-	
-	//alert("Entra a guardado");
 		$.ajax({
 			type: "POST",
 			data: {
@@ -985,7 +992,8 @@ function GuardarOrden(){
 				FechaDeOrden: FechaDeOrden,
 				arrayListadoGreenSpot : JSON.stringify(arrayListadoGreenSpot),
 				arrayListadoPlatilloUnico : JSON.stringify(arrayListadoPlatilloUnico),
-				pedidoporcomedor:1
+				pedidoporcomedor:1,
+				comentario_global:comentario_global
 			},
 			url: "../../utileria.php", 
 			success: function(result) {
@@ -993,7 +1001,9 @@ function GuardarOrden(){
 				if (data.estatus === "success") {
 					Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
 					.then(function(){
-						location.reload();
+						$("#txtComentarioGlobalPlatillo").val("");
+						CargarPedido();
+						MostrarInforme();
 					});
 				}else if(data.estatus === "pedido_duplicado"){
 					Swal.fire('Solo se puede realizar un pedido al día.', "","info");
@@ -1005,7 +1015,6 @@ function GuardarOrden(){
 				}
 			}
 		});
-	
 	}else{
 		Swal.fire( 
 			"Favor de llenar la información",
@@ -1018,6 +1027,7 @@ function GuardarOrden(){
 }
 
 function CargarPedido(){
+	$("#DivComentarioglobal").hide();
 	$("#txtNumEmpleadoLogeado").val("");
 	$("#txtNombreEmpleadoLogeado").val("");
 	$("#txtTipoPlatillo").val("0");

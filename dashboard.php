@@ -157,6 +157,16 @@
 			</a>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999'){ ?>
+		<li>
+			<a href="GraficasComedor.php">
+			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
+			<span class="pull-right-container">
+			
+			</span>
+			</a>
+		</li>
+		<?php } ?>
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -227,7 +237,19 @@
 									
 								</select>
 							</div>
-						 </div>
+						</div>
+						<div class="form-group row" id="DivComentario" style="display:none;">
+						<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
+							<div class="col-sm-8">
+								<textarea id="txtComentarioGlobalPlatillo" class="form-control" rows="5" cols="200" maxlength="250" placeholder="Descripción pedido"></textarea>
+							</div>
+						</div>
+						<div class="col-md-12 col-xs-12 " id="divIDVisita" style="display:none;">
+							<label for="lblNombreVisita" class="col-sm-12 col-form-label">Comentarios:</label>
+							<div class="col-sm-12">
+								<textarea id="txtComentariosGR" class="form-control" rows="5" cols="200" maxlength="250"></textarea>
+							</div>
+						</div>
 						  <div class="form-group row" id="DivCantidad" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Platillos:</label>
 							<div class="col-sm-8">
@@ -247,12 +269,6 @@
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="txtPrecioPlatillo" value="47.50" disabled>
-							</div>
-						 </div>
-						  <div class="form-group row" id="DivComentario" style="display:none;">
-							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
-							<div class="col-sm-8">
-								<textarea id="txtComentarioPlatillo" class="form-control" rows="5" cols="200"  maxlength="250"></textarea>
 							</div>
 						 </div>
 						 <!-- ---------- -->

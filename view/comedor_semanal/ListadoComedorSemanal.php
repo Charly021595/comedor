@@ -175,6 +175,16 @@
 			</a>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999'){ ?>
+		<li>
+			<a href="GraficasComedor.php">
+			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
+			<span class="pull-right-container">
+			
+			</span>
+			</a>
+		</li>
+		<?php } ?>
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -283,10 +293,10 @@
 										<th scope='col'>No. Orden</th>
 										<th scope='col'>No. Empleado</th>
 										<th scope='col'>Empleado</th>
-										<th scope='col' >Tipo de Platillo</th>
+										<th scope='col'>Tipo de Platillo</th>
 										<th scope='col'>No. Platillo</th>
 										<th scope='col'>Platillo</th>
-										<!-- <th scope='col'>Comentarios</th> -->
+										<th scope='col'>Comentarios</th>
 										<th scope='col'>Ubicación</th>
 										<th scope='col'>FechaPedido</th>
 										<th scope='col'>Estatus Enviado</th>
@@ -369,11 +379,17 @@
 						  <div class="form-group row" id="DivCantidad" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Platillos:</label>
 							<div class="col-sm-8">
-								
 								<input type="text" class="form-control" id="txtNumPlatillo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="\d*" maxlength="1" min="1" value="1" onchange="ValidarPlatillos()">
-							  
 							</div>
 						 </div>
+						 <div id="DivComentarioglobal" style="display:none;">
+							<div class="form-group row">
+								<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
+								<div class="form-group col-sm-8 col-xs-8">
+									<textarea id="txtComentarioGlobalPlatillo" class="form-control" rows="5" cols="200" maxlength="250" placeholder="Descripción pedido"></textarea>
+								</div>
+							</div>
+						</div>
 						 <!-- ---------- -->
 						 <div class="form-group row" id="DivTotal" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Total:</label>

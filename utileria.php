@@ -46,6 +46,7 @@
 				//$FechaDeOrden = DateTime::createFromFormat('d/m/Y H:i A', $FechaDeOrden );
 				$validar = true;
 				$pedidoporcomedor =  $_POST['pedidoporcomedor'];
+				$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 				
 				include './db/conectar.php';
 				if ($TipoPlatillo == 3 && $NoEmpleado != 20000) {
@@ -107,7 +108,7 @@
 								$TipoPlatillo = $row3['TipoPlatillo'];
 								$Total = $row3['Total'];
 								$FechaPedido = $row3['FechaPedido'];
-								$Comentario =  utf8_decode($row3['Comentario']);
+								$Comentario =  utf8_decode($comentario_global);
 								$Platillo  = $row3['Platillo'];
 								
 								include './db/conectar.php';
@@ -139,7 +140,7 @@
 								$Posicion = $row4['Posicion'];
 								$IdPlatillo = $row4['IdPlatillo'];
 								$Platillo = utf8_decode($row4['Platillo']);
-								$Comentario = utf8_decode($row4['Comentario']);
+								$Comentario = utf8_decode($comentario_global);
 								$TipoPlatillo = $TipoPlatillo;
 								$KCal =  utf8_decode($row4['KCal']);
 								$Cantidad = $row4['Cantidad'];
@@ -309,6 +310,7 @@
 				if(count($query) > 0){
 					session_start();
 					$_SESSION['RHComedor'] =$username;
+					$_SESSION['Hora_Session'] = date("Y-m-d H:i:s");
 				
 				}else{
 					session_start();
@@ -439,7 +441,6 @@
 					);
 					array_push($query, $record);
 				}
-
 
 				if (count($query) != 0){
 					$data = array(
@@ -1839,6 +1840,152 @@
 			}
 
 			echo json_encode($data);
+		break;
+		case '25': 
+			$query = array();
+			$data = array();
+			include './db/conectar.php';
+			$Fecha = isset($_POST['Fecha']) ? utf8_decode($_POST['Fecha']) : '';
+			$fecha_inicial = "";
+			$fecha_final = "";
+			$Ubicacion = isset($_POST['Ubicacion']) ? utf8_decode($_POST['Ubicacion']) : '';
+			$validar = true;
+			$mensaje;
+
+			if ($Fecha != '') {
+				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
+				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
+				$fecha_inicial="$anio_inicio-$mes_inicio-$dia_inicio";//Fecha inicial formato ingles
+				list($dia_fin,$mes_fin,$anio_fin) = explode("/",$f_final);//Extrae la fecha final
+				$fecha_final = "$anio_fin-$mes_fin-$dia_fin";
+			}
+
+			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
+				$sql = "{call RH_Com_Listar_Pedidos_Sin_Estatus(?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $Ubicacion);
+				$stmt = sqlsrv_query($conn, $sql, $params);
+
+				if (isset($stmt)) {
+					if ( $stmt === false) {
+						$data = array(
+							"estatus" => 'error',
+							"Mensaje" => sqlsrv_errors()
+						);
+						echo json_encode($data);	
+					}
+					while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+						$sql2 = "{call RHCom_EstatusComedor(?,?)}";
+						$params2 = array($row['IdPedido'], 2);
+						$stmt2 = sqlsrv_query($conn, $sql2, $params2);
+
+						if ($stmt2 === false) {
+							$data = array(
+								"estatus" => 'error',
+								"Mensaje" => sqlsrv_errors()
+							);
+							echo json_encode($data);
+						}
+						
+					}
+					sqlsrv_free_stmt( $stmt);
+					sqlsrv_free_stmt( $stmt2 );
+					sqlsrv_close($conn);
+				}
+			}
+			
+			if ($validar) {
+				$data = array(
+					"estatus" => "success",
+					"Validar" => $validar
+				);
+			}else{
+				$data = array(
+					"estatus" => "error",
+					"Validar" => $validar,
+					"Mensaje" => $mensaje
+				);
+			}
+
+			echo json_encode($data); 
+		break;
+		case '26':
+			$query = array(); 
+			$data = array();
+			include './db/conectar.php';
+			$Fecha = isset($_POST['Fecha']) ? utf8_decode($_POST['Fecha']) : '';
+			$fecha_inicial = "";
+			$fecha_final = "";
+			$Ubicacion = isset($_POST['ubicacion']) ? $_POST['ubicacion'] : '';
+			$validar = true;
+			$mensaje;
+
+			if ($Fecha != '') {
+				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
+				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
+				$fecha_inicial="$anio_inicio-$mes_inicio-$dia_inicio";//Fecha inicial formato ingles
+				list($dia_fin,$mes_fin,$anio_fin) = explode("/",$f_final);//Extrae la fecha final
+				$fecha_final = "$anio_fin-$mes_fin-$dia_fin";
+			}
+
+			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
+				$sql = "{call RHCom_GraficasPedidos(?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $Ubicacion);
+				$stmt = sqlsrv_query($conn, $sql, $params);
+
+				$sql2 = "{call RHCom_GraficasPedidosPlatoUnico(?, ?, ?)}";
+				$params2 = array($fecha_inicial, $fecha_final, $Ubicacion);
+				$stmt2 = sqlsrv_query($conn, $sql2, $params2);
+
+				if (isset($stmt) && isset($stmt2)) {
+					if ($stmt === false && $stmt2 === false) {
+						$mensaje = sqlsrv_errors();
+						$data = array(
+							"estatus" => 'error',
+							"mensaje" => $mensaje[0]['mensaje']
+						);
+						echo json_encode($data);	
+					}
+					while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+						$record = array(
+							"Nombre" => utf8_encode($row['Platillo']),
+							"Fecha_Pedido" => $row['FechaPedido'],
+							"Cantidad_Platillo" => $row['Cantidad_Platillo']
+						);
+						array_push($query, $record);
+					}
+					while($row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
+						$record2 = array(
+							"Nombre" => utf8_encode($row2['Platillo']),
+							"Fecha_Pedido" => $row2['FechaPedido'],
+							"Cantidad_Platillo" => $row2['Cantidad_Platillo']
+						);
+						array_push($query, $record2);
+					}
+
+					if (count($query) != 0){
+						$data = array(
+							"estatus" => "success",
+							"data" => $query,
+							"code" => 200
+						);
+					}else{
+						$data = array(
+							"estatus" => 'error',
+							"mensaje" => "no hay datos",
+							"code" => 400
+						);	
+							
+					}
+					sqlsrv_free_stmt( $stmt);
+					sqlsrv_close($conn);
+				}
+			}else{
+				$data = array(
+					"estatus" => 'error_fecha',
+					"mensaje" => "no seleccionaste un rango de fechas valido"
+				);	
+			}
+			echo json_encode($data); 
 		break;
   }
 	/*

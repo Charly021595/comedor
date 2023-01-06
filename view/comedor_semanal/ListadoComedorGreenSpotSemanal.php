@@ -172,6 +172,16 @@
 					</a>
 				</li>
 				<?php } ?>
+				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'|| $_SESSION['RHComedor'] == '99999999'){ ?>
+				<li>
+					<a href="GraficasComedor.php">
+					<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
+					<span class="pull-right-container">
+					
+					</span>
+					</a>
+				</li>
+				<?php } ?>
 			</ul>
 			</section>
 			<!-- /.sidebar -->
@@ -271,8 +281,8 @@
 													<th scope='col' >Empleado</th>
 													<th scope='col'>No. Platillo</th>
 													<th scope='col'>Platillo</th>
-													<!-- <th scope='col' style="display:none;">Comentario</th>
-													<th scope='col' style='display:none;'>Kcal.</th> -->
+													<th scope='col'>Comentario</th>
+													<!-- <th scope='col' style='display:none;'>Kcal.</th> -->
 													<th scope='col'>Precio </th>
 													<th scope='col'>Total</th>
 													<th scope='col'>Ubicación</th>
@@ -346,7 +356,6 @@
 													<select class="form-control" name="txtTipoPlatillo" id="txtTipoPlatillo" onchange="TipoPlatillo()" disabled>
 														<option value="0"> Seleccione el tipo de platillo</option>
 														<option value="4">Platillo Especial</option>
-														
 													</select>
 												</div>
 											</div>
@@ -371,12 +380,6 @@
 													<input type="text" class="form-control" id="txtPrecioPlatillo" value="49.00" disabled>
 												</div>
 											</div>
-											<div class="form-group row" id="DivComentario" style="display:none;">
-												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
-												<div class="col-sm-8">
-													<textarea id="txtComentarioPlatillo" class="form-control" rows="5" cols="200"  maxlength="250"></textarea>
-												</div>
-											</div>
 											<!-- ---------- -->
 											<!-- ////////// -->
 											<div id="ComidaGR" style="display:none;" class="form-group row" >
@@ -399,6 +402,14 @@
 												</div>
 												<div class="form-group col-sm-8 col-xs-8">
 													<input type="text" class="form-control" id="txtNumPlatilloGR" pattern="\d*" maxlength="2" min="1" value="1" onchange="ValidarPlatillosGR()" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+												</div>
+												<div id="DivComentario">
+													<div class="form-group col-md-3 col-xs-3">
+														<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
+													</div>
+													<div class="form-group col-sm-8 col-xs-8">
+														<textarea id="txtComentarioGlobalPlatillo" class="form-control" rows="5" cols="200" maxlength="250" placeholder="Descripción pedido"></textarea>
+													</div>
 												</div>
 												<div class="col-md-12 col-xs-12 " id="divIDVisita" style="display:none;">
 													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Precio:</label>

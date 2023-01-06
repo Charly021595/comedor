@@ -134,7 +134,8 @@ function GuardarOrden(){
 	let fechaActualL = new Date(); //Fecha actual
 	let FechaDeOrden = moment(fechaActualL).format("YYYY-MM-DD HH:mm:ss"),
 	dia_actual = moment(fechaActualL).format('DD'),
-	nombre_dia_actual = moment(fechaActualL).format('dddd');
+	nombre_dia_actual = moment(fechaActualL).format('dddd'),
+	comentario_global= $("#txtComentarioGlobalPlatillo").val();
 	switch (nombre_dia_actual) {
 		case 'Saturday':
 			dia_inicial = dia_actual - 1;
@@ -219,7 +220,11 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	
+	if (NoEmpleadoLogeado == 20000 && comentario_global == "") {
+        Swal.fire('El comentario es obligatorio', "","info");
+		$("#GuardarOrden").prop("disabled", false);
+        return false;
+    }
 	$.ajax({
 		type: "POST",
 		data: {
@@ -232,7 +237,8 @@ function GuardarOrden(){
 			FechaDeOrden: FechaDeOrden,
 			arrayListadoGreenSpot : JSON.stringify(arrayListadoGreenSpot),
 			arrayListadoPlatilloUnico : JSON.stringify(arrayListadoPlatilloUnico),
-			pedidoporcomedor:0
+			pedidoporcomedor:0,
+			comentario_global:comentario_global
 		},
 		url: "utileria.php", 
 		success: function(result) {
@@ -247,7 +253,6 @@ function GuardarOrden(){
 				$("#GuardarOrden").prop("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
-				console.log(data.mensaje);
 				$("#GuardarOrden").prop("disabled", false);
 			}
 		}
@@ -331,8 +336,10 @@ function ElimarAlimento(NoAlimentos){
 }
 
 function TipoPlatillo(){
+	$("#DivComentario").hide();
 	let txtUbicacion = $("#txtUbicacion").val();
 	let tipoplatillo = $("#txtTipoPlatillo").val();
+	let empleado = $("#txtNumEmpleado").val();
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
@@ -353,15 +360,17 @@ function TipoPlatillo(){
 		}
 	$("#txtNumPlatillo").val("1");
 	$("#txtTotalPlatillo").val("47.50");
-	}
-	else{
+	$("#txtTotalPlatillo").show();
+	}else{
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		// $("#DivTotal").css("display", "none");
 		// $("#DivPrecio").css("display", "none");
 		// $("#DivComentario").css("display", "none");
 		$("#txtNumPlatillo").val("0");
-		
+		if (empleado == 20000) {
+			$("#DivComentario").show();	
+		}
 		$.ajax({
             type: "POST",
             data: {
@@ -372,7 +381,6 @@ function TipoPlatillo(){
             url: "utileria.php",
             dataType: 'JSON',
              success: function(data) {
-				console.log(data);
 				if(data.length){
 					let seleccionar = "<option value='0'> Seleccione el Platillo</option>"
 					for(i=0;i<data.length;i++){
@@ -395,7 +403,7 @@ function LimpiarCampos(){
 	$("#txtPrecioTotal").val("0.00");
 	$("#txtPrecioGR").val("0.00");
 	$("#txtCaloriasGR").val("");
-	$("#txtProductoSeleccionadoGR").val(0);
+	$("#txtProductoSeleccionadoGR").val("0");
 	$("#txtNumPlatilloGR").val(1);
 	$("#txtComentariosGR").val("");
 	$("#txtTotalPlatillo").val("0.00");
@@ -520,15 +528,13 @@ $("#txtUbicacion").on('change',function(e){
 		}
 	$("#txtNumPlatillo").val("1");
 	$("#txtTotalPlatillo").val("49.00");
-	}
-	else{
+	}else{
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		// $("#DivTotal").css("display", "none");
 		// $("#DivPrecio").css("display", "none");
 		// $("#DivComentario").css("display", "none");
 		$("#txtNumPlatillo").val("0");
-		
 		$.ajax({
             type: "POST",
             data: {
@@ -539,7 +545,7 @@ $("#txtUbicacion").on('change',function(e){
             url: "utileria.php",
             dataType: 'JSON',
              success: function(data) {
-				console.log(data);
+
 				if(data.length){
 					let seleccionar = "<option value='0'> Seleccione el Platillo</option>"
 					for(i=0;i<data.length;i++){

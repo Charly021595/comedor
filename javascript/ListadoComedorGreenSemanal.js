@@ -9,43 +9,35 @@ let datos,
 bandera_descargar = 0;
 
 $(document).ready(function(){
-	 /*
-	 var Respuesta = Contraseña();
-	 if(Respuesta == true){
-	 */
-		ObtenerFecha();
-		window.location.hash="no-back-button";
-		window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
-		window.onhashchange=function(){window.location.hash="no-back-button";}
-		// var tabla ="<table  id='TablaComedor' class='table table-bordered table-hover TablaResponsiva'>";
-		// 	tabla +="<thead>";
-		// 	tabla +="<tr>"
-		// 	tabla +="<th scope='col'>No. Orden</th>"
-		// 	tabla +="<th scope='col'>No. Empleado</th>"
-		// 	tabla +="<th scope='col'>Empleado</th>"
-		// 	tabla +="<th scope='col'>No. Platillo</th>"
-		// 	tabla +="<th scope='col'>Platillo</th>"
-		// 	tabla +="<th scope='col' >Comentario</th>"
-		// 	tabla +="<th scope='col' style='display:none;'>Kcal.</th>"
-		// 	tabla +="<th scope='col'>Precio </th>"
-		// 	tabla +="<th scope='col'>Total</th>"
-		// 	tabla +="<th scope='col'>Ubicación</th>"
-		// 	tabla +="<th scope='col' colspan='2'>Acciones</th>"
-		// 	tabla +="</tr>";
-		// 	tabla +="</thead>";
-		// 	tabla +="<tbody id='ContenidoListados'>";
-		// 	tabla += "</tbody>"
-		// 	tabla +="</table>";
-		// 	$('#EspacioTabla').append(tabla);
-	/*
-	 }else{
-		 alert("La contraseña ingresada es incorrecta");
-		 //location.reload();
-		 window.location.replace('www.google.com'); 
-	 }
-	*/
+	ObtenerFecha();
+	window.location.hash="no-back-button";
+	window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
+	window.onhashchange=function(){window.location.hash="no-back-button";}
+
 	BuscarEmpleadoLogeadoSesion();
 	buscar_sede();
+	setInterval(function(){
+		debugger;
+		let hoy = new Date();
+		let dia = hoy.getDay(),
+		hora = hoy.getHours(),
+		minutos = hoy.getMinutes();
+		let Fecha = $("#txtFechaSeleccionado").val(),
+		Ubicacion = $("#txtUbicacion").val();
+		console.log(hora+':'+minutos);
+		return false;
+        // if(hora == 21 && minutos == 0 && dia != 6 && dia != 7) {
+			$.ajax({
+				url: "../../utileria.php",
+				type: "post",
+				data: {"param":25, "Fecha":Fecha, "Ubicacion":Ubicacion, "estatus_comedor":2},
+				success: function(result) {
+					data = JSON.parse(result);
+					MostrarInforme();
+				}
+			});
+        // }
+    }, 1000000);
 });
 
 function CerrarSesion(){
@@ -217,7 +209,7 @@ function MostrarInforme(){
 						tablacontenido +="<td  id='IDNomEmpleado"+datos[i].IdPedido+"'' data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
 						tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 						tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-						tablacontenido +="<td data-label= 'Comentarios' style='display:none;'>"+datos[i].Comentarios+"</td>"
+						tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
 						// tablacontenido +="<td data-label= 'Kcal' style='display:none;'>"+datos[i].Kcal+"</td>"
 						tablacontenido +="<td data-label= 'Precio'>"+parseFloat(datos[i].Precio).toFixed(2)+"</td>"
 						tablacontenido +="<td data-label= 'Total'>"+parseFloat(datos[i].total).toFixed(2)+"</td>"
@@ -276,7 +268,7 @@ function MostrarInforme(){
 						$("#IDNomEmpleado" +datos[i].IdPedido ).attr('rowspan', RowFinal);
 						var tablacontenidoD ="<tr id='tr_"+RowID+"_"+datos[i].IdPedido+"'><td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 						tablacontenidoD +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-						tablacontenidoD +="<td data-label= 'Comentarios' style='display:none;'></td>"
+						tablacontenidoD +="<td data-label= 'Comentarios'></td>"
 						// tablacontenidoD +="<td data-label= 'Kcal' style='display:none;'>"+datos[i].Kcal+"</td>"
 						tablacontenidoD +="<td data-label= 'Precio'>"+parseFloat(datos[i].Precio).toFixed(2)+"</td>"
 						tablacontenidoD +="<td data-label= 'Total'>"+parseFloat(datos[i].total).toFixed(2)+"</td>"
@@ -715,6 +707,7 @@ $("#txtNumeroEmpleado").on('change',function(e){
 
 $("#txtNumEmpleadoLogeado").on('change',function(e){
 	$("#div_mostrar_tabla_pedido").hide();
+	$("#DivComentario").hide();
 	let fechaActualL = new Date(); //Fecha actual
 	let fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
 	$("#txtFechaPedido").val(fechaActual2);
@@ -731,7 +724,6 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
              success: function(data) {
 				if(data.length){
 					for(i=0;i<data.length;i++){
-						
 						let FechaAr =  "Fecha: "+ fechaActual2; 
 						$("#txtFechaDia").val(fechaActual2);
 						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
@@ -745,6 +737,9 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
 					$("#txtTipoPlatillo").trigger("change").val(4);
 					TipoPlatillo();
 					$("#ListadoComidaGr").html("");
+					if (empleado == 20000) {
+						$("#DivComentario").show();
+					}
 				}else{
 					Swal.fire( 
 						'El número de empleado ingresado no existe.',
@@ -1137,7 +1132,8 @@ function GuardarOrden(){
 	//let FechaDeOrden = $("#txtFechaPedido").val();
 	let Total = $("#txtTotalPlatillo").val();
 	let Precio= $("#txtPrecioPlatillo").val();
-	let Tipo_Empleado= $("#tipo_empleado").val();
+	let Tipo_Empleado= $("#tipo_empleado").val(),
+	comentario_global= $("#txtComentarioGlobalPlatillo").val();
 	$("#GuardarOrden").prop("disabled", true);
 	let CantidadArreglo = '';
 	//
@@ -1219,6 +1215,11 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
+	if (comentario_global == '' && NoEmpleadoLogeado == 20000) {
+        Swal.fire('Comentario no puede ir vació', "","info");
+		$("#GuardarOrden").prop("disabled", false);
+        return false;
+    }
 	$.ajax({
 		type: "POST",
 		data: {
@@ -1231,7 +1232,8 @@ function GuardarOrden(){
 			FechaDeOrden: FechaDeOrden,
 			arrayListadoGreenSpot : JSON.stringify(arrayListadoGreenSpot),
 			arrayListadoPlatilloUnico : JSON.stringify(arrayListadoPlatilloUnico),
-			pedidoporcomedor:1
+			pedidoporcomedor:1,
+			comentario_global: comentario_global
 		},
 		url: "../../utileria.php",
 		success: function(result) {
@@ -1239,7 +1241,18 @@ function GuardarOrden(){
 			if (data.estatus === "success") {
 				Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
 				.then(function(){
-					location.reload();
+					// $("#txtNumEmpleadoLogeado").val("");
+					// $("#txtNombreEmpleadoLogeado").val("");
+					// $("#txtNumPlatillo").val("");
+					// $("#txtTipoPlatillo").val("");
+					// $("#txtUbicacion").val("");
+					// $("#txtTotalPlatillo").val("");
+					// $("#txtPrecioPlatillo").val("");
+					// $("#tipo_empleado").val("");
+					$("#txtComentarioGlobalPlatillo").val("");
+					CargarPedido();
+					MostrarInforme();
+					$("#GuardarOrden").prop("disabled", false);
 				});
 			}else if(data.estatus === "pedido_duplicado"){
 				Swal.fire('Solo se puede realizar un pedido al día.', "","info");
