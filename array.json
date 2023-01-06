@@ -1,0 +1,21 @@
+{
+    "data": [
+      {
+        "Orden_compra": "1",
+        "Fecha_recepcion": "Tiger Nixon",
+        "Moneda": "System Architect",
+        "Monto_Neto": "$320,800",
+        "Lote": "2011/04/25",
+        "Configuracion": "Edinburgh"
+        
+      },
+      {
+        "Orden_compra": "1",
+        "Fecha_recepcion": "Tiger Nixon",
+        "Moneda": "System Architect",
+        "Monto_Neto": "$320,800",
+        "Lote": "2011/04/25",
+        "Configuracion": "Edinburgh"
+      }
+    ]
+}

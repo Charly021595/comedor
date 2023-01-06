@@ -1,0 +1,73 @@
+USE [Consultas]
+GO
+/****** Object:  StoredProcedure [dbo].[RHMet_GuardaMetas]    Script Date: 10/11/2021 05:23:38 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Leonardo Peña
+-- Create date: 08/11/2021
+-- Description:	Guarda las Metas del usuario
+-- =============================================
+ALTER PROCEDURE [dbo].[RHMet_GuardaMetas]
+	-- Add the parameters for the stored procedure here
+	@NoEmpleado					int,
+	@NombreEmpleado				nvarchar(MAX),
+	@NoMeta						int,
+	@NombreMeta					nvarchar(MAX),
+	@Ponderacion				int,
+	@Fecha						nvarchar(50),
+	@IdMeta						nvarchar(50)
+		
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	Declare	@Id	int,
+			@IdMetaA	int,
+		    @IdMetaA2	varchar(150),
+			@IdMetaA3	varchar(150)
+
+	Select	@Id = isnull( MAX(id), 0 )+1
+		From	EvaluacionMetas_RH 
+
+	
+		Select	@IdMetaA = isnull( MAX(REPLACE(idMeta, 'RHM-', '')), 0 )+1
+		From	EvaluacionMetas_RH
+
+		Set @IdMetaA2 =   REPLICATE('0',6-LEN(CONVERT(varchar(150), @IdMetaA))) + CONVERT(varchar(150), @IdMetaA)
+		Set @IdMetaA3 = 'RHM-'+ CONVERT(varchar(150), @IdMetaA2) 
+    -- Insert statements for procedure here
+
+	insert into EvaluacionMetas_RH(
+	id,
+	idMeta,
+	Empleado,
+	NoEmpleado,
+	Estatus,
+	Meta,
+	Ponderacion,
+	Fecha,
+	Anio,
+	NoMeta,
+	FechaIngreso
+	)
+	values(
+	@Id,
+	@IdMetaA3,
+	@NombreEmpleado,
+	@NoEmpleado,
+	0,
+	@NombreMeta,
+	@Ponderacion,
+	@Fecha,
+	year(GETDATE()),
+	@NoMeta,
+	GETDATE()
+	)
+
+	select @IdMetaA3 as IDMeta
+END

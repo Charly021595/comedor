@@ -1,0 +1,372 @@
+/*JSSH Se aplica @font-face para que tome fuentes guardadas en dicha ubicación*/
+@font-face {
+    font-family: "Lettera Text Std";
+    src: /*url("../../Font/LetteraTextStd.woff2") format('woff2'), */
+        url("../font/LetteraTextStd.woff") format('woff'), 
+        url("../font/LetteraTextStd.ttf") format('truetype'), 
+        url("../font/LetteraTextStd.svg") format('svg'),
+        url("../font/LetteraTextStd-Títulos.otf") format('embedded-opentype');       
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary.hover {
+    background-color: #093255 !important;
+}
+
+.btn-primary {
+    background-color: #093255;
+    border-color: #093255;
+}
+
+.btn-primary.focus, .btn-primary:focus {
+    color: #fff;
+    background-color: #093255;
+    border-color: #093255;
+}
+
+td.details-control {
+    background: url('../img/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../img/details_close.png') no-repeat center center;
+}
+
+.redireccion {
+    font-size: 16px;
+    color: #66676B;
+}
+
+footer {   
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+div.dividir {
+    display: table;
+    width: 100%;
+    padding: 10px;
+}
+
+div.centrar-vertical {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: left;
+}
+
+.EnviarContactoDetalleProducto {
+    background: #00B74F;
+    font-family: Lettera Text Std;
+    font-style: normal;
+    line-height: 14px;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+.menu {
+	background-color: #E2E2E4;
+	height: 70px;
+}
+
+div.alinear-derecha {
+	display: table-cell;
+	text-align: right;
+}
+
+div.alinear-centro {
+	display: table-cell;
+	text-align: center;
+}
+
+button#subir_factura_btn, button#subir_facturaviaje_btn {
+	height: 60px;
+    width: 200px;
+    font-size: 20px;	
+}
+
+div.titulo-facturas {
+    height: 25px;
+    background-color: #059856;
+    color: white;
+    text-align: center;
+    font-weight:bold;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+}
+
+td#requisition-detail{
+	color: #337ab7;
+	font-weight: bold;
+}
+
+td#requisition-detail:hover{
+	text-decoration: underline;;
+}
+
+span.glyphicon.glyphicon-remove {
+    color: #8A0808;
+}
+
+div#cuerpo_pequeno {
+	padding: 10px;
+	width: 400px;
+	margin: auto;
+}
+
+.nombre-proveedor {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;	
+}
+
+.titulo_portal {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 20px;		
+}
+
+#borrar-btn {
+	border-color: #fff;
+	padding: 0;
+}
+
+.centrar{
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.espacio-medio{
+	height: 50px;
+}
+
+.espacio-pequeno{
+	height: 20px;
+}
+
+.divs-paralelos {
+    display: inline-flex;
+}
+
+.espacio-10{
+	width: 10px;
+}
+
+div#cargar_factura{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.alinear_derecha{
+	text-align: right;
+}
+
+.dropdown-check-list {
+  display: inline-block;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.items {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.dropdown-check-list ul.items li {
+  list-style: none;
+}
+
+.dropdown-check-list.visible .anchor {
+  color: #0094ff;
+}
+
+.dropdown-check-list.visible .items {
+  display: block;
+}
+.Modelo{
+/* height: 150px;*/
+	height: 54px;
+}
+
+.TablaResponsiva {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  
+}
+
+.TablaResponsiva caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+.TablaResponsiva tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+
+.TablaResponsiva th,
+.TablaResponsiva td {
+  padding: .625em;
+  text-align: center;
+}
+
+.TablaResponsiva th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+/**/
+.MetaAnual{
+	width:13%;
+}
+.Ponderacion{
+	width:6%;
+}
+.Fecha{
+	width:10%
+}
+.UnidadMedida{
+	width:9%
+}
+.Minimo{
+	width:5%
+}
+.Minimo{
+	width:5%
+}
+.Satisfactorio{
+	width:7%;
+}
+.NombreMeta{
+	width:25%;
+}
+.FechaHito{
+	width:15%;
+}
+.MoverDerecha{
+	left:53%;
+}
+.ResponseReporte{
+	width:1140 px !important;
+	height:541.25 px !important;
+}
+@media screen and (max-width: 600px) { 
+/* @media screen and (max-width: 1590px) {*/
+  .TablaResponsiva {
+    border: 0;
+  }
+
+  .TablaResponsiva caption {
+    font-size: 1.3em;
+  }
+  
+  .TablaResponsiva thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .TablaResponsiva tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  
+  .TablaResponsiva td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  
+  .TablaResponsiva td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .TablaResponsiva td:last-child {
+    border-bottom: 0;
+  }
+  
+	 .MetaAnual{
+		width:100%;
+	}
+	.Ponderacion{
+		width:100%;
+	}
+	.Fecha{
+		width:100%
+	}
+	.UnidadMedida{
+		width:100%
+	}
+	.Minimo{
+		width:100%
+	}
+	.Minimo{
+		width:100%
+	}
+	.Satisfactorio{
+		width:100%;
+	}
+	.NombreMeta{
+		width:100%;
+	}
+	.FechaHito{
+		width:100%;
+	}
+	.MoverDerecha{
+	left:0%;
+}
+}

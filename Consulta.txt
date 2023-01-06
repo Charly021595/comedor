@@ -1,0 +1,49 @@
+
+
+
+select RECID,* from MicrosoftDynamicsAX.dbo.arzcustodiasTransporte
+
+
+select RECID,* from MicrosoftDynamicsAX.dbo.ARZCUSTODIASTRANSPORTEDETALLE
+
+select RECID,* from MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE
+
+
+
+
+select RECID,* from MicrosoftDynamicsAX.dbo.arzcustodiasTransporte
+select * from MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE
+select RECID,* from MicrosoftDynamicsAX.dbo.ARZCUSTODIASINCIDENTE
+
+
+
+select * from MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE
+
+
+select * from MicrosoftDynamicsAX.dbo.ARZCUSTODIASINCIDENTE
+
+select * from MicrosoftDynamicsAX.dbo.ARZVIAJESINCIDENCIASMONITOREO
+
+--select * from MicrosoftDynamicsAX.dbo.ARZPERSONALCUSTODIA
+
+select * from MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE 
+
+
+select RECID,* from MicrosoftDynamicsAX.dbo.ARZCUSTODIASTRANSPORTE where RECID= 5637145326 and NOCUSTODIA = 'CUI-000005'
+
+-- select REPLACE(NOENCUESTA, 'ECI-', ''),* from MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE
+
+Select	 isnull( MAX(REPLACE(NOENCUESTA, 'ECI-', '')), 0 )+1
+		From	MicrosoftDynamicsAX.dbo.ARZCUSTODIASENCUESTACIERRE
+
+Select	ID
+	From	MicrosoftDynamicsAX.dbo.USERINFO
+	Where	NETWORKALIAS = 'erick.delossantos'
+
+
+
+
+ Update	MicrosoftDynamicsAX.dbo.arzcustodiasTransporte
+		SET		ESTATUS= 0,
+				FECHAHORAINICIO = '1900-01-01 00:00:00.000'
+		where  RECID = 5637145326 and NOCUSTODIA ='CUI-000005'
