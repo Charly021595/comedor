@@ -66,7 +66,6 @@ function buscar_sede(){
 }
 
 function BuscarEmpleadoLogeado(){
-	prueba_funcion2();
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
 	$("#txtFechaPedido").val(fechaActual2);
@@ -107,11 +106,6 @@ function BuscarEmpleadoLogeado(){
 		);
 		//CerrarSesion();
 	}
-}
-
-
-function prueba_funcion2(){
-	alert("es una prueba");
 }
 
 function BuscarEmpleadoLogeadoSesion(){
