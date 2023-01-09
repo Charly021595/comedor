@@ -66,6 +66,7 @@ function buscar_sede(){
 }
 
 function BuscarEmpleadoLogeado(){
+	prueba_funcion();
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
 	$("#txtFechaPedido").val(fechaActual2);
@@ -108,6 +109,10 @@ function BuscarEmpleadoLogeado(){
 	}
 }
 
+
+function prueba_funcion(){
+	alert("es una prueba");
+}
 
 function BuscarEmpleadoLogeadoSesion(){
 	var fechaActualL = new Date(); //Fecha actual
@@ -146,50 +151,6 @@ function BuscarEmpleadoLogeadoSesion(){
 		CerrarSesion();
 	}
 }
-
-function BuscarEmpleadoLogeado(){
-	var fechaActualL = new Date(); //Fecha actual
-	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
-	$("#txtFechaPedido").val(fechaActual2);
-	var empleado = $("#txtNumEmpleadoLogeado").val()
-	if(empleado.replace(/\s/g,"") != ""){
-		
-		//LimpiarCampos();
-		$.ajax({
-            type: "POST",
-            data: {
-                param: 1,
-				empleado: empleado 
-            },
-            url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
-						
-						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#txtFechaDia").val(fechaActual2);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
-					}
-				}else{
-					$("#txtFechaDia").val("");
-					$("#txtNombreEmpleadoLogeado").val("");
-					$("#txtNumEmpleadoLogeado").val("")
-				}
-				
-			}
-		});
-	
-	}else{
-		Swal.fire( 
-			'Favor de Agregar un numero de empleado.',
-			'',
-			'error'
-		);
-		//CerrarSesion();
-	}
-}
-
 
 function Contraseña(){
 	var Contraseña = prompt("Favor de ingresar la contrasea", "");
