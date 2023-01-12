@@ -192,146 +192,106 @@ function traer_datos(){
 	$("#div_padre_graficas").show();
 	$("#graficas").hide();
 	$("#contenedor_loading_comedor").show();
-	titulos = [];
-	Canidad_Platillos = [];
-	let Fecha = $("#txtFechaSeleccionado").val(),
-	txtUbicacion = $("#txtUbicacion").val();
-	if (Fecha == "") {
-		Swal.fire( 
-			"El campo fecha no puede ir vacío",
-			'',
-			'info'
-		);
-		return;
-	}
-	$.ajax({
-		url: "../../utileria.php",
-		type: "post",
-		data: {"param":26, "Fecha":Fecha, "ubicacion":txtUbicacion},
-		success: function(result) {
-			data = JSON.parse(result);
-			if (data.estatus == 'success') {
-				console.log(data.data);
-				let datos = data.data;
-				for (let i = 0; i < datos.length; i++) {
-					titulos.push(datos[i].Nombre);
-					Canidad_Platillos.push(datos[i].Cantidad_Platillo);				
-				}
-				crear_grafica();
-			}else if (data.estatus == "error_fecha") {
-				$("#contenedor_loading_comedor").hide();
-				$("#graficas").hide();
-				$("#div_padre_graficas").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'info'
-				);
-			}else{
-				$("#contenedor_loading_comedor").hide();
-				$("#graficas").hide();
-				$("#div_padre_graficas").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'error'
-				);
-			}
-		}
-	});
+
+	// prueba();
 }
 
-function MostrarGraficas(){
-	$("#div_padre_graficas").show();
-	$("#graficas").hide();
-	$("#contenedor_loading_comedor").show();
-	titulos = [];
-	Canidad_Platillos = [];
-	let Fecha = $("#txtFechaSeleccionado").val(),
-	txtUbicacion = $("#txtUbicacion").val();
-	if (Fecha == "") {
-		Swal.fire( 
-			"El campo fecha no puede ir vacío",
-			'',
-			'info'
-		);
-		return false;
-	}
-	let formData = new FormData(document.getElementById("form_graficas_greenspot"));
-  	formData.append("dato", "valor");
-	formData.append("ubicacion", txtUbicacion);
-	$.ajax({
-		url: "../../utileria.php",
-		type: "post",
-		data: formData,
-		dataType: "html",
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function(result) {
-			data = JSON.parse(result);
-			if (data.estatus == "success") {
-				let datos = data.data;
-				for (let i = 0; i < datos.length; i++) {
-					titulos.push(datos[i].Nombre);
-					Canidad_Platillos.push(datos[i].Cantidad_Platillo);				
-				}
-				crear_grafica();
-			}else if (data.estatus == "error_fecha") {
-				$("#contenedor_loading_comedor").hide();
-				$("#graficas").hide();
-				$("#div_padre_graficas").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'info'
-				);
-			}else{
-				$("#contenedor_loading_comedor").hide();
-				$("#graficas").hide();
-				$("#div_padre_graficas").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'error'
-				);
-			}
-		}	
-	});
-}
-
-function crear_grafica(){
-	$("#contenedor_loading_comedor").hide();
+function siteLoaded() {
+    $("#contenedor_loading_comedor").hide();
 	$("#graficas").show();
-	const ctx = document.getElementById('myChart').getContext("2d");
-    if (myChart) {
-        myChart.destroy();
-    }
-	myChart = new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: titulos,
-			datasets: [{
-			label: 'cantidad de pedidos',
-			data: Canidad_Platillos,
-			borderWidth: 1
-			}]
-		},
-		options: {
-			indexAxis: 'y',
-			responsive: true,
-			plugins: {
-			  legend: {
-				position: 'top',
-			  },
-			  title: {
-				display: true,
-				text: 'cantidad de pedidos'
-			  }
-			}
-		  },
-	});
 }
+
+// function MostrarGraficas(){
+// 	$("#div_padre_graficas").show();
+// 	$("#graficas").hide();
+// 	$("#contenedor_loading_comedor").show();
+// 	titulos = [];
+// 	Canidad_Platillos = [];
+// 	let Fecha = $("#txtFechaSeleccionado").val(),
+// 	txtUbicacion = $("#txtUbicacion").val();
+// 	if (Fecha == "") {
+// 		Swal.fire( 
+// 			"El campo fecha no puede ir vacío",
+// 			'',
+// 			'info'
+// 		);
+// 		return false;
+// 	}
+// 	let formData = new FormData(document.getElementById("form_graficas_greenspot"));
+//   	formData.append("dato", "valor");
+// 	formData.append("ubicacion", txtUbicacion);
+// 	$.ajax({
+// 		url: "../../utileria.php",
+// 		type: "post",
+// 		data: formData,
+// 		dataType: "html",
+// 		cache: false,
+// 		contentType: false,
+// 		processData: false,
+// 		success: function(result) {
+// 			data = JSON.parse(result);
+// 			if (data.estatus == "success") {
+// 				let datos = data.data;
+// 				for (let i = 0; i < datos.length; i++) {
+// 					titulos.push(datos[i].Nombre);
+// 					Canidad_Platillos.push(datos[i].Cantidad_Platillo);				
+// 				}
+// 				crear_grafica();
+// 			}else if (data.estatus == "error_fecha") {
+// 				$("#contenedor_loading_comedor").hide();
+// 				$("#graficas").hide();
+// 				$("#div_padre_graficas").hide();
+// 				Swal.fire( 
+// 					data.mensaje,
+// 					'',
+// 					'info'
+// 				);
+// 			}else{
+// 				$("#contenedor_loading_comedor").hide();
+// 				$("#graficas").hide();
+// 				$("#div_padre_graficas").hide();
+// 				Swal.fire( 
+// 					data.mensaje,
+// 					'',
+// 					'error'
+// 				);
+// 			}
+// 		}	
+// 	});
+// }
+
+// function crear_grafica(){
+// 	$("#contenedor_loading_comedor").hide();
+// 	$("#graficas").show();
+// 	const ctx = document.getElementById('myChart').getContext("2d");
+//     if (myChart) {
+//         myChart.destroy();
+//     }
+// 	myChart = new Chart(ctx, {
+// 		type: 'bar',
+// 		data: {
+// 			labels: titulos,
+// 			datasets: [{
+// 			label: 'cantidad de pedidos',
+// 			data: Canidad_Platillos,
+// 			borderWidth: 1
+// 			}]
+// 		},
+// 		options: {
+// 			indexAxis: 'y',
+// 			responsive: true,
+// 			plugins: {
+// 			  legend: {
+// 				position: 'top',
+// 			  },
+// 			  title: {
+// 				display: true,
+// 				text: 'cantidad de pedidos'
+// 			  }
+// 			}
+// 		  },
+// 	});
+// }
 
 // ejemplos tablas chart.js
 

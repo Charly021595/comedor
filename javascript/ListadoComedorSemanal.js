@@ -177,6 +177,7 @@ function BuscarEmpleadoLogeado(){
 }
 
 $("#txtNumEmpleadoLogeado").on('change',function(e){
+	debugger;
 	$("#DivComentarioglobal").hide();
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");

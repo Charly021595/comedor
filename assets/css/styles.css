@@ -200,6 +200,11 @@ button.cerrar{
     color: #fff;
 }
 
+#graficas_power_bi{
+    width: 100%;
+    height: 800px;
+}
+
 /* .scroll_tablas_detalle::-webkit-scrollbar {
     width: 12px;
 }

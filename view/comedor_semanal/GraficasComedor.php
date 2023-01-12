@@ -192,14 +192,14 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 			<h1>
-			Graficas del Comedor
+			Graficas Comedor
 			</h1>
 			</section>
 
 			<!-- Main content -->
 			<section class="content">
 				<!-- Small boxes (Stat box) -->
-				<div class="panel panel-default">
+				<div class="panel panel-default" style="display: none;">
 					<div class="panel-body">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<form action="" method="POST" id="form_graficas_greenspot">
@@ -246,8 +246,15 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="contenedor_loading_comedor" class="centrar" style="display:none;">
 							<img src="../../assets/img/loading.gif" id="loading_comedor" class="centrar">
 						</div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="graficas" style="display:none;">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="graficas" style="display:none;">
 							<canvas id="myChart" width="100" height="35"></canvas>
+						</div> -->
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="graficas" style="display:none;">
+							<!-- <canvas id="myChart" width="100" height="35"></canvas> -->
+							<iframe title="Indicador Comedor" name="graficas_power_bi" id="graficas_power_bi" onload="siteLoaded()"
+							src="https://app.powerbi.com/view?r=eyJrIjoiODRlNTg0MWQtOThjOC00NTA4LThiMTktMzFjZDZiOGRhNDQxIiwidCI6ImZhZTBkZDhhLTY1ZjctNDFiMy1iZTMxLWFkZWMwMDE0YjYyMCJ9&pageName=ReportSectionc2e8662857718e57182b" 
+							frameborder="0"
+							allowFullScreen="true"></iframe>
 						</div>
                     </div>
                 </div>
@@ -304,10 +311,10 @@
 
     <!-- graficas libreria -->
     <!-- <script src="../../assets/js/chart.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.umd.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.umd.min.js"></script> -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/helpers.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/helpers.min.js"></script> -->
 

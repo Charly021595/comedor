@@ -1069,11 +1069,10 @@ $("#btn_nomina").on("click", function(e){
 		type: "post",
 		data: {"param":16, "daterange":fecha, "numero_empleado":numero_empleado},
 		success: function(result) {
-			let resultados = JSON.parse(result);
-			if (resultados.estatus == "success"){
-				enviar_nomina(resultados);
+			if (result.estatus == "success"){
+				enviar_nomina(result);
 			}else{
-				Swal.fire(resultados.mensaje, "","info");
+				Swal.fire(result.message, "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
