@@ -166,7 +166,8 @@
 				</span>
 			</a>
 		</li>
-		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
+		|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
 		<li>
 			<a href="ListadoComedorProcesado.php">
 				<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Listado Enviado Nomina</span>

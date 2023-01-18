@@ -163,7 +163,8 @@
 					</span>
 					</a>
 				</li>
-				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
+				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
+				|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
 				<li>
 					<a href="ListadoComedorProcesado.php">
 						<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Listado Enviado Nomina</span>
@@ -289,7 +290,7 @@
 													<th scope='col'>FechaPedido</th>
 													<th scope='col'>Estatus Enviado</th>
 													<th scope='col'>Estatus Comedor</th>
-													<th scope='col' colspan='2'>Acciones</th>
+													<th scope='col' colspan='3'>Acciones</th>
 												</tr>
 											</thead>
 											<tbody id='ContenidoListados'>
@@ -302,12 +303,12 @@
 					</div>
 				</div>
 
-				<!-- Modal -->
+				<!-- Modal Agregar Pedido-->
 				<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalCargaEvidenciaVisual" data-backdrop="static" data-keyboard="false" >
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
-							<div id="modal_header_pedido" class="modal-header">
-								<button type="button" class="close" data-dismiss="modal"><i id="cross_cerrar" class="fa fa-times" aria-hidden="true"></i></button>
+							<div id="modal_header_pedido" class="modal-header modal_header_pedido">
+								<button type="button" class="close" data-dismiss="modal"><i id="cross_cerrar" class="fa fa-times cross_cerrar" aria-hidden="true"></i></button>
 								<h4 class="modal-title">Crear pedido</h4>
 							</div>
 							<div class="modal-body">
@@ -387,7 +388,7 @@
 													<label for="lblNombreVisita" class="col-sm-12 col-xs-12 col-form-label">Platillo:</label>
 												</div>
 												<div class="form-group col-sm-8 col-xs-8">
-													<select class="form-control" name="txtProductoSeleccionadoGR" id="txtProductoSeleccionadoGR" onchange="InfoPlatillo()">
+													<select class="form-control" name="txtProductoSeleccionadoGR" id="txtProductoSeleccionadoGR" onchange="InfoPlatillo(1)">
 														
 													</select>
 												</div>
@@ -445,6 +446,7 @@
 															<td scope="col" style="display:none">Precios</td>
 															<td scope="col" style="display:none">Total</td>
 															<td scope="col">Acciones</td>
+															<td scope="col" style="display:none">Recien Agregado</td>
 														</tr>
 														</thead>
 														<tbody id="ListadoComidaGr">
@@ -473,6 +475,166 @@
 					</div>
 				</div>
 				<!-- /.Modal-->
+				<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ModalEditar" data-backdrop="static" data-keyboard="false" >
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div id="modal_header_Editar" class="modal-header modal_header_pedido">
+								<button type="button" class="close" data-dismiss="modal"><i id="cross_cerrar_Editar" class="fa fa-times cross_cerrar" aria-hidden="true"></i></button>
+								<h4 class="modal-title">Editar Pedido</h4>
+							</div>
+							<div class="modal-body">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<section id="Industria_Editar" class="CeroPadCeroMar">
+											<div class="col-md-12 col-xs-12">
+												<center>
+													<h2 class="MoverInnovacion" style="font-size: 5vmin;color: #0F196C;font-family: Lettera Text Std;">
+													</h2>
+												</center>
+											<div class="form-group row" id="divIDVisita_No_Empleado_Editar">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Empleado:</label>
+												<div class="col-sm-8">
+													<input type="hidden" class="form-control" maxlength="6" id="txtIdPedido_Editar" onkeypress="return event.charCode >= 48 && event.charCode <= 57" disabled>
+													<input type="text" class="form-control" maxlength="6" id="txtNumEmpleadoLogeado_Editar" onkeypress="return event.charCode >= 48 && event.charCode <= 57" disabled>
+												</div>
+											</div>
+											<div class="form-group row" id="divIDVisita_nombre_empleado_Editar">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Empleado:</label>
+												<div class="col-sm-8">
+												<input type="text" class="form-control" id="txtNombreEmpleadoLogeado_Editar" disabled>
+												</div>
+											</div>
+											<div class="form-group row" style="display:none;">
+													<label for="lblNombreVisita" class="col-sm-3 col-form-label">Fecha:</label>
+													<div class="col-sm-8">
+													<input type="date" class="form-control" id="txtFechaDia_Editar" disabled>
+													
+													</div>
+												</div>
+											<div class="form-group row" id="divIDVisita_Ubicacion_Editar" style="display:none;">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Ubicación:</label>
+												<div class="col-sm-8">
+													<select class="form-control" id="txtUbicacion_Editar" disabled>
+														<option value="0"> Seleccione Ubicación</option>
+														<option value="1"> Torre TOP</option>
+														<option value="2"> Apodaca</option>
+														<option value="3"> Cienega</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row" id="divIDVisita_tipo_platillo_Editar" style="display:none;">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Tipo de platillo:</label>
+												<div class="col-sm-8">
+													<select class="form-control" name="txtTipoPlatillo_Editar" id="txtTipoPlatillo_Editar" disabled>
+														<option value="0">Seleccione el tipo de platillo</option>
+														<option value="4">Platillo Especial</option>
+													</select>
+												</div>
+											</div>
+											<!-- ---------- -->
+											<div class="form-group row" id="DivTotal_Editar" style="display:none;">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Total:</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" id="txtTotalPlatillo_Editar" value="0.00" disabled>
+												</div>
+											</div>
+											<div class="form-group row" id="DivPrecio_Editar" style="display:none;">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio:</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" id="txtPrecioPlatillo_Editar" value="49.00" disabled>
+												</div>
+											</div>
+											<!-- ---------- -->
+											<!-- ////////// -->
+											<div id="ComidaGR_Editar" style="display:none;" class="form-group row" >
+												<div class="form-group col-md-3 col-xs-3" id="divIDVisita_Platillo_Editar">
+													<label for="lblNombreVisita" class="col-sm-12 col-xs-12 col-form-label">Platillo:</label>
+												</div>
+												<div class="form-group col-sm-8 col-xs-8">
+													<select class="form-control" name="txtProductoSeleccionadoGR_Editar" id="txtProductoSeleccionadoGR_Editar" onchange="InfoPlatillo(2)">
+														
+													</select>
+												</div>
+												<div class="col-md-12 col-xs-12 " id="divIDVisita_calorias_Editar" style='display:none;'>
+													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Kcal (c/u):</label>
+													<div class="col-sm-12">
+														<input type="text" class="form-control" id="txtCaloriasGR_Editar" disabled>
+													</div>
+												</div>
+												<div class="form-group col-md-3 col-xs-3" id="divIDVisita_cantidad_lbl_Editar">
+													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Cantidad:</label>
+												</div>
+												<div class="form-group col-sm-8 col-xs-8" id="divIDVisita_cantidad_Editar">
+													<input type="text" class="form-control" id="txtNumPlatilloGR_Editar" pattern="\d*" maxlength="2" min="1" value="1" onchange="ValidarPlatillosGR()" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+												</div>
+												<div id="DivComentario_Editar">
+													<div class="form-group col-md-3 col-xs-3" id="divIDVisita_Comentarios_lbl_Editar" style="display:none;">
+														<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
+													</div>
+													<div class="form-group col-sm-8 col-xs-8" id="divIDVisita_Comentarios_Global_Editar" style="display:none;">
+														<textarea id="txtComentarioGlobalPlatillo_Editar" class="form-control" rows="5" cols="200" maxlength="250" placeholder="Descripción pedido"></textarea>
+													</div>
+												</div>
+												<div class="col-md-12 col-xs-12 " id="divIDVisita_Precio_Editar" style="display:none;">
+													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Precio:</label>
+													<div class="col-sm-12">
+														<input type="text" class="form-control" id="txtPrecioTotal_Editar" value="0.00" disabled >
+														<input type="text" class="form-control" id="txtPrecioGR_Editar" value="0.00" disabled style="display:none">
+														<input type="text" class="form-control" id="txtTipoPlatilloGR_Editar" disabled style="display:none" >
+													</div>
+												</div>
+												<div class="col-md-12 col-xs-12 " id="divIDVisita_Comentarios_Editar" style="display:none;">
+													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Comentarios:</label>
+													<div class="col-sm-12">
+														<textarea id="txtComentariosGR_Editar" class="form-control" rows="5" cols="200" maxlength="250"></textarea>
+													</div>
+												</div>
+												<div class="form-group col-md-12 col-xs-12 row">
+													<div class="col-md-12 col-xs-12 row" id="divIDVisita_Agregar_Editar">
+														<button type="button" class="btn btn-primary ValidaBoton ajustar_btn" onclick="EditarComidaGr();" id="EditarOrdenGR" >Agregar</button>
+													</div>
+												</div>
+												<div id="div_mostrar_tabla_pedido_Editar" class="form-group col-md-12 col-xs-12 row scroll_pedio_gs" style="display:none;">
+													<table id ="TablaGreenSpot_Editar"  class="table table-bordered table-hover TablaResponsiva">
+														<thead>
+														<tr>
+															<td scope="col" style="display:none">Posición</td>
+															<td scope="col" style="display:none">Id. Platillo</td>
+															<td scope="col" >Platillo</td>
+															<td scope="col" style="display:none">Comentario</td>
+															<td scope="col" style="display:none">Tipo Platillo</td>
+															<td scope="col" style='display:none;'>Kcal.</td>
+															<td scope="col" >Cantidad</td>
+															<td scope="col" style="display:none">Precios</td>
+															<td scope="col" style="display:none">Total</td>
+															<td scope="col">Acciones</td>
+														</tr>
+														</thead>
+														<tbody id="ListadoComidaGr_Editar">
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<!-- ////////// -->
+											<div class="form-group row" id="DivFecha_Editar" style="display:none;">
+												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Fecha:</label>
+												<div class="col-sm-8">
+												<input type="text" class="form-control" id="txtFechaPedido_Editar" disabled>
+												</div>
+											</div>
+										</section>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div class="d-flex flex-row-reverse">
+									<button type="button" class="btn boton-secundario" data-dismiss="modal">Cerrar</button>
+									<button type="button" class="btn btn-primary ValidaBoton" onclick="EditarOrden();" id="EditarOrden">Editar Comida</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			
 			</section>
 		</div>

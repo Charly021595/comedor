@@ -1613,51 +1613,55 @@ function boton_ver_detalles_comida(numero_emp){
 		processData: false,
 		success: function(result) {
 			data = JSON.parse(result);
-			datos = data.data;
-			let nombre_ubicacion = '';
-			let tabla_detalle_comida = `
-			<table  id='TablaDetallesComida' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col'>No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col'>No. Platillos</th>
-						<th scope='col'>Precio</th>
-						<th scope='col'>Total</th>
-						<th scope='col'>Ubicación</th>
-						<th scope='col'>FechaPedido</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoDetallesComida'>
-			`;
-			for(let i = 0; i < datos.length; i++){
-				let tipo_empleado = '';
-				tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
-				tabla_detalle_comida += `
-				<tr>
-					<td  data-label= 'No. Orden'>${datos[i].IdPedido}</td>
-					<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
-					<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
-					<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
-					<td data-label= 'No. Platillos'>${datos[i].NoPlatillo}</td>
-					<td data-label= 'Precio'>${datos[i].Precio}</td>
-					<td data-label= 'Total'>${datos[i].Total}</td>	
-					<td data-label= 'Ubicación'>
-					${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-					</td>
-					<td data-label= 'FechaPedido'>${datos[i].FechaPedido}</td>
-				</tr>`;
-			}
+			if (data.estatus == "success") {
+				datos = data.data;
+				let nombre_ubicacion = '';
+				let tabla_detalle_comida = `
+				<table  id='TablaDetallesComida' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col'>No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col'>No. Platillos</th>
+							<th scope='col'>Precio</th>
+							<th scope='col'>Total</th>
+							<th scope='col'>Ubicación</th>
+							<th scope='col'>FechaPedido</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoDetallesComida'>
+				`;
+				for(let i = 0; i < datos.length; i++){
+					let tipo_empleado = '';
+					tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
+					tabla_detalle_comida += `
+					<tr>
+						<td  data-label= 'No. Orden'>${datos[i].IdPedido}</td>
+						<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
+						<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
+						<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
+						<td data-label= 'No. Platillos'>${datos[i].NoPlatillo}</td>
+						<td data-label= 'Precio'>${datos[i].Precio}</td>
+						<td data-label= 'Total'>${datos[i].Total}</td>	
+						<td data-label= 'Ubicación'>
+						${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+						</td>
+						<td data-label= 'FechaPedido'>${datos[i].FechaPedido}</td>
+					</tr>`;
+				}
 
-			tabla_detalle_comida += `</tbody>
-			</table>`;
-			$("#titulo_modal").html('Detalles Comida');
-			$("#mostrar_tabla_detalles").html(tabla_detalle_comida);
-			$("#agregar_botones_modal").append(`
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			`);
+				tabla_detalle_comida += `</tbody>
+				</table>`;
+				$("#titulo_modal").html('Detalles Comida');
+				$("#mostrar_tabla_detalles").html(tabla_detalle_comida);
+				$("#agregar_botones_modal").append(`
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				`);
+			}else{
+				Swal.fire('No hay Registros', "","info");
+			}
 		}
 	});
 }
@@ -1681,53 +1685,57 @@ function boton_ver_detalles_desayunos(numero_emp){
 		processData: false,
 		success: function(result) {
 			data = JSON.parse(result);
-			datos_green_spot = data.data;
-			let nombre_ubicacion = '';
-			let tabla_detalle_desayuno = `
-			<table  id='tabla_detalles_desayuno' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col'>No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col'>No. Platillos</th>
-						<th scope='col'>Platillo</th>
-						<th scope='col'>Precio</th>
-						<th scope='col'>Total</th>
-						<th scope='col'>Ubicación</th>
-						<th scope='col'>FechaPedido</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoDetallesDesayuno'>
-			`;
-			for(let i = 0; i < datos_green_spot.length; i++){
-				let tipo_empleado_green_spot = '';
-				tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? tipo_empleado_green_spot = 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? tipo_empleado_green_spot = 'Administrativo' : '';
-				tabla_detalle_desayuno += `
-				<tr>
-					<td  data-label= 'No. Orden'>${datos_green_spot[i].IdPedido}</td>
-					<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
-					<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
-					<td data-label= 'tipo_empleado'>${tipo_empleado_green_spot}</td>
-					<td data-label= 'No. Platillos'>${datos_green_spot[i].NoPlatillo}</td>
-					<td data-label= 'Platillo'>${datos_green_spot[i].Platillo}</td>
-					<td data-label= 'Precio'>${datos_green_spot[i].Precio}</td>
-					<td data-label= 'Total'>${datos_green_spot[i].total}</td>	
-					<td data-label= 'Ubicación'>
-					${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-					</td>
-					<td data-label= 'FechaPedido'>${datos_green_spot[i].FechaPedido}</td>
-				</tr>`;
-			}
+			if (data.estatus == "success") {
+				datos_green_spot = data.data;
+				let nombre_ubicacion = '';
+				let tabla_detalle_desayuno = `
+				<table  id='tabla_detalles_desayuno' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col'>No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col'>No. Platillos</th>
+							<th scope='col'>Platillo</th>
+							<th scope='col'>Precio</th>
+							<th scope='col'>Total</th>
+							<th scope='col'>Ubicación</th>
+							<th scope='col'>FechaPedido</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoDetallesDesayuno'>
+				`;
+				for(let i = 0; i < datos_green_spot.length; i++){
+					let tipo_empleado_green_spot = '';
+					tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? tipo_empleado_green_spot = 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? tipo_empleado_green_spot = 'Administrativo' : '';
+					tabla_detalle_desayuno += `
+					<tr>
+						<td  data-label= 'No. Orden'>${datos_green_spot[i].IdPedido}</td>
+						<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
+						<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
+						<td data-label= 'tipo_empleado'>${tipo_empleado_green_spot}</td>
+						<td data-label= 'No. Platillos'>${datos_green_spot[i].NoPlatillo}</td>
+						<td data-label= 'Platillo'>${datos_green_spot[i].Platillo}</td>
+						<td data-label= 'Precio'>${datos_green_spot[i].Precio}</td>
+						<td data-label= 'Total'>${datos_green_spot[i].total}</td>	
+						<td data-label= 'Ubicación'>
+						${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+						</td>
+						<td data-label= 'FechaPedido'>${datos_green_spot[i].FechaPedido}</td>
+					</tr>`;
+				}
 
-			tabla_detalle_desayuno += `</tbody>
-			</table>`;
-			$("#titulo_modal").html('Detalles Comida Green Spot');
-			$("#mostrar_tabla_detalles").html(tabla_detalle_desayuno);
-			$("#agregar_botones_modal").append(`
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			`);
+				tabla_detalle_desayuno += `</tbody>
+				</table>`;
+				$("#titulo_modal").html('Detalles Comida Green Spot');
+				$("#mostrar_tabla_detalles").html(tabla_detalle_desayuno);
+				$("#agregar_botones_modal").append(`
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				`);
+			}else{
+				Swal.fire('No hay Registros', "","info");
+			}
 		}
 	});
 }
@@ -1754,91 +1762,95 @@ function boton_ver_detalles_comida_con(numero_conciliado){
 		success: function(result) {
 			$("#numero_conciliacion").val(numero_conciliado);
 			data = JSON.parse(result);
-			datos = data.data;
-			let nombre_ubicacion = '',
-			nombre_tipo_platillo = '',
-			nombre_estatus = '';
-			$("#filtro_pirmer_detalle").html(`
-				<div class="form-group row">
-					<div class="col-sm-4 col-xs-4 col-md-4">
-						<label for="lblNombreVisita_detalle_comida_conciliada">Filtrar por No. Empleado:</label>
+			if (data.estatus == 'success') {
+				datos = data.data;
+				let nombre_ubicacion = '',
+				nombre_tipo_platillo = '',
+				nombre_estatus = '';
+				$("#filtro_pirmer_detalle").html(`
+					<div class="form-group row">
+						<div class="col-sm-4 col-xs-4 col-md-4">
+							<label for="lblNombreVisita_detalle_comida_conciliada">Filtrar por No. Empleado:</label>
+						</div>
+						<div class="col-sm-8 col-xs-8 col-md-8">
+							<input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_detalle_conciliada" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onchange="txtNumeroEmpleado_detalle_conciliada()">
+						</div>
 					</div>
-					<div class="col-sm-8 col-xs-8 col-md-8">
-						<input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_detalle_conciliada" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onchange="txtNumeroEmpleado_detalle_conciliada()">
-					</div>
-				</div>
-			`);
-			$("#boton_descarga_excel_comedor_detalle_conciliados").html(`
-				<button id="btn_conciliar_comedor_detalle_conciliados" style="display:none;" class="btn btn-primary" onclick="DescargarTablaComedorDetalleConciliados()">Exportar Excel</button>
-			`);
-			let tbody_detalle_gs_co = '';
-			let tabla_detalle_comida_con = `
-			<table  id='TablaDetallesComidaConciliado' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col' style='display:none;'>No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col' style="display:none;">Tipo de Platillo</th>
-						<th scope='col'>Total Platillos</th>
-						<th scope='col'>Total Pagar</th>
-						<th scope='col' style='display:none;'>Ubicación</th>
-						<th scope='col' style="display:none;">FechaPedido</th>
-						<th scope='col'>Estatus</th>
-						<th scope='col'>Acciones</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoListados_detalle_plato_express_procesadas'>
-				</tbody>
-			</table>
-			`;
-			$("#mostrar_tabla_conciliadas_detalles").append(tabla_detalle_comida_con);
-			for(let i = 0; i < datos.length; i++){
-				if (numero_empleado != datos[i].NoEmpleado) {
-					let tipo_empleado = '';
-					tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
-					tbody_detalle_gs_co = `
-					<tr>
-					<td  data-label= 'No. Orden' style='display:none;'>${datos[i].IdPedido}</td>
-						<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
-						<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
-						<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
-						<td data-label= 'Tipo de Platillo' style='display:none;'>
-							${nombre_tipo_platillo = datos[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
-						</td>
-						<td data-label= 'Total Platillos' id='numero_platillos_plato_express_conciliados_${datos[i].NoEmpleado}'></td>
-						<td data-label= 'Total Pagar' id='total_pagar_comida_expres_conciliados_${datos[i].NoEmpleado}'></td>
-						<td data-label= 'Ubicación' style='display:none;'>
-							${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-						</td>
-						<td data-label= 'FechaPedido' style='display:none;'>${datos[i].FechaPedido}</td>
-						<td data-label= 'Estatus Enviado' >
-							${ nombre_estatus = datos[i].EstatusEnviado == 1 ? 'Pendiente por Procesar' : datos[i].EstatusEnviado == 2 ? 'Procesado' : ''}
-						</td>
-						<td data-label= 'Acciones' ><button id='boton_ver_detalles' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_comida_pro_con(${datos[i].NoEmpleado}, "${numero_conciliado}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>
-					</tr>`;
+				`);
+				$("#boton_descarga_excel_comedor_detalle_conciliados").html(`
+					<button id="btn_conciliar_comedor_detalle_conciliados" style="display:none;" class="btn btn-primary" onclick="DescargarTablaComedorDetalleConciliados()">Exportar Excel</button>
+				`);
+				let tbody_detalle_gs_co = '';
+				let tabla_detalle_comida_con = `
+				<table  id='TablaDetallesComidaConciliado' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col' style='display:none;'>No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col' style="display:none;">Tipo de Platillo</th>
+							<th scope='col'>Total Platillos</th>
+							<th scope='col'>Total Pagar</th>
+							<th scope='col' style='display:none;'>Ubicación</th>
+							<th scope='col' style="display:none;">FechaPedido</th>
+							<th scope='col'>Estatus</th>
+							<th scope='col'>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoListados_detalle_plato_express_procesadas'>
+					</tbody>
+				</table>
+				`;
+				$("#mostrar_tabla_conciliadas_detalles").append(tabla_detalle_comida_con);
+				for(let i = 0; i < datos.length; i++){
+					if (numero_empleado != datos[i].NoEmpleado) {
+						let tipo_empleado = '';
+						tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
+						tbody_detalle_gs_co = `
+						<tr>
+						<td  data-label= 'No. Orden' style='display:none;'>${datos[i].IdPedido}</td>
+							<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
+							<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
+							<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
+							<td data-label= 'Tipo de Platillo' style='display:none;'>
+								${nombre_tipo_platillo = datos[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
+							</td>
+							<td data-label= 'Total Platillos' id='numero_platillos_plato_express_conciliados_${datos[i].NoEmpleado}'></td>
+							<td data-label= 'Total Pagar' id='total_pagar_comida_expres_conciliados_${datos[i].NoEmpleado}'></td>
+							<td data-label= 'Ubicación' style='display:none;'>
+								${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+							</td>
+							<td data-label= 'FechaPedido' style='display:none;'>${datos[i].FechaPedido}</td>
+							<td data-label= 'Estatus Enviado' >
+								${ nombre_estatus = datos[i].EstatusEnviado == 1 ? 'Pendiente por Procesar' : datos[i].EstatusEnviado == 2 ? 'Procesado' : ''}
+							</td>
+							<td data-label= 'Acciones' ><button id='boton_ver_detalles' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_comida_pro_con(${datos[i].NoEmpleado}, "${numero_conciliado}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>
+						</tr>`;
 
-					$("#ContenidoListados_detalle_plato_express_procesadas").append(tbody_detalle_gs_co);
+						$("#ContenidoListados_detalle_plato_express_procesadas").append(tbody_detalle_gs_co);
+					}
+
+					if (numero_empleado != datos[i].NoEmpleado) {
+						suma_platillos_coex = datos[i].NoPlatillo;
+						total_pagar_platillos_coco = datos[i].Total;
+						$("#numero_platillos_plato_express_conciliados_"+datos[i].NoEmpleado).html(datos[i].NoPlatillo);
+						$("#total_pagar_comida_expres_conciliados_"+datos[i].NoEmpleado).html('$'+total_pagar_platillos_coco);
+					}else{
+						suma_platillos_coex += Number(datos[i].NoPlatillo);
+						total_pagar_platillos_coco += Number(datos[i].Total);
+						$("#numero_platillos_plato_express_conciliados_"+datos[i].NoEmpleado).html(suma_platillos_coex);
+						$("#total_pagar_comida_expres_conciliados_"+datos[i].NoEmpleado).html('$'+total_pagar_platillos_coco);
+					}
+
+					numero_empleado = datos[i].NoEmpleado;
 				}
 
-				if (numero_empleado != datos[i].NoEmpleado) {
-					suma_platillos_coex = datos[i].NoPlatillo;
-					total_pagar_platillos_coco = datos[i].Total;
-					$("#numero_platillos_plato_express_conciliados_"+datos[i].NoEmpleado).html(datos[i].NoPlatillo);
-					$("#total_pagar_comida_expres_conciliados_"+datos[i].NoEmpleado).html('$'+total_pagar_platillos_coco);
-				}else{
-					suma_platillos_coex += Number(datos[i].NoPlatillo);
-					total_pagar_platillos_coco += Number(datos[i].Total);
-					$("#numero_platillos_plato_express_conciliados_"+datos[i].NoEmpleado).html(suma_platillos_coex);
-					$("#total_pagar_comida_expres_conciliados_"+datos[i].NoEmpleado).html('$'+total_pagar_platillos_coco);
-				}
-
-				numero_empleado = datos[i].NoEmpleado;
+				$("#titulo_modal_conciliado").html('Detalles Comida Conciliada');
+				$("#btn_conciliar_comedor_detalle_conciliados").show();
+			}else{
+				Swal.fire('No hay Registros', "","info");
 			}
-
-			$("#titulo_modal_conciliado").html('Detalles Comida Conciliada');
-			$("#btn_conciliar_comedor_detalle_conciliados").show();
 		}
 	});
 }
@@ -1866,52 +1878,56 @@ function boton_ver_detalles_comida_pro_con(numero_emp, numero_conciliado){
 		processData: false,
 		success: function(result) {
 			data = JSON.parse(result);
-			datos = data.data;
-			let nombre_ubicacion = '';
-			let tabla_detalle_comida_con = `
-			<table  id='TablaDetallesComidaProcesadoConciliado' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col'>No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col'>No. Platillos</th>
-						<th scope='col'>Precio</th>
-						<th scope='col'>Total</th>
-						<th scope='col'>Ubicación</th>
-						<th scope='col'>FechaPedido</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoDetallesComidaCociliado'>
-			`;
-			for(let i = 0; i < datos.length; i++){
-				let tipo_empleado = '';
-				tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
-				tabla_detalle_comida_con += `
-				<tr>
-					<td  data-label= 'No. Orden'>${datos[i].IdPedido}</td>
-					<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
-					<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
-					<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
-					<td data-label= 'No. Platillos'>${datos[i].NoPlatillo}</td>
-					<td data-label= 'Precio'>${datos[i].Precio}</td>
-					<td data-label= 'Total'>${datos[i].Total}</td>	
-					<td data-label= 'Ubicación'>
-					${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-					</td>
-					<td data-label= 'FechaPedido'>${datos[i].FechaPedido}</td>
-				</tr>`;
-			}
+			if (data.estatus == "success") {
+				datos = data.data;
+				let nombre_ubicacion = '';
+				let tabla_detalle_comida_con = `
+				<table  id='TablaDetallesComidaProcesadoConciliado' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col'>No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col'>No. Platillos</th>
+							<th scope='col'>Precio</th>
+							<th scope='col'>Total</th>
+							<th scope='col'>Ubicación</th>
+							<th scope='col'>FechaPedido</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoDetallesComidaCociliado'>
+				`;
+				for(let i = 0; i < datos.length; i++){
+					let tipo_empleado = '';
+					tipo_empleado = datos[i].Tipo_Empleado == 1 ? tipo_empleado = 'Sindicalizado' : datos[i].Tipo_Empleado == 2 ? tipo_empleado = 'Administrativo' : '';
+					tabla_detalle_comida_con += `
+					<tr>
+						<td  data-label= 'No. Orden'>${datos[i].IdPedido}</td>
+						<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
+						<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
+						<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
+						<td data-label= 'No. Platillos'>${datos[i].NoPlatillo}</td>
+						<td data-label= 'Precio'>${datos[i].Precio}</td>
+						<td data-label= 'Total'>${datos[i].Total}</td>	
+						<td data-label= 'Ubicación'>
+						${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+						</td>
+						<td data-label= 'FechaPedido'>${datos[i].FechaPedido}</td>
+					</tr>`;
+				}
 
-			tabla_detalle_comida_con += `</tbody>
-			</table>`;
-			$("#titulo_modal").html('Detalles Comida Conciliada');
-			$("#mostrar_tabla_detalles").html(tabla_detalle_comida_con);
-			$("#agregar_botones_modal").append(`
-				<button type="button" class="btn btn-default" onclick='regresar_modal("${numero_conciliado}", 1)'>Regresar</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			`);
+				tabla_detalle_comida_con += `</tbody>
+				</table>`;
+				$("#titulo_modal").html('Detalles Comida Conciliada');
+				$("#mostrar_tabla_detalles").html(tabla_detalle_comida_con);
+				$("#agregar_botones_modal").append(`
+					<button type="button" class="btn btn-default" onclick='regresar_modal("${numero_conciliado}", 1)'>Regresar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				`);
+			}else{
+				Swal.fire('No hay Registros', "","info");
+			}
 		}
 	});
 }
@@ -1941,117 +1957,121 @@ function boton_ver_detalles_desayunos_con(numero_conciliado){
 		processData: false,
 		success: function(result) {
 			data = JSON.parse(result);
-			$("#numero_conciliacion").val(numero_conciliado);
-			datos_green_spot = data.data;
-			let nombre_ubicacion = '',
-			nombre_tipo_platillo = '',
-			nombre_estatus = '';
-			$("#filtro_pirmer_detalle").html(`
-				<div class="form-group row">
-					<div class="col-sm-4 col-xs-4 col-md-4">
-						<label for="lblNombreVisita_detalle_comida_especial_conciliada">Filtrar por No. Empleado:</label>
+			if (data.estatus == "success") {
+				$("#numero_conciliacion").val(numero_conciliado);
+				datos_green_spot = data.data;
+				let nombre_ubicacion = '',
+				nombre_tipo_platillo = '',
+				nombre_estatus = '';
+				$("#filtro_pirmer_detalle").html(`
+					<div class="form-group row">
+						<div class="col-sm-4 col-xs-4 col-md-4">
+							<label for="lblNombreVisita_detalle_comida_especial_conciliada">Filtrar por No. Empleado:</label>
+						</div>
+						<div class="col-sm-8 col-xs-8 col-md-8">
+							<input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_detalle_especial_conciliada" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onchange="txtNumeroEmpleado_detalle_especial_conciliada()">
+						</div>
 					</div>
-					<div class="col-sm-8 col-xs-8 col-md-8">
-						<input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_detalle_especial_conciliada" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onchange="txtNumeroEmpleado_detalle_especial_conciliada()">
-					</div>
-				</div>
-			`);
-			$("#boton_descarga_excel_comedor_detalle_conciliados").html(`
-				<button id="btn_conciliar_comedor_detalle_especial_conciliados" style="display:none;" class="btn btn-primary" onclick="DescargarTablaComedorDetalleEspecialConciliados()">Exportar Excel</button>
-			`);
-			let tbody_detalle_gs_co = '';
-			let tabla_detalle_gs_co = `
-			<table  id='TablaDetallesComidaEspecialConciliado' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col' style="display:none;">No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col' style="display:none;">Tipo de Platillo</th>
-						<th scope='col'>Total Platillos</th>
-						<th scope='col'>Total Pagar</th>
-						<th scope='col' style='display:none;'>Ubicación</th>
-						<th scope='col' style="display:none;">FechaPedido</th>
-						<th scope='col'>Estatus</th>
-						<th scope='col'>Acciones</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoListados_green_spot_conciliados'>
-				</tbody>
-			</table>
-			`;
-			$("#mostrar_tabla_conciliadas_detalles").append(tabla_detalle_gs_co);
-			for(var i=0; i < datos_green_spot.length; i++){
-				if (numero_empleado_green_spot != datos_green_spot[i].NoEmpleado){
-					if(ID != datos_green_spot[i].IdPedido){
-						let tipo_empleado_green_spot = '';
-						tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? 'Administrativo' : '';  
-						ID = datos_green_spot[i].IdPedido;
-						tbody_detalle_gs_co = `
-						<tr>
-							<td  data-label= 'No. Orden' style='display:none;'>${datos_green_spot[i].IdPedido}</td>
-							<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
-							<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
-							<td data-label= 'Tipo de Empleado'>${tipo_empleado_green_spot}</td>
-							<td data-label= 'Tipo de Platillo' style='display:none;'>
-								${nombre_tipo_platillo = datos_green_spot[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
-							</td>
-							<td data-label= 'Total Platillos' id='total_platillos_gs_co_${datos_green_spot[i].NoEmpleado}'>${suma_platillos_gs_co}</td>
-							<td data-label= 'Total Pagar' id='total_platillos_precio_gs_co_${datos_green_spot[i].NoEmpleado}'>${total_pagar_platillos_gs_co}</td>
-							<td data-label= 'Ubicación' style='display:none;'>
-								${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-							</td>
-							<td data-label= 'FechaPedido' style='display:none;'>${datos_green_spot[i].FechaPedido}</td>
-							<td data-label= 'Estatus Enviado' >
-								${ nombre_estatus = datos_green_spot[i].EstatusEnviado == 1 ? 'Pendiente por Procesar' : datos_green_spot[i].EstatusEnviado == 2 ? 'Procesado' : ''}
-							</td>
-							<td data-label= 'Acciones' ><button id='boton_ver_detalles' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_desayunos_pro_con(${datos_green_spot[i].NoEmpleado}, "${numero_conciliado}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>
-						</tr>`;
-						
-						RowID = 0;
-						num_orden = datos_green_spot[i].IdPedido;
-					}else{
-						RowID= RowID +1;
-						var RowFinal = RowID +1;
-						tabla_detalle_gs_co += `
-						<tr>
-							<td  data-label= 'No. Orden' style='display:none;' rowspan='${RowFinal}'></td>
-							<td  data-label= 'No. Empleado' rowspan='${RowFinal}'></td>
-							<td data-label= 'Empleado' rowspan='${RowFinal}'></td>
-							<td data-label= 'Tipo de Empleado' rowspan='${RowFinal}'></td>
-							<td data-label= 'Tipo de Platillo' style='display:none;'>
-								${nombre_tipo_platillo = datos_green_spot[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
-							</td>
-							<td data-label= 'Total Platillos'>${suma_platillos_gs_co}</td>
-							<td data-label= 'Total Pagar'>${total_pagar_platillos_gs_co}</td>
-							<td data-label= 'Ubicación' style='display:none;'>
-								${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-							</td>
-							<td data-label= 'FechaPedido' style='display:none;'>${datos_green_spot[i].FechaPedido}</td>
-							<td data-label= 'Estatus'></td>
-						</tr>`;
+				`);
+				$("#boton_descarga_excel_comedor_detalle_conciliados").html(`
+					<button id="btn_conciliar_comedor_detalle_especial_conciliados" style="display:none;" class="btn btn-primary" onclick="DescargarTablaComedorDetalleEspecialConciliados()">Exportar Excel</button>
+				`);
+				let tbody_detalle_gs_co = '';
+				let tabla_detalle_gs_co = `
+				<table  id='TablaDetallesComidaEspecialConciliado' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col' style="display:none;">No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col' style="display:none;">Tipo de Platillo</th>
+							<th scope='col'>Total Platillos</th>
+							<th scope='col'>Total Pagar</th>
+							<th scope='col' style='display:none;'>Ubicación</th>
+							<th scope='col' style="display:none;">FechaPedido</th>
+							<th scope='col'>Estatus</th>
+							<th scope='col'>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoListados_green_spot_conciliados'>
+					</tbody>
+				</table>
+				`;
+				$("#mostrar_tabla_conciliadas_detalles").append(tabla_detalle_gs_co);
+				for(var i=0; i < datos_green_spot.length; i++){
+					if (numero_empleado_green_spot != datos_green_spot[i].NoEmpleado){
+						if(ID != datos_green_spot[i].IdPedido){
+							let tipo_empleado_green_spot = '';
+							tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? 'Administrativo' : '';  
+							ID = datos_green_spot[i].IdPedido;
+							tbody_detalle_gs_co = `
+							<tr>
+								<td  data-label= 'No. Orden' style='display:none;'>${datos_green_spot[i].IdPedido}</td>
+								<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
+								<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
+								<td data-label= 'Tipo de Empleado'>${tipo_empleado_green_spot}</td>
+								<td data-label= 'Tipo de Platillo' style='display:none;'>
+									${nombre_tipo_platillo = datos_green_spot[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
+								</td>
+								<td data-label= 'Total Platillos' id='total_platillos_gs_co_${datos_green_spot[i].NoEmpleado}'>${suma_platillos_gs_co}</td>
+								<td data-label= 'Total Pagar' id='total_platillos_precio_gs_co_${datos_green_spot[i].NoEmpleado}'>${total_pagar_platillos_gs_co}</td>
+								<td data-label= 'Ubicación' style='display:none;'>
+									${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+								</td>
+								<td data-label= 'FechaPedido' style='display:none;'>${datos_green_spot[i].FechaPedido}</td>
+								<td data-label= 'Estatus Enviado' >
+									${ nombre_estatus = datos_green_spot[i].EstatusEnviado == 1 ? 'Pendiente por Procesar' : datos_green_spot[i].EstatusEnviado == 2 ? 'Procesado' : ''}
+								</td>
+								<td data-label= 'Acciones' ><button id='boton_ver_detalles' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_desayunos_pro_con(${datos_green_spot[i].NoEmpleado}, "${numero_conciliado}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>
+							</tr>`;
+							
+							RowID = 0;
+							num_orden = datos_green_spot[i].IdPedido;
+						}else{
+							RowID= RowID +1;
+							var RowFinal = RowID +1;
+							tabla_detalle_gs_co += `
+							<tr>
+								<td  data-label= 'No. Orden' style='display:none;' rowspan='${RowFinal}'></td>
+								<td  data-label= 'No. Empleado' rowspan='${RowFinal}'></td>
+								<td data-label= 'Empleado' rowspan='${RowFinal}'></td>
+								<td data-label= 'Tipo de Empleado' rowspan='${RowFinal}'></td>
+								<td data-label= 'Tipo de Platillo' style='display:none;'>
+									${nombre_tipo_platillo = datos_green_spot[i].TipoPlatillo == "3" ? 'Platillo Unico' : ''}
+								</td>
+								<td data-label= 'Total Platillos'>${suma_platillos_gs_co}</td>
+								<td data-label= 'Total Pagar'>${total_pagar_platillos_gs_co}</td>
+								<td data-label= 'Ubicación' style='display:none;'>
+									${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+								</td>
+								<td data-label= 'FechaPedido' style='display:none;'>${datos_green_spot[i].FechaPedido}</td>
+								<td data-label= 'Estatus'></td>
+							</tr>`;
+						}
+						$("#ContenidoListados_green_spot_conciliados").append(tbody_detalle_gs_co);
 					}
-					$("#ContenidoListados_green_spot_conciliados").append(tbody_detalle_gs_co);
-				}
 
-				if (numero_empleado_green_spot != datos_green_spot[i].NoEmpleado) {
-					suma_platillos_gs_co = datos_green_spot[i].NoPlatillo;
-					total_pagar_platillos_gs_co = datos_green_spot[i].total;
-					$("#total_platillos_gs_co_"+datos_green_spot[i].NoEmpleado).html(datos_green_spot[i].NoPlatillo);
-					$("#total_platillos_precio_gs_co_"+datos_green_spot[i].NoEmpleado).html('$'+total_pagar_platillos_gs_co);
-				}else{
-					suma_platillos_gs_co += Number(datos_green_spot[i].NoPlatillo);
-					total_pagar_platillos_gs_co += Number(datos_green_spot[i].total);
-					$("#total_platillos_gs_co_"+datos_green_spot[i].NoEmpleado).html(suma_platillos_gs_co);
-					$("#total_platillos_precio_gs_co_"+datos_green_spot[i].NoEmpleado).html('$'+total_pagar_platillos_gs_co);
+					if (numero_empleado_green_spot != datos_green_spot[i].NoEmpleado) {
+						suma_platillos_gs_co = datos_green_spot[i].NoPlatillo;
+						total_pagar_platillos_gs_co = datos_green_spot[i].total;
+						$("#total_platillos_gs_co_"+datos_green_spot[i].NoEmpleado).html(datos_green_spot[i].NoPlatillo);
+						$("#total_platillos_precio_gs_co_"+datos_green_spot[i].NoEmpleado).html('$'+total_pagar_platillos_gs_co);
+					}else{
+						suma_platillos_gs_co += Number(datos_green_spot[i].NoPlatillo);
+						total_pagar_platillos_gs_co += Number(datos_green_spot[i].total);
+						$("#total_platillos_gs_co_"+datos_green_spot[i].NoEmpleado).html(suma_platillos_gs_co);
+						$("#total_platillos_precio_gs_co_"+datos_green_spot[i].NoEmpleado).html('$'+total_pagar_platillos_gs_co);
+					}
+					
+					numero_empleado_green_spot = datos_green_spot[i].NoEmpleado;
 				}
 				
-				numero_empleado_green_spot = datos_green_spot[i].NoEmpleado;
+				$("#titulo_modal_conciliado").html('Detalles Comida Green Spot Conciliada');
+				$("#btn_conciliar_comedor_detalle_especial_conciliados").show();	
+			}else{
+				Swal.fire('No hay Registros', "","info");
 			}
-			
-			$("#titulo_modal_conciliado").html('Detalles Comida Green Spot Conciliada');
-			$("#btn_conciliar_comedor_detalle_especial_conciliados").show();
 		}
 	});
 }
@@ -2079,54 +2099,58 @@ function boton_ver_detalles_desayunos_pro_con(numero_emp, numero_conciliado){
 		processData: false,
 		success: function(result) {
 			data = JSON.parse(result);
-			datos_green_spot = data.data;
-			let nombre_ubicacion = '';
-			let tabla_detalle_desayuno_co = `
-			<table  id='tabla_detalles_desayuno_conciliado' class='table table-bordered table-hover TablaResponsiva'>
-				<thead>
-					<tr class='table-header'>
-						<th scope='col'>No. Orden</th>
-						<th scope='col'>No. Empleado</th>
-						<th scope='col'>Empleado</th>
-						<th scope='col'>Tipo de Empleado</th>
-						<th scope='col'>No. Platillos</th>
-						<th scope='col'>Platillo</th>
-						<th scope='col'>Precio</th>
-						<th scope='col'>Total</th>
-						<th scope='col'>Ubicación</th>
-						<th scope='col'>FechaPedido</th>
-					</tr>
-				</thead>
-				<tbody id='ContenidoDetallesDesayunoConciliado'>
-			`;
-			for(let i = 0; i < datos_green_spot.length; i++){
-				let tipo_empleado_green_spot = '';
-				tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? 'Administrativo' : '';
-				tabla_detalle_desayuno_co += `
-				<tr>
-					<td  data-label= 'No. Orden'>${datos_green_spot[i].IdPedido}</td>
-					<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
-					<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
-					<td data-label= 'Tipo de Empleado'>${tipo_empleado_green_spot}</td>
-					<td data-label= 'No. Platillos'>${datos_green_spot[i].NoPlatillo}</td>
-					<td data-label= 'Platillo'>${datos_green_spot[i].Platillo}</td>
-					<td data-label= 'Precio'>${datos_green_spot[i].Precio}</td>
-					<td data-label= 'Total'>${datos_green_spot[i].total}</td>	
-					<td data-label= 'Ubicación'>
-					${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
-					</td>
-					<td data-label= 'FechaPedido'>${datos_green_spot[i].FechaPedido}</td>
-				</tr>`;
-			}
+			if (data.estatus == "success") {
+				datos_green_spot = data.data;
+				let nombre_ubicacion = '';
+				let tabla_detalle_desayuno_co = `
+				<table  id='tabla_detalles_desayuno_conciliado' class='table table-bordered table-hover TablaResponsiva'>
+					<thead>
+						<tr class='table-header'>
+							<th scope='col'>No. Orden</th>
+							<th scope='col'>No. Empleado</th>
+							<th scope='col'>Empleado</th>
+							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col'>No. Platillos</th>
+							<th scope='col'>Platillo</th>
+							<th scope='col'>Precio</th>
+							<th scope='col'>Total</th>
+							<th scope='col'>Ubicación</th>
+							<th scope='col'>FechaPedido</th>
+						</tr>
+					</thead>
+					<tbody id='ContenidoDetallesDesayunoConciliado'>
+				`;
+				for(let i = 0; i < datos_green_spot.length; i++){
+					let tipo_empleado_green_spot = '';
+					tipo_empleado_green_spot = datos_green_spot[i].Tipo_Empleado == 1 ? 'Sindicalizado' : datos_green_spot[i].Tipo_Empleado == 2 ? 'Administrativo' : '';
+					tabla_detalle_desayuno_co += `
+					<tr>
+						<td  data-label= 'No. Orden'>${datos_green_spot[i].IdPedido}</td>
+						<td  data-label= 'No. Empleado'>${datos_green_spot[i].NoEmpleado}</td>
+						<td data-label= 'Empleado'>${datos_green_spot[i].NombreEmpleado}</td>
+						<td data-label= 'Tipo de Empleado'>${tipo_empleado_green_spot}</td>
+						<td data-label= 'No. Platillos'>${datos_green_spot[i].NoPlatillo}</td>
+						<td data-label= 'Platillo'>${datos_green_spot[i].Platillo}</td>
+						<td data-label= 'Precio'>${datos_green_spot[i].Precio}</td>
+						<td data-label= 'Total'>${datos_green_spot[i].total}</td>	
+						<td data-label= 'Ubicación'>
+						${ nombre_ubicacion = datos_green_spot[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos_green_spot[i]['Ubicacion'] == 2 ? 'Apodaca' : datos_green_spot[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	
+						</td>
+						<td data-label= 'FechaPedido'>${datos_green_spot[i].FechaPedido}</td>
+					</tr>`;
+				}
 
-			tabla_detalle_desayuno_co += `</tbody>
-			</table>`;
-			$("#titulo_modal").html('Detalles Comida Escpecial Conciliada');
-			$("#mostrar_tabla_detalles").html(tabla_detalle_desayuno_co);
-			$("#agregar_botones_modal").append(`
-				<button type="button" class="btn btn-default" onclick='regresar_modal("${numero_conciliado}", 2)'>Regresar</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			`);
+				tabla_detalle_desayuno_co += `</tbody>
+				</table>`;
+				$("#titulo_modal").html('Detalles Comida Escpecial Conciliada');
+				$("#mostrar_tabla_detalles").html(tabla_detalle_desayuno_co);
+				$("#agregar_botones_modal").append(`
+					<button type="button" class="btn btn-default" onclick='regresar_modal("${numero_conciliado}", 2)'>Regresar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				`);
+			}else{
+				Swal.fire('No hay Registros', "","info");
+			}
 		}
 	});
 }
@@ -2183,6 +2207,7 @@ function DescargarTablaComedor(){
 					$("#btn_conciliar_comedor").removeAttr("disabled, disabled");
 					$("#btn_conciliar_comedor").removeClass("deshabilitar");
 					$('#btn_conciliar_comedor').attr("disabled", false);
+					ObtenerFecha();
 					MostrarInforme();
 				});
 			}else{
@@ -2212,6 +2237,7 @@ function DescargarTablaGreen(){
 					$("#btn_conciliar_comedor_green_spot").removeAttr("disabled, disabled");
 					$("#btn_conciliar_comedor_green_spot").removeClass("deshabilitar");
 					$('#btn_conciliar_comedor_green_spot').attr("disabled", false);
+					ObtenerFecha();
 					MostrarInforme_green_spot();
 				});
 			}else{

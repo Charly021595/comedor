@@ -8,7 +8,8 @@
 		//$a= "No PAsaria 1";
 		echo "<script> window.location='index.php'</script>";
 	}else{
-		if($_SESSION['RHComedor'] != '8999' && $_SESSION['RHComedor'] != '4857'){
+		if($_SESSION['RHComedor'] != '8999' && $_SESSION['RHComedor'] != '4857' && $_SESSION['RHComedor'] != '4603' && $_SESSION['RHComedor'] != '4984' 
+		&& $_SESSION['RHComedor'] != '8938' && $_SESSION['RHComedor'] != '5074' && $_SESSION['RHComedor'] != '8711'){
 			echo "<script> window.location='../dashboard.php'</script>";
 		}
 	}
@@ -125,7 +126,8 @@
 			</span>
 			</a>
 		</li> -->
-		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'|| $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
+		|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
 		<li>
 			<a href="../../dashboard.php">
 			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Dashboard</span>
@@ -163,7 +165,8 @@
 			</a>
 		</li>
 		<?php } ?>
-		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
+				|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
         <li>
 			<a href="ListadoComedorProcesado.php">
 			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Listado Enviado Nomina</span>
@@ -173,7 +176,8 @@
 			</a>
 		</li>
 		<?php } ?>
-		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
+				|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
         <li>
 			<a href="ListadoComedorFinalizados.php">
 			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Listado Finalizados</span>
@@ -317,7 +321,7 @@
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<!-- Aqui se cargaran las tablas con los detalles de los Platillos -->
-								<div class="col-xs-12 col-sm-12 col-md-12 scroll_tablas_detalle" id="mostrar_tabla_primer_detalle_finalizados">
+								<div class="col-xs-12 col-sm-12 col-md-12 scroll_pedido_tabla_detalles" id="mostrar_tabla_primer_detalle_finalizados">
 									
 								</div>
 							</div>

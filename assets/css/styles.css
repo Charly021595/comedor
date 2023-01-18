@@ -66,7 +66,7 @@
     margin-left: 15px;
 }
 
-#cross_cerrar{
+.cross_cerrar{
     color: #fff;
 }
 
@@ -84,28 +84,28 @@
 
 .scroll_tables{
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     height:400px;
     width:100%;
 }
 
 .scroll_pedio_gs{
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     height:117px;
     width:100%;
 }
 
 .scroll_pedido_tabla_principal_gs{
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     height:390px;
     width:100%;
 }
 
 .scroll_pedido_tabla_detalles{
     overflow-y: auto;
-    overflow-x: none;
+    overflow-x: hidden;
     height:350px;
     width:100%;
 }
@@ -128,7 +128,7 @@ button.cerrar{
     opacity: 1 !important;
 }
 
-#modal_header_pedido{
+.modal_header_pedido{
     background: #093255;
     color: #fff;
 }
