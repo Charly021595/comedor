@@ -284,7 +284,7 @@
 							<button id="btn_conciliar_comedor" class="btn btn-primary" onclick="DescargarTablaComedor()">Conciliar</button>
 						</div>
 						<div style="text-align:right; display:none;" id="boton_descarga_excel_green">
-							<button id="btn_conciliar_comedor_green_spot" class="btn btn-primary" onclick="DescargarTablaGreen()">Conciliar</button>
+							<button id="btn_conciliar_comedor_green_spot" class="btn btn-primary" onclick="DescargarTablaGreen()"><label style="display: none;" for="" id="lbl_btn_conciliar">Conciliar</label><img id="cargando_conciliar" class="gif_cargando_btn" src="../../assets/img/loading.gif" style="display:none;"></button>
 						</div>
 						<div style="text-align:right; display:none;" id="boton_descarga_excel_comedor_conciliados">
 							<button id="btn_finalizar_comedor_conciliados" class="btn btn-primary" onclick="Finalizar_Conciliadas()">Finalizar</button>

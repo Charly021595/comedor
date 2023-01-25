@@ -248,8 +248,8 @@
 									</div>
 									<!-- -->
 									<div style="text-align:right;display:none;" id="boton_descarga_excel">
-										<button class="btn btn-primary" onclick="DescargarTabla()">Export to XLS</button>
-										<button id="btn_nomina" class="btn btn-primary">Pasar a Nómina</button> 
+										<button class="btn btn-primary btn_export_xls" onclick="DescargarTabla()">Export to XLS</button>
+										<button id="btn_nomina" class="btn btn-primary"><label for=""  id="lbl_pasar_nomina">Pasar a Nómina</label><img id="cargando_pasar_nomina" class="gif_cargando_btn" src="../../assets/img/loading.gif" style="display:none;"></button> 
 										<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="AbrirModal()">Enivar Listado.</button> -->
 									</div>
 								</div>

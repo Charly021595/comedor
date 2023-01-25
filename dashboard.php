@@ -163,7 +163,7 @@
 		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999'){ ?>
 		<li>
 			<a href="GraficasComedor.php">
-			<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
+			<img src="assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
 			<span class="pull-right-container">
 			
 			</span>

@@ -554,7 +554,7 @@
 			$Fecha = isset($_POST['Fecha']) ? utf8_decode($_POST['Fecha']) : '';
 			$fecha_inicial = "";
 			$fecha_final = "";
-			$estatus_enviado = isset($_POST['estatus_enviado']) && is_null(!$_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 0;
+			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 0;
 			$listado_procesadas = isset($_POST['listado_procesadas']) ? $_POST['listado_procesadas'] : 0;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '';
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
@@ -638,9 +638,9 @@
 			if ($listado_procesadas == 0) {
 				foreach ($datos['data'] as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 0) {
-						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?)}";
 						$IdPedido = $dato["IdPedido"];
-						$params = array($IdPedido, $estatus_enviado);
+						$params = array($IdPedido);
 						$stmt = sqlsrv_query($conn, $sql, $params);
 	
 						if ( $stmt === false) {
@@ -658,7 +658,7 @@
 			}else{
 				foreach ($query as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
-						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?)}";
 						$IdPedido = $dato["IdPedido"];
 						$params = array($IdPedido, $estatus_enviado);
 						$stmt = sqlsrv_query($conn, $sql, $params);
@@ -699,11 +699,12 @@
 					$contador++;
 				}
 				sqlsrv_free_stmt( $stmt2 );
+				sqlsrv_free_stmt( $stmt );
+				sqlsrv_free_stmt( $exec );
 			}
-			sqlsrv_free_stmt( $stmt );
-			sqlsrv_free_stmt( $exec );
+
 			sqlsrv_close($conn);
-			
+
 			if ($validar) {
 				$data = array(
 					"estatus" => "success",

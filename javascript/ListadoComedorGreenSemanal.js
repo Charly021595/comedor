@@ -1071,7 +1071,7 @@ function InfoPlatillo(valor){
 			$("#txtTipoPlatilloGR").val("");
 			$("#txtComentariosGR").val("");
 		}	
-	}if (tipo_peticion == 2) {
+	}else if (tipo_peticion == 2) {
 		var InfoPlatillo = $("#txtProductoSeleccionadoGR_Editar").val();
 		//
 		$("#txtComentariosGR_Editar").val("");
@@ -1307,8 +1307,12 @@ function DescargarTabla(){
 }
 
 $("#btn_nomina").on("click", function(e){
+	debugger;
 	$("#btn_nomina").addClass("deshabilitar");
   	$('#btn_nomina').attr("disabled", true);
+	$('#lbl_pasar_nomina').hide();
+	$("#btn_nomina").css("width", "6%");
+	$('#cargando_pasar_nomina').show();
 	let fecha = $('#txtFechaSeleccionado').val(),
 	numero_empleado = $('#txtNumeroEmpleado').val();
 	$.ajax({
@@ -1320,7 +1324,7 @@ $("#btn_nomina").on("click", function(e){
 			if (datos.estatus == "success"){
 				enviar_nomina(datos);
 			}else{
-				Swal.fire(result.message, "","info");
+				Swal.fire(datos.mensaje, "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
@@ -1360,18 +1364,22 @@ function enviar_nomina(resultados){
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
 				MostrarInforme();
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
+				$('#cargando_pasar_nomina').hide();
 			}else{
 				Swal.fire('No hay Registros pendientes de pago', "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
+				$('#lbl_pasar_nomina').show();
+				$('#cargando_pasar_nomina').hide();
 			}
 		}
 	});
 }
 
 function GuardarOrden(){
-	debugger;
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
 	let NombreEmpleado =  $("#txtNombreEmpleadoLogeado").val();
 	let NoPlatillos = $("#txtNumPlatillo").val();
@@ -1468,7 +1476,6 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	return false;
 	$.ajax({
 		type: "POST",
 		data: {
