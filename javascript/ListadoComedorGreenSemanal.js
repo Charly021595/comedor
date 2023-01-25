@@ -20,7 +20,6 @@ $(document).ready(function(){
 	BuscarEmpleadoLogeadoSesion();
 	buscar_sede();
 	// setInterval(function(){
-	// 	debugger;
 	// 	let hoy = new Date();
 	// 	let dia = hoy.getDay(),
 	// 	hora = hoy.getHours(),
@@ -901,7 +900,6 @@ function TipoPlatillo(){
 }
 
 function TipoPlatillo_Editar(){
-	debugger;
 	let txtUbicacion = $("#txtUbicacion_Editar").val();
 	var tipoplatillo = $("#txtTipoPlatillo_Editar").val();
 	$("#txtProductoSeleccionadoGR_Editar").empty();
@@ -1198,7 +1196,6 @@ function Traer_Tipo_Empleado(NoEmpleado){
 }
 
 function EditarComidaGr(){
-	debugger;
 	NoAlimento_Editar = posicion_final_editar;
 	let Platillo_Editar = $('select[name="txtProductoSeleccionadoGR_Editar"] option:selected').text();
 	let IdPlatillo_Editar = $("#txtProductoSeleccionadoGR_Editar").val();
@@ -1307,7 +1304,6 @@ function DescargarTabla(){
 }
 
 $("#btn_nomina").on("click", function(e){
-	debugger;
 	$("#btn_nomina").addClass("deshabilitar");
   	$('#btn_nomina').attr("disabled", true);
 	$('#lbl_pasar_nomina').hide();
@@ -1712,7 +1708,6 @@ function EditarOrden(){
 }
 
 function EditarListadoGreenSpot() {
-	debugger;
     var arrayListadoComida_Editar = [];
 	$("#ListadoComidaGr_Editar tr").each(function(index, value) {
 		var Posicion, IdPlatillo, Platillo, Comentario, TipoPlatillo, KCal, Cantidad, Precios, Total, Estatus_Posicion;
