@@ -418,7 +418,7 @@ function CargarPedidoEditar(datos){
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Cantidad" id ="tdCantidadPlatilloEditar'+i+'">'+datos[i].NoPlatillo+'</td>';
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Precios" id ="tdPrecioUnitarioPlatilloEditar'+i+'" style="display:none">'+datos[i].Precio+'</td>';
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Total" id ="tdPrecioTotalPlatilloEditar'+i+'" style="display:none">'+datos[i].total+'</td>';
-		NuevoAlimento =  NuevoAlimento + "<td data-label='' ><button onclick='ElimarAlimentoEditar("+i+","+JSON.stringify(datos[i].IdPedido)+","+JSON.stringify(datos[i].IdComedorGr)+")'>Eliminar</button></td>" 
+		NuevoAlimento =  NuevoAlimento + "<td data-label='' ><button onclick='EliminarAlimentoEditar("+i+","+1+","+JSON.stringify(datos[i].IdPedido)+","+JSON.stringify(datos[i].IdComedorGr)+")'>Eliminar</button></td>" 
 		NuevoAlimento =  NuevoAlimento + "<td data-label='' id='recien_agregado' style='display:none'>"+1+"</td></tr>"   
 		$('#ListadoComidaGr_Editar').append(NuevoAlimento);
 		posicion_final_editar = i;
@@ -1209,7 +1209,7 @@ function EditarComidaGr(){
 	if(Platillo_Editar !="0" && PrecioTotal_Editar != "0.00" && IdPlatillo_Editar != 0){
 		NoAlimento_Editar = NoAlimento_Editar + 1;
 		$("#div_mostrar_tabla_pedido_Editar").show();
-		let NuevoAlimento = '<tr id="AlimentoEditar'+NoAlimento+'">';
+		let NuevoAlimento = '<tr id="AlimentoEditar'+NoAlimento_Editar+'">';
 		//style="display:none"
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Posición" style="display:none" id="tdPosiciónAlimentoEditar'+NoAlimento_Editar+'">'+NoAlimento_Editar+'</td>';
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Id. Platillo" style="display:none" id ="tdIdPlatilloEditar'+NoAlimento_Editar+'">'+IdPlatillo_Editar+'</td>';
@@ -1221,7 +1221,7 @@ function EditarComidaGr(){
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Cantidad" id ="tdCantidadPlatilloEditar'+NoAlimento_Editar+'">'+Cantidad_Editar+'</td>';
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Precios" id ="tdPrecioUnitarioPlatilloEditar'+NoAlimento_Editar+'" style="display:none">'+PrecioUnitario_Editar+'</td>';
 		NuevoAlimento =  NuevoAlimento + '<td data-label= "Total" id ="tdPrecioTotalPlatilloEditar'+NoAlimento_Editar+'" style="display:none">'+PrecioTotal_Editar+'</td>';
-		NuevoAlimento =  NuevoAlimento + "<td data-label='' ><button onclick='ConfirmacionEliminaAlimento("+NoAlimento_Editar+")'>Eliminar</button></td>";
+		NuevoAlimento =  NuevoAlimento + "<td data-label='' ><button onclick='EliminarAlimentoEditar("+NoAlimento_Editar+", "+0+")'>Eliminar</button></td>";
 		NuevoAlimento =  NuevoAlimento + "<td data-label='' id='recien_agregadoEditar' style='display:none'>"+0+"</td></tr>";
 		
 		$('#ListadoComidaGr_Editar').append(NuevoAlimento);
@@ -1266,27 +1266,37 @@ function ConfirmacionEliminaAlimento(NoAlimento){
 	});
 }
 
-function ElimarAlimentoEditar(NoAlimento, IdPedido, IdComedorGr){
+function EliminarAlimentoEditar(NoAlimento, Estatus_Posicion, IdPedido, IdComedorGr){
 	let NoAlimentos = NoAlimento;
-	$.ajax({
-		url: "../../utileria.php",
-		type: "post",
-		data: {"param":28, "IdPedido":IdPedido, "IdComedorGr":IdComedorGr},
-		success: function(result) {
-			data = JSON.parse(result);
-			if (data.estatus == 'success') {
-				console.log("se elimino correctamente");
-				MostrarInforme();
-				$("#AlimentoEditar" + NoAlimentos).remove();
-				var Lineas = $("#ListadoComidaGr_Editar tr").length;
-				if(Lineas == 0){
-					NoAlimentos = 0;
+	if (Estatus_Posicion == 1) {
+		$.ajax({
+			url: "../../utileria.php",
+			type: "post",
+			data: {"param":28, "IdPedido":IdPedido, "IdComedorGr":IdComedorGr},
+			success: function(result) {
+				data = JSON.parse(result);
+				if (data.estatus == 'success') {
+					console.log("se elimino correctamente");
+					MostrarInforme();
+					$("#AlimentoEditar" + NoAlimentos).remove();
+					let Lineas = $("#ListadoComidaGr_Editar tr").length;
+					if(Lineas == 0){
+						NoAlimentos = 0;
+					}
+					Swal.fire('Se eliminó el alimento', "","success");
+				}else{
+					Swal.fire('No se puede eliminar el alimento', "","info");
 				}
-			}else{
-				console.log("no se pudo eliminar");
 			}
+		});
+	}else if(Estatus_Posicion == 0){
+		$("#AlimentoEditar" + NoAlimentos).remove();
+		let Lineas = $("#ListadoComidaGr_Editar tr").length;
+		if(Lineas == 0){
+			NoAlimentos = 0;
 		}
-	});
+		Swal.fire('Se eliminó el alimento', "","success");
+	}
 }
 
 function ElimarAlimento(NoAlimentos){
@@ -1309,6 +1319,7 @@ $("#btn_nomina").on("click", function(e){
 	$('#lbl_pasar_nomina').hide();
 	$("#btn_nomina").css("width", "6%");
 	$('#cargando_pasar_nomina').show();
+	$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 	let fecha = $('#txtFechaSeleccionado').val(),
 	numero_empleado = $('#txtNumeroEmpleado').val();
 	$.ajax({
@@ -1321,6 +1332,8 @@ $("#btn_nomina").on("click", function(e){
 				enviar_nomina(datos);
 			}else{
 				Swal.fire(datos.mensaje, "","info");
+				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
@@ -1330,22 +1343,27 @@ $("#btn_nomina").on("click", function(e){
 });
 
 function enviar_nomina(resultados){
-	let datos2 = resultados;
-	for (let i = 0; i < datos.length; i++) {
-		if (datos[i].EstatusComedor == 0) {
+	let datos2 = resultados.data;
+	console.log(datos2);
+	for (let i = 0; i < datos2.length; i++) {
+		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
+			$('#cargando_pasar_nomina').hide();
+			$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			$("#btn_nomina").removeAttr("disabled, disabled");
 			$("#btn_nomina").removeClass("deshabilitar");
 			$('#btn_nomina').attr("disabled", false);
 			return;
 		}
-		if (datos[i].EstatusEnviado == 1) {
+		if (datos2[i].EstatusEnviado == 1) {
 			let index = i;	
 			if (index > -1) {
-				datos.splice(index, 1);
-			 }
+				datos2.splice(index, 1);
+			}
 		}
 	}
+	console.log(datos2);
+	return false;
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -1363,6 +1381,7 @@ function enviar_nomina(resultados){
 				$('#lbl_pasar_nomina').show();
 				$("#btn_nomina").css("width", "");
 				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			}else{
 				Swal.fire('No hay Registros pendientes de pago', "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
@@ -1370,6 +1389,7 @@ function enviar_nomina(resultados){
 				$('#btn_nomina').attr("disabled", false);
 				$('#lbl_pasar_nomina').show();
 				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			}
 		}
 	});
