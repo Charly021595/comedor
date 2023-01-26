@@ -34,48 +34,51 @@
 	
 			break;
 		case '2':
-				$data = array();
-				$NoEmpleado = $_POST['NoEmpleadoLogeado'];
-				$NombreEmpleado =  utf8_decode($_POST['NombreEmpleado']);
-				$TipoPlatillo = $_POST['TipoPlatillo'];
-				$Ubicacion =  $_POST['Ubicacion'];
-				$FechaDeOrden =  $_POST['FechaDeOrden'];
-				$arrayListadoPlatilloUnico = isset($_POST['arrayListadoPlatilloUnico']) ? json_decode($_POST['arrayListadoPlatilloUnico'], true) : 0;
-				$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
-				$Tipo_Empleado =  $_POST['Tipo_Empleado'];
-				//$FechaDeOrden = DateTime::createFromFormat('d/m/Y H:i A', $FechaDeOrden );
+			$data = array();
+			$NoEmpleado = $_POST['NoEmpleadoLogeado'];
+			$NombreEmpleado =  utf8_decode($_POST['NombreEmpleado']);
+			$TipoPlatillo = $_POST['TipoPlatillo'];
+			$Ubicacion =  $_POST['Ubicacion'];
+			$FechaDeOrden =  $_POST['FechaDeOrden'];
+			$arrayListadoPlatilloUnico = isset($_POST['arrayListadoPlatilloUnico']) ? json_decode($_POST['arrayListadoPlatilloUnico'], true) : 0;
+			$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
+			$Tipo_Empleado =  $_POST['Tipo_Empleado'];
+			//$FechaDeOrden = DateTime::createFromFormat('d/m/Y H:i A', $FechaDeOrden );
+			$validar = false;
+			$pedidoporcomedor =  $_POST['pedidoporcomedor'];
+			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
+			
+			include './db/conectar.php';
+			if ($TipoPlatillo == 3 && $NoEmpleado != 20000) {
 				$validar = true;
-				$pedidoporcomedor =  $_POST['pedidoporcomedor'];
-				$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
-				
-				include './db/conectar.php';
-				if ($TipoPlatillo == 3 && $NoEmpleado != 20000) {
-					$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?,?)}";
-					$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado);
-					$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
-					if ( $stmt_validar_cantidad_platillos === false) {
-						$validar = false;
-						$mensaje = sqlsrv_errors();
+				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?,?)}";
+				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado);
+				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
+				if ($stmt_validar_cantidad_platillos === false) {
+					$validar = false;
+					$mensaje = sqlsrv_errors();
+					$data = array(
+						"estatus" => 'error_consulta_validar_platillos',
+						"Validar" => $validar,
+						"mensaje" => $mensaje[0]['message']
+					);
+					echo json_encode($data);
+					die();	
+				}else{
+					$row_validar_cantidad_platillos = sqlsrv_fetch_array($stmt_validar_cantidad_platillos, SQLSRV_FETCH_ASSOC);
+					if (count($row_validar_cantidad_platillos) != 0) {
 						$data = array(
-							"estatus" => 'error_consulta_validar_platillos',
-							"Validar" => $validar,
-							"mensaje" => $mensaje[0]['message']
+							"estatus" => "pedido_duplicado",
+							"mensaje" => "Solo puedes realizar un pedido por día"
 						);
-						echo json_encode($data);
-						die();	
-					}else{
-						$row_validar_cantidad_platillos = sqlsrv_fetch_array($stmt_validar_cantidad_platillos, SQLSRV_FETCH_ASSOC);
-						if (count($row_validar_cantidad_platillos) != 0) {
-							$data = array(
-								"estatus" => "pedido_duplicado",
-								"mensaje" => "Solo puedes realizar un pedido por día"
-							);
-							echo json_encode($data); 
-							die();
-						}
+						echo json_encode($data); 
+						die();
 					}
 				}
+			}
 
+			if (($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 3) || ($arrayListadoGreenSpot != 0 && $TipoPlatillo == 4)) {
+				$validar = true;
 				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?)}";
 				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado);
 				$stmt = sqlsrv_query($conn, $sql, $params);
@@ -131,8 +134,7 @@
 								sqlsrv_close($conn);
 							}
 						}
-					}
-					else if($TipoPlatillo == "4"){
+					}else if($TipoPlatillo == "4"){
 						foreach ($record as $row1) {
 							foreach ($arrayListadoGreenSpot as $row4) {
 								
@@ -151,7 +153,7 @@
 								include './db/conectar.php';
 								$sql = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
 								$params = array($IdPedidoInsertado,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
-												$KCal,$Cantidad,$Precios,$Total,$FechaPedido,);
+												$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								if ( $stmt === false) {
 									$validar = false;
@@ -170,17 +172,22 @@
 							}
 						}
 					}
-					
-					//
-					
 				}
+			}
+			
+			if ($validar) {
 				$data = array(
 					"estatus" => "success",
-					"validar" => true
+					"validar" => "true"
 				);
-				// array_push($query2,$record2);
-				ob_clean();//clears the output buffer
-				echo json_encode($data);	
+			}else{
+				$data = array(
+					"estatus" => "error",
+					"validar" => "false"
+				);
+			}
+			ob_clean();//clears the output buffer
+			echo json_encode($data);	
 			break;
 		case '3': //Listado
 				$datos = array();
@@ -2060,11 +2067,12 @@
 			include './db/conectar.php';
 			$IdPedido = isset($_POST['IdPedido']) ? utf8_decode($_POST['IdPedido']) : '';
 			$IdComedorGr = isset($_POST['IdComedorGr']) ? utf8_decode($_POST['IdComedorGr']) : '';
-			$validar = true;
-			$mensaje;
+			$validar = false;
+			$mensaje = '';
 			$contador = 0;
 
 			if ($IdPedido != '' && $IdComedorGr != '') {
+				$validar = true;
 				$sql = "{call RHCom_Editar_Pedidos_Gr(?)}";
 				$params = array($IdPedido);
 				$stmt = sqlsrv_query($conn, $sql, $params);
@@ -2103,6 +2111,7 @@
 					"Validar" => $validar
 				);
 			}else{
+				$mensaje = "no se ejecuto nada";
 				$data = array(
 					"estatus" => "error",
 					"Validar" => $validar,
@@ -2123,30 +2132,63 @@
 			$arrayListadoPlatilloUnico = isset($_POST['arrayListadoPlatilloUnico']) ? json_decode($_POST['arrayListadoPlatilloUnico'], true) : 0;
 			$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
 			$Tipo_Empleado =  $_POST['Tipo_Empleado'];
+			$contador = 0;
 
 			$validar = true;
 			$pedidoporcomedor =  $_POST['pedidoporcomedor'];
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 			
 			include './db/conectar.php';
+			
+			$sql = "{call RHCom_Editar_Pedidos_Gr(?)}";
+			$params = array($IdPedido);
+			$stmt = sqlsrv_query($conn, $sql, $params);
 
-			foreach ($arrayListadoGreenSpot as $row) {		
+			while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+				$contador++; 
+			}
+
+
+
+			if ($contador == 0) {
+				$sql2 = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?)}";
+				$params2 = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado);
+				$stmt2 = sqlsrv_query($conn, $sql2, $params2);
+
+				if ($stmt2 === false) {
+					$validar = false;
+					$mensaje = sqlsrv_errors();
+					$data = array(
+						"estatus" => 'error_guardar_pedido',
+						"Validar" => $validar,
+						"mensaje" => $mensaje[0]['message']
+					);
+					echo json_encode($data);
+					die();	
+				}else{
+					while( $row2 = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+						$IdPedido = $row2['IdPedido'];
+					}
+				}
+			}
+
+			foreach ($arrayListadoGreenSpot as $row3) {		
 				$IdPedidoInsertado = $IdPedido;
-				$Posicion = $row['Posicion'];
-				$IdPlatillo = $row['IdPlatillo'];
-				$Platillo = utf8_decode($row['Platillo']);
+				$Posicion = $row3['Posicion'];
+				$IdPlatillo = $row3['IdPlatillo'];
+				$Platillo = utf8_decode($row3['Platillo']);
 				$Comentario = utf8_decode($comentario_global);
 				$TipoPlatillo = $TipoPlatillo;
-				$KCal =  utf8_decode($row['KCal']);
-				$Cantidad = $row['Cantidad'];
-				$Precios = $row['Precios'];
-				$Total = $row['Total'];
+				$KCal =  utf8_decode($row3['KCal']);
+				$Cantidad = $row3['Cantidad'];
+				$Precios = $row3['Precios'];
+				$Total = $row3['Total'];
 				$FechaPedido = $FechaDeOrden;
 					
 				include './db/conectar.php';
 				$sql = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
 				$params = array($IdPedidoInsertado,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
-								$KCal,$Cantidad,$Precios,$Total,$FechaPedido,);
+								$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 				if ( $stmt === false) {
 					$validar = false;

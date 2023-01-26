@@ -205,6 +205,18 @@ button.cerrar{
     height: 800px;
 }
 
+.btn_export_xls{
+    height: 39px;
+}
+
+.gif_cargando_btn{
+    width: 21%;
+}
+
+.nuevo_style_btn_nomina{
+    width: 8%;
+}
+
 /* .scroll_tablas_detalle::-webkit-scrollbar {
     width: 12px;
 }

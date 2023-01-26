@@ -215,7 +215,7 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	if (CantidadArreglo === 0 && CantidadArreglo === "" && TipoPlatillo == "4") {
+	if (CantidadArreglo === 0 || CantidadArreglo === "" && TipoPlatillo == "4") {
         Swal.fire('No tienes platillos ingresados', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
