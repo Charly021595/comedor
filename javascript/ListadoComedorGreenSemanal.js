@@ -1276,7 +1276,6 @@ function EliminarAlimentoEditar(NoAlimento, Estatus_Posicion, IdPedido, IdComedo
 			success: function(result) {
 				data = JSON.parse(result);
 				if (data.estatus == 'success') {
-					console.log("se elimino correctamente");
 					MostrarInforme();
 					$("#AlimentoEditar" + NoAlimentos).remove();
 					let Lineas = $("#ListadoComidaGr_Editar tr").length;
@@ -1344,7 +1343,6 @@ $("#btn_nomina").on("click", function(e){
 
 function enviar_nomina(resultados){
 	let datos2 = resultados.data;
-	console.log(datos2);
 	for (let i = 0; i < datos2.length; i++) {
 		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
@@ -1362,7 +1360,6 @@ function enviar_nomina(resultados){
 			}
 		}
 	}
-	console.log(datos2);
 	return false;
 	$.ajax({
 		url: "../../utileria.php",
@@ -1590,6 +1587,7 @@ function GuardarListadoGreenSpot() {
 }
 
 function EditarOrden(){
+	debugger;
 	bandera_editar = 0;
 	let IdPedido_Editar = $("#txtIdPedido_Editar").val();
 	let NoEmpleadoLogeado_Editar = $("#txtNumEmpleadoLogeado_Editar").val();
@@ -1699,6 +1697,7 @@ function EditarOrden(){
 		},
 		url: "../../utileria.php",
 		success: function(result) {
+			console.log(result);
 			data = JSON.parse(result);
 			if (data.estatus === "success") {
 				Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
@@ -1720,7 +1719,6 @@ function EditarOrden(){
 				$("#EditarOrden").prop("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
-				console.log(data.mensaje);
 				$("#EditarOrden").prop("disabled", false);
 			}
 		}

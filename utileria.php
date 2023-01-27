@@ -2133,8 +2133,9 @@
 			$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
 			$Tipo_Empleado =  $_POST['Tipo_Empleado'];
 			$contador = 0;
+			$IdPedido_new = '';
 
-			$validar = true;
+			$validar = false;
 			$pedidoporcomedor =  $_POST['pedidoporcomedor'];
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 			
@@ -2148,13 +2149,11 @@
 				$contador++; 
 			}
 
-
-
 			if ($contador == 0) {
 				$sql2 = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?)}";
 				$params2 = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado);
 				$stmt2 = sqlsrv_query($conn, $sql2, $params2);
-
+				
 				if ($stmt2 === false) {
 					$validar = false;
 					$mensaje = sqlsrv_errors();
@@ -2166,50 +2165,90 @@
 					echo json_encode($data);
 					die();	
 				}else{
-					while( $row2 = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
-						$IdPedido = $row2['IdPedido'];
+					while( $row2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC) ) {
+						$IdPedido_new = $row2['IdPedido'];
+					}
+					
+					foreach ($arrayListadoGreenSpot as $row3) {		
+						// $IdPedidoInsertado = $IdPedido_new;
+						$Posicion = $row3['Posicion'];
+						$IdPlatillo = $row3['IdPlatillo'];
+						$Platillo = utf8_decode($row3['Platillo']);
+						$Comentario = utf8_decode($comentario_global);
+						$TipoPlatillo = $TipoPlatillo;
+						$KCal =  utf8_decode($row3['KCal']);
+						$Cantidad = $row3['Cantidad'];
+						$Precios = $row3['Precios'];
+						$Total = $row3['Total'];
+						$FechaPedido = $FechaDeOrden;
+							
+						include './db/conectar.php';
+						$sql3 = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
+						$params3 = array($IdPedido_new,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
+										$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
+						$stmt3 = sqlsrv_query($conn, $sql3, $params3);
+						if ( $stmt3 === false) {
+							$validar = false;
+							$mensaje = sqlsrv_errors();
+							$data = array(
+								"estatus" => 'error_guardar_pedido_green_spot',
+								"Validar" => $validar,
+								"mensaje" => $mensaje[0]['message']
+							);
+							echo json_encode($data);
+							die();
+						}
+					}
+					sqlsrv_free_stmt( $stmt3 );
+				}
+				sqlsrv_free_stmt( $stmt2 );
+			}else{
+				foreach ($arrayListadoGreenSpot as $row4) {		
+					$IdPedidoInsertado = $IdPedido;
+					$Posicion = $row4['Posicion'];
+					$IdPlatillo = $row4['IdPlatillo'];
+					$Platillo = utf8_decode($row4['Platillo']);
+					$Comentario = utf8_decode($comentario_global);
+					$TipoPlatillo = $TipoPlatillo;
+					$KCal =  utf8_decode($row4['KCal']);
+					$Cantidad = $row4['Cantidad'];
+					$Precios = $row4['Precios'];
+					$Total = $row4['Total'];
+					$FechaPedido = $FechaDeOrden;
+						
+					include './db/conectar.php';
+					$sql4 = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
+					$params4 = array($IdPedidoInsertado,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
+									$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
+					$stmt4 = sqlsrv_query($conn, $sql4, $params4);
+					if ( $stmt4 === false) {
+						$validar = false;
+						$mensaje = sqlsrv_errors();
+						$data = array(
+							"estatus" => 'error_guardar_pedido_green_spot',
+							"Validar" => $validar,
+							"mensaje" => $mensaje[0]['message']
+						);
+						echo json_encode($data);
+						die();
 					}
 				}
 			}
 
-			foreach ($arrayListadoGreenSpot as $row3) {		
-				$IdPedidoInsertado = $IdPedido;
-				$Posicion = $row3['Posicion'];
-				$IdPlatillo = $row3['IdPlatillo'];
-				$Platillo = utf8_decode($row3['Platillo']);
-				$Comentario = utf8_decode($comentario_global);
-				$TipoPlatillo = $TipoPlatillo;
-				$KCal =  utf8_decode($row3['KCal']);
-				$Cantidad = $row3['Cantidad'];
-				$Precios = $row3['Precios'];
-				$Total = $row3['Total'];
-				$FechaPedido = $FechaDeOrden;
-					
-				include './db/conectar.php';
-				$sql = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
-				$params = array($IdPedidoInsertado,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
-								$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
-				$stmt = sqlsrv_query($conn, $sql, $params);
-				if ( $stmt === false) {
-					$validar = false;
-					$mensaje = sqlsrv_errors();
-					$data = array(
-						"estatus" => 'error_guardar_pedido_green_spot',
-						"Validar" => $validar,
-						"mensaje" => $mensaje[0]['message']
-					);
-					echo json_encode($data);
-					die();
-				}
+			sqlsrv_free_stmt( $stmt );
+			sqlsrv_close($conn);
 
-				sqlsrv_free_stmt( $stmt );
-				sqlsrv_close($conn);
+			if ($validar) {
+				$data = array(
+					"estatus" => "success",
+					"validar" => true
+				);
+			}else{
+				$data = array(
+					"estatus" => "success",
+					"validar" => true
+				);
 			}
-
-			$data = array(
-				"estatus" => "success",
-				"validar" => true
-			);
 			// array_push($query2,$record2);
 			ob_clean();//clears the output buffer
 			echo json_encode($data);	
