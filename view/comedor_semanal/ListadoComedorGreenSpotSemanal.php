@@ -468,7 +468,7 @@
 							<div class="modal-footer">
 								<div class="d-flex flex-row-reverse">
 									<button type="button" class="btn boton-secundario"   data-dismiss="modal">Cerrar</button>
-									<button type="button" class="btn btn-primary ValidaBoton" onclick="GuardarOrden();" id="GuardarOrden">Solicitar Comida</button>
+									<button type="button" class="btn btn-primary ValidaBoton" onclick="GuardarOrden();" id="GuardarOrdenS">Solicitar Comida</button>
 								</div>
 							</div>
 						</div>

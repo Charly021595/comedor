@@ -337,42 +337,71 @@ function deshabilitar_botones_green(id, estatus_comedor){
 	} 
 }
 
+// function ConfirmacionEstatusAlimentoGreen(id_pedido, estatus_comedor){
+// 	Swal.fire({
+// 		title: '¿Quieres confirmar el pedido?',
+// 		icon: 'info',
+// 		showCancelButton: true,
+// 		confirmButtonColor: '#3085d6',
+// 		cancelButtonColor: '#d33',
+// 		confirmButtonText: 'Confirmar',
+// 		cancelButtonText: 'Cancelar'
+// 	  }).then((res) => {
+// 		if (res.isConfirmed) {$.ajax({
+// 			url: "../../utileria.php",
+// 			type: "post",
+// 			data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+// 			success: function(result) {
+// 				data = JSON.parse(result);
+// 				if (data.estatus == 'success') {
+// 					Swal.fire(
+// 						'Confirmado',
+// 						'Tu platillo se confirmo.',
+// 						'success'
+// 					  ).then(function(){
+// 						  MostrarInforme();
+// 					  });
+// 				}else{
+// 					if (res.isConfirmed) {
+// 						Swal.fire( 
+// 							data.mensaje,
+// 							'',
+// 							'error'
+// 						);
+// 					}
+// 				}
+// 			}
+// 		});
+// 		}	
+// 	});
+// }
+
 function ConfirmacionEstatusAlimentoGreen(id_pedido, estatus_comedor){
-	Swal.fire({
-		title: '¿Quieres confirmar el pedido?',
-		icon: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Confirmar',
-		cancelButtonText: 'Cancelar'
-	  }).then((res) => {
-		if (res.isConfirmed) {$.ajax({
-			url: "../../utileria.php",
-			type: "post",
-			data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-			success: function(result) {
-				data = JSON.parse(result);
-				if (data.estatus == 'success') {
-					Swal.fire(
-						'Confirmado',
-						'Tu platillo se confirmo.',
-						'success'
-					  ).then(function(){
-						  MostrarInforme();
-					  });
-				}else{
-					if (res.isConfirmed) {
-						Swal.fire( 
-							data.mensaje,
-							'',
-							'error'
-						);
-					}
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+		success: function(result) {
+			data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				// Swal.fire(
+				// 	'Confirmado',
+				// 	'Tu platillo se confirmo.',
+				// 	'success'
+				// ).then(function(){
+				// 	MostrarInforme();
+				// });
+				MostrarInforme();
+			}else{
+				if (res.isConfirmed) {
+					Swal.fire( 
+						data.mensaje,
+						'',
+						'error'
+					);
 				}
 			}
-		});
-		}	
+		}
 	});
 }
 
@@ -426,43 +455,72 @@ function CargarPedidoEditar(datos){
 	$("#txtFechaPedido_Editar").val(fechaActual2);
 }
 
+// function RechazarEstatusAlimentoGreen(id_pedido, estatus_comedor){
+// 	Swal.fire({
+// 		title: '¿Quieres rechazar el pedido?',
+// 		icon: 'info',
+// 		showCancelButton: true,
+// 		confirmButtonColor: '#3085d6',
+// 		cancelButtonColor: '#d33',
+// 		confirmButtonText: 'Rechazar',
+// 		cancelButtonText: 'Cancelar'
+// 	  }).then((res) => {
+// 		if (res.isConfirmed) {
+// 			$.ajax({
+// 				url: "../../utileria.php",
+// 				type: "post",
+// 				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+// 				success: function(result) {
+// 					data = JSON.parse(result);
+// 					if (data.estatus == 'success') {
+// 						Swal.fire(
+// 							'Rechazado',
+// 							'Tu platillo fue Rechazado.',
+// 							'success'
+// 						  ).then(function(){
+// 							  MostrarInforme();
+// 						  });
+// 					}else{
+// 						if (res.isConfirmed) {
+// 							Swal.fire( 
+// 								data.mensaje,
+// 								'',
+// 								'error'
+// 							);
+// 						}
+// 					}
+// 				}
+// 			});
+// 		}	
+// 	});
+// }
+
 function RechazarEstatusAlimentoGreen(id_pedido, estatus_comedor){
-	Swal.fire({
-		title: '¿Quieres rechazar el pedido?',
-		icon: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Rechazar',
-		cancelButtonText: 'Cancelar'
-	  }).then((res) => {
-		if (res.isConfirmed) {
-			$.ajax({
-				url: "../../utileria.php",
-				type: "post",
-				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-				success: function(result) {
-					data = JSON.parse(result);
-					if (data.estatus == 'success') {
-						Swal.fire(
-							'Rechazado',
-							'Tu platillo fue Rechazado.',
-							'success'
-						  ).then(function(){
-							  MostrarInforme();
-						  });
-					}else{
-						if (res.isConfirmed) {
-							Swal.fire( 
-								data.mensaje,
-								'',
-								'error'
-							);
-						}
-					}
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+		success: function(result) {
+			data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				// Swal.fire(
+				// 	'Rechazado',
+				// 	'Tu platillo fue Rechazado.',
+				// 	'success'
+				//   ).then(function(){
+				// 	  MostrarInforme();
+				//   });
+				MostrarInforme();
+			}else{
+				if (res.isConfirmed) {
+					Swal.fire( 
+						data.mensaje,
+						'',
+						'error'
+					);
 				}
-			});
-		}	
+			}
+		}
 	});
 }
 
@@ -1342,8 +1400,9 @@ $("#btn_nomina").on("click", function(e){
 });
 
 function enviar_nomina(resultados){
-	let datos2 = resultados.data;
-	for (let i = 0; i < datos2.length; i++) {
+	let datos2 = resultados.data,
+	i = 0;
+	while (i < datos2.length) {
 		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
 			$('#cargando_pasar_nomina').hide();
@@ -1354,19 +1413,27 @@ function enviar_nomina(resultados){
 			return;
 		}
 		if (datos2[i].EstatusEnviado == 1) {
-			let index = i;	
-			if (index > -1) {
-				datos2.splice(index, 1);
-			}
-		}
-	}
-	return false;
+			datos2.splice(i, 1);
+        }else{
+            ++i;
+        }
+    }
+	if (datos2.length == 0) {
+        Swal.fire('No hay registros para pasar a nomina', "","info");
+		$('#btn_nomina').addClass("nuevo_style_btn_nomina");
+		$("#btn_nomina").removeAttr("disabled, disabled");
+		$("#btn_nomina").removeClass("deshabilitar");
+		$('#btn_nomina').attr("disabled", false);
+		$('#lbl_pasar_nomina').show();
+		$("#btn_nomina").css("width", "");
+		$('#cargando_pasar_nomina').hide();
+        return false;
+    }
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
 		data: {"param":11, "datos":datos2, "estatus_enviado":1},
 		success: function(result) {
-			console.log(result);
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
 				Swal.fire('Estatus Envio', "El estatus enviado se actualizo correctamente", "success");
@@ -1393,6 +1460,8 @@ function enviar_nomina(resultados){
 }
 
 function GuardarOrden(){
+	$("#GuardarOrdenS").addClass("deshabilitar");
+  	$('#GuardarOrdenS').attr("disabled", true);
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
 	let NombreEmpleado =  $("#txtNombreEmpleadoLogeado").val();
 	let NoPlatillos = $("#txtNumPlatillo").val();
@@ -1451,42 +1520,58 @@ function GuardarOrden(){
 	//
 	if (NoEmpleadoLogeado == "") {
         Swal.fire('El número de empleado es requerido', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (NombreEmpleado == "") {
         Swal.fire('El Nombre del empleado es requerido', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (NoPlatillos == "" && TipoPlatillo != "4") {
         Swal.fire('El número de platillos es requerido', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (TipoPlatillo != "4") {
         Swal.fire('Tipo de platillo no soportado', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (Ubicacion == "0") {
         Swal.fire('La ubicación es obligatoria', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (Tipo_Empleado == "0") {
         Swal.fire('El tipo de empleado es obligatorio', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (CantidadArreglo == 0) {
         Swal.fire('No tienes platillos ingresados', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if (comentario_global == '' && NoEmpleadoLogeado == 20000) {
         Swal.fire('Comentario no puede ir vació', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	$.ajax({
@@ -1521,15 +1606,21 @@ function GuardarOrden(){
 					$("#txtComentarioGlobalPlatillo").val("");
 					CargarPedido();
 					MostrarInforme();
-					$("#GuardarOrden").prop("disabled", false);
+					$("#GuardarOrdenS").removeAttr("disabled, disabled");
+					$("#GuardarOrdenS").removeClass("deshabilitar");
+					$("#GuardarOrdenS").prop("disabled", false);
 				});
 			}else if(data.estatus === "pedido_duplicado"){
 				Swal.fire('Solo se puede realizar un pedido al día.', "","info");
-				$("#GuardarOrden").prop("disabled", false);
+				$("#GuardarOrdenS").removeAttr("disabled, disabled");
+				$("#GuardarOrdenS").removeClass("deshabilitar");
+				$("#GuardarOrdenS").prop("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
 				console.log(data.mensaje);
-				$("#GuardarOrden").prop("disabled", false);
+				$("#GuardarOrdenS").removeAttr("disabled, disabled");
+				$("#GuardarOrdenS").removeClass("deshabilitar");
+				$("#GuardarOrdenS").prop("disabled", false);
 			}
 		}
 	});
@@ -1587,7 +1678,6 @@ function GuardarListadoGreenSpot() {
 }
 
 function EditarOrden(){
-	debugger;
 	bandera_editar = 0;
 	let IdPedido_Editar = $("#txtIdPedido_Editar").val();
 	let NoEmpleadoLogeado_Editar = $("#txtNumEmpleadoLogeado_Editar").val();

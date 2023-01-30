@@ -643,7 +643,7 @@
 			}
 
 			if ($listado_procesadas == 0) {
-				foreach ($datos['data'] as $dato) {
+				foreach ($datos as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 0) {
 						$sql = "{call RHCom_AcualizarEstatus(?)}";
 						$IdPedido = $dato["IdPedido"];

@@ -177,7 +177,6 @@ function BuscarEmpleadoLogeado(){
 }
 
 $("#txtNumEmpleadoLogeado").on('change',function(e){
-	debugger;
 	$("#DivComentarioglobal").hide();
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
@@ -324,6 +323,10 @@ function ElimarAlimento(NoAlimentos){
 $("#btn_nomina").on("click", function(e){
 	$("#btn_nomina").addClass("deshabilitar");
   	$('#btn_nomina').attr("disabled", true);
+	$('#lbl_pasar_nomina').hide();
+	$("#btn_nomina").css("width", "6%");
+	$('#cargando_pasar_nomina').show();
+	$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 	let fecha = $('#txtFechaSeleccionado').val(),
 	numero_empleado = $('#txtNumeroEmpleado').val();
 	$.ajax({
@@ -331,37 +334,53 @@ $("#btn_nomina").on("click", function(e){
 		type: "post",
 		data: {"param":15, "daterange":fecha, "numero_empleado":numero_empleado},
 		success: function(result) {
-			let resultados = JSON.parse(result);
-			if (resultados.estatus == "success"){
-				enviar_nomina(resultados);
+			let datos = JSON.parse(result);
+			if (datos.estatus == "success"){
+				enviar_nomina(datos);
 			}else{
-				Swal.fire(resultados.mensaje, "","info");
+				Swal.fire(datos.mensaje, "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
+				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			}
 		}
 	});  
 });
 
 function enviar_nomina(resultados){
-	let datos2 = resultados;
-	for (let i = 0; i < datos.length; i++) {
-		if (datos[i].EstatusEnviado == 1) {
-			let index = i;	
-			if (index > -1) {
-				datos.splice(index, 1);
-			 }
-		}
-
-		if (datos[i].EstatusComedor == 0) {
+	let datos2 = resultados.data,
+	i = 0;
+	while (i < datos2.length) {
+		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
+			$('#cargando_pasar_nomina').hide();
+			$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			$("#btn_nomina").removeAttr("disabled, disabled");
 			$("#btn_nomina").removeClass("deshabilitar");
 			$('#btn_nomina').attr("disabled", false);
-			return false;
+			return;
 		}
-	}
+		if (datos2[i].EstatusEnviado == 1) {
+			datos2.splice(i, 1);
+        }else{
+            ++i;
+        }
+    }
+	if (datos2.length == 0) {
+        Swal.fire('No hay registros para pasar a nomina', "","info");
+		$("#btn_nomina").removeAttr("disabled, disabled");
+		$("#btn_nomina").removeClass("deshabilitar");
+		$('#btn_nomina').attr("disabled", false);
+		$('#lbl_pasar_nomina').show();
+		$("#btn_nomina").css("width", "");
+		$('#cargando_pasar_nomina').hide();
+		$('#btn_nomina').addClass("nuevo_style_btn_nomina");
+        return false;
+    }
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -376,11 +395,19 @@ function enviar_nomina(resultados){
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
 				MostrarInforme();
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
+				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			}else{
 				Swal.fire('No hay Registros pendientes de pago', "","info");
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
+				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
 			}
 		}
 	});
@@ -900,6 +927,8 @@ function ValidarPlatillos(){
 }
 
 function GuardarOrden(){
+	$("#GuardarOrdenS").addClass("deshabilitar");
+  	$('#GuardarOrdenS').attr("disabled", true);
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
 	let NombreEmpleado =  $("#txtNombreEmpleadoLogeado").val();
 	let NoPlatillos = $("#txtNumPlatillo").val();
@@ -910,7 +939,6 @@ function GuardarOrden(){
 	let Precio= $("#txtPrecioPlatillo").val();
 	let Tipo_Empleado= $("#tipo_empleado").val(),
 	comentario_global= $("#txtComentarioGlobalPlatillo").val();
-	$("#GuardarOrden").prop("disabled", true);
 	//
 	let arrayListadoGreenSpot = {};
 	let arrayListadoPlatilloUnico = {};
@@ -965,19 +993,25 @@ function GuardarOrden(){
 	// }
 	if (NoPlatillos < 1) {
         Swal.fire('El número de platillos es requerido', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
 		ValidarPlatillos();
         return false;
     }
 	if (NoPlatillos > 1 && NoEmpleadoLogeado != 20000) {
         Swal.fire('Solo puedes pedir un platillo', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
 		ValidarPlatillos();
         return false;
     }
 	if (comentario_global == '' && NoEmpleadoLogeado == 20000) {
         Swal.fire('Comentario no puede ir vació', "","info");
-		$("#GuardarOrden").prop("disabled", false);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
         return false;
     }
 	if((NoEmpleadoLogeado !="" && NombreEmpleado !="" && TipoPlatillo !="0" && TipoPlatillo !="4" && Ubicacion !="0" && Total != "0.00" && Tipo_Empleado != "0")||(CantidadArreglo > 0)){
@@ -1008,11 +1042,15 @@ function GuardarOrden(){
 					});
 				}else if(data.estatus === "pedido_duplicado"){
 					Swal.fire('Solo se puede realizar un pedido al día.', "","info");
-					$("#GuardarOrden").prop("disabled", false);
+					$("#GuardarOrdenS").removeAttr("disabled, disabled");
+					$("#GuardarOrdenS").removeClass("deshabilitar");
+					$("#GuardarOrdenS").prop("disabled", false);
 				}else{
 					Swal.fire('La información no pudo ser guardada.', "","error");
 					console.log(data.mensaje);
-					$("#GuardarOrden").prop("disabled", false);
+					$("#GuardarOrdenS").removeAttr("disabled, disabled");
+					$("#GuardarOrdenS").removeClass("deshabilitar");
+					$("#GuardarOrdenS").prop("disabled", false);
 				}
 			}
 		});
@@ -1022,8 +1060,10 @@ function GuardarOrden(){
 			'',
 			'info'
 		);
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").prop("disabled", false);
 		ValidarPlatillos();
-		$("#GuardarOrden").prop("disabled", false);
 	}
 }
 
@@ -1045,82 +1085,138 @@ function CargarPedido(){
 	// }
 }
 
+// function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
+// 	Swal.fire({
+// 		title: '¿Quieres confirmar el pedido?',
+// 		icon: 'info',
+// 		showCancelButton: true,
+// 		confirmButtonColor: '#3085d6',
+// 		cancelButtonColor: '#d33',
+// 		confirmButtonText: 'Confirmar',
+// 		cancelButtonText: 'Cancelar'
+// 	  }).then((res) => {
+// 		if (res.isConfirmed) {
+// 			$.ajax({
+// 				url: "../../utileria.php",
+// 				type: "post",
+// 				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+// 				success: function(result) {
+// 					data = JSON.parse(result);
+// 					if (data.estatus == 'success') {
+// 						Swal.fire(
+// 							'Confirmado',
+// 							'Tu platillo se confirmo.',
+// 							'success'
+// 						  ).then(function(){
+// 							  MostrarInforme();
+// 						  });
+// 					}else{
+// 						if (res.isConfirmed) {
+// 							Swal.fire( 
+// 								data.mensaje,
+// 								'',
+// 								'error'
+// 							);
+// 						}
+// 					}
+// 				}
+// 			});	
+// 		}
+// 	});
+// }
+
 function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
-	Swal.fire({
-		title: '¿Quieres confirmar el pedido?',
-		icon: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Confirmar',
-		cancelButtonText: 'Cancelar'
-	  }).then((res) => {
-		if (res.isConfirmed) {
-			$.ajax({
-				url: "../../utileria.php",
-				type: "post",
-				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-				success: function(result) {
-					data = JSON.parse(result);
-					if (data.estatus == 'success') {
-						Swal.fire(
-							'Confirmado',
-							'Tu platillo se confirmo.',
-							'success'
-						  ).then(function(){
-							  MostrarInforme();
-						  });
-					}else{
-						if (res.isConfirmed) {
-							Swal.fire( 
-								data.mensaje,
-								'',
-								'error'
-							);
-						}
-					}
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+		success: function(result) {
+			data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				Swal.fire(
+					'Confirmado',
+					'Tu platillo se confirmo.',
+					'success'
+				  ).then(function(){
+					  MostrarInforme();
+				  });
+			}else{
+				if (res.isConfirmed) {
+					Swal.fire( 
+						data.mensaje,
+						'',
+						'error'
+					);
 				}
-			});	
+			}
 		}
 	});
 }
 
+// function RechazarEstatusAlimento(id_pedido, estatus_comedor){
+// 	Swal.fire({
+// 		title: '¿Quieres rechazar el pedido?',
+// 		icon: 'info',
+// 		showCancelButton: true,
+// 		confirmButtonColor: '#3085d6',
+// 		cancelButtonColor: '#d33',
+// 		confirmButtonText: 'Rechazar',
+// 		cancelButtonText: 'Cancelar'
+// 	  }).then((res) => {
+// 		if (res.isConfirmed) {
+// 			$.ajax({
+// 				url: "../../utileria.php",
+// 				type: "post",
+// 				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+// 				success: function(result) {
+// 					data = JSON.parse(result);
+// 					if (data.estatus == 'success') {
+// 						Swal.fire(
+// 							'Rechazado',
+// 							'Tu platillo fue Rechazado.',
+// 							'success'
+// 						  ).then(function(){
+// 							  MostrarInforme();
+// 						  });	
+// 					}else{
+// 						if (res.isConfirmed) {
+// 							Swal.fire( 
+// 								data.mensaje,
+// 								'',
+// 								'error'
+// 							);
+// 						}
+// 					}
+// 				}
+// 			});				
+// 		}
+// 	});
+// }
+
 function RechazarEstatusAlimento(id_pedido, estatus_comedor){
-	Swal.fire({
-		title: '¿Quieres rechazar el pedido?',
-		icon: 'info',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Rechazar',
-		cancelButtonText: 'Cancelar'
-	  }).then((res) => {
-		if (res.isConfirmed) {
-			$.ajax({
-				url: "../../utileria.php",
-				type: "post",
-				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-				success: function(result) {
-					data = JSON.parse(result);
-					if (data.estatus == 'success') {
-						Swal.fire(
-							'Rechazado',
-							'Tu platillo fue Rechazado.',
-							'success'
-						  ).then(function(){
-							  MostrarInforme();
-						  });	
-					}else{
-						if (res.isConfirmed) {
-							Swal.fire( 
-								data.mensaje,
-								'',
-								'error'
-							);
-						}
-					}
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
+		success: function(result) {
+			data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				Swal.fire(
+					'Rechazado',
+					'Tu platillo fue Rechazado.',
+					'success'
+					).then(function(){
+						MostrarInforme();
+					});	
+			}else{
+				if (res.isConfirmed) {
+					Swal.fire( 
+						data.mensaje,
+						'',
+						'error'
+					);
 				}
-			});				
+			}
 		}
 	});
 }
@@ -1150,7 +1246,7 @@ $('input[name="daterange"]').daterangepicker({
 });
   
 $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+	$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
 });
 
 $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
