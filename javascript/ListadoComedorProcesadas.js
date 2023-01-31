@@ -2193,7 +2193,7 @@ function DescargarTablaComedor(){
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":11, "estatus_enviado":2, "listado_procesadas":1, "Fecha":Fecha},
+		data: {"param":11, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha},
 		success: function(result) {
 			console.log(result);
 			// $("#btn_conciliar_comedor").removeAttr("disabled, disabled");

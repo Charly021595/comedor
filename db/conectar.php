@@ -5,7 +5,7 @@
 	// $serverName = "vmdynamicsaxdev";
 	// $connectionInfo = array( "Database"=>"Consultas", "UID"=>"Consulta", "PWD"=>"Consulta");
 	// $conn = sqlsrv_connect( $serverName, $connectionInfo);
-	$serverName = "vmdynamicsaxdev";
+	$serverName = "172.20.28.80";
 	$connectionInfo = array( "Database"=>"dwweb_comedor", "UID"=>"sa", "PWD"=>"Dyn4mic$");
 	$conn = sqlsrv_connect( $serverName, $connectionInfo);
 

@@ -1429,10 +1429,11 @@ function enviar_nomina(resultados){
 		$('#cargando_pasar_nomina').hide();
         return false;
     }
+	let datos_limpios = JSON.stringify(datos2);
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":11, "datos":datos2, "estatus_enviado":1},
+		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1},
 		success: function(result) {
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
@@ -1522,56 +1523,56 @@ function GuardarOrden(){
         Swal.fire('El número de empleado es requerido', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (NombreEmpleado == "") {
         Swal.fire('El Nombre del empleado es requerido', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (NoPlatillos == "" && TipoPlatillo != "4") {
         Swal.fire('El número de platillos es requerido', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (TipoPlatillo != "4") {
         Swal.fire('Tipo de platillo no soportado', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (Ubicacion == "0") {
         Swal.fire('La ubicación es obligatoria', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (Tipo_Empleado == "0") {
         Swal.fire('El tipo de empleado es obligatorio', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (CantidadArreglo == 0) {
         Swal.fire('No tienes platillos ingresados', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	if (comentario_global == '' && NoEmpleadoLogeado == 20000) {
         Swal.fire('Comentario no puede ir vació', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
 		$("#GuardarOrdenS").removeClass("deshabilitar");
-		$("#GuardarOrdenS").prop("disabled", false);
+		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
 	$.ajax({
@@ -1608,19 +1609,19 @@ function GuardarOrden(){
 					MostrarInforme();
 					$("#GuardarOrdenS").removeAttr("disabled, disabled");
 					$("#GuardarOrdenS").removeClass("deshabilitar");
-					$("#GuardarOrdenS").prop("disabled", false);
+					$("#GuardarOrdenS").attr("disabled", false);
 				});
 			}else if(data.estatus === "pedido_duplicado"){
 				Swal.fire('Solo se puede realizar un pedido al día.', "","info");
 				$("#GuardarOrdenS").removeAttr("disabled, disabled");
 				$("#GuardarOrdenS").removeClass("deshabilitar");
-				$("#GuardarOrdenS").prop("disabled", false);
+				$("#GuardarOrdenS").attr("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
 				console.log(data.mensaje);
 				$("#GuardarOrdenS").removeAttr("disabled, disabled");
 				$("#GuardarOrdenS").removeClass("deshabilitar");
-				$("#GuardarOrdenS").prop("disabled", false);
+				$("#GuardarOrdenS").attr("disabled", false);
 			}
 		}
 	});

@@ -557,17 +557,20 @@
 			$query = array();
 			include './db/conectar.php';
 			$id_conciliado = '';
-			$datos = isset($_POST['datos']) ? $_POST['datos'] : '';
+			$datos = isset($_POST['datos']) ? json_decode($_POST['datos'], true) : '';
 			$Fecha = isset($_POST['Fecha']) ? utf8_decode($_POST['Fecha']) : '';
 			$fecha_inicial = "";
 			$fecha_final = "";
 			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 0;
+			$estatus_enviado_conciliado = isset($_POST['estatus_enviado_conciliado']) ? $_POST['estatus_enviado_conciliado'] : 0;
 			$listado_procesadas = isset($_POST['listado_procesadas']) ? $_POST['listado_procesadas'] : 0;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '';
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
 			$validar = true;
 			$mensaje;
 			$contador = 0;
+			$stmt = '';
+			$stmt2 = '';
 
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
@@ -641,13 +644,12 @@
 					$id_conciliado = "RHCon-000001";
 				}
 			}
-
 			if ($listado_procesadas == 0) {
 				foreach ($datos as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 0) {
-						$sql = "{call RHCom_AcualizarEstatus(?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
 						$IdPedido = $dato["IdPedido"];
-						$params = array($IdPedido);
+						$params = array($IdPedido, $estatus_enviado);
 						$stmt = sqlsrv_query($conn, $sql, $params);
 	
 						if ( $stmt === false) {
@@ -664,8 +666,9 @@
 				}
 			}else{
 				foreach ($query as $dato) {
+					$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
-						$sql = "{call RHCom_AcualizarEstatus(?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
 						$IdPedido = $dato["IdPedido"];
 						$params = array($IdPedido, $estatus_enviado);
 						$stmt = sqlsrv_query($conn, $sql, $params);
@@ -705,8 +708,16 @@
 					}
 					$contador++;
 				}
-				sqlsrv_free_stmt( $stmt2 );
-				sqlsrv_free_stmt( $stmt );
+				if ($stmt != '' && $stmt2 != '') {
+					sqlsrv_free_stmt( $stmt );
+					sqlsrv_free_stmt( $stmt2 );
+				}else{
+					$data = array(
+						"estatus" => "error",
+						"Validar" => $validar,
+						"Mensaje" => 'ocurrio un error.'
+					);
+				}
 				sqlsrv_free_stmt( $exec );
 			}
 
