@@ -1473,7 +1473,7 @@ function GuardarOrden(){
 	let Precio= $("#txtPrecioPlatillo").val();
 	let Tipo_Empleado= $("#tipo_empleado").val(),
 	comentario_global= $("#txtComentarioGlobalPlatillo").val();
-	$("#GuardarOrden").prop("disabled", true);
+	// $("#GuardarOrden").prop("disabled", true);
 	let CantidadArreglo = '';
 	//
 	let arrayListadoGreenSpot = {};

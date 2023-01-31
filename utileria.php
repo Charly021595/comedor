@@ -665,8 +665,8 @@
 					}
 				}
 			}else{
+				$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 				foreach ($query as $dato) {
-					$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
 						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
 						$IdPedido = $dato["IdPedido"];
@@ -1360,8 +1360,9 @@
 			$Fecha = isset($_POST['Fecha']) ? utf8_decode($_POST['Fecha']) : '';
 			$fecha_inicial = "";
 			$fecha_final = "";
-			$datos = isset($_POST['datos']) ? $_POST['datos'] : '';
-			$estatus_enviado = $_POST['estatus_enviado'];
+			$datos = isset($_POST['datos']) ? json_decode($_POST['datos'], true) : '';
+			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 0;
+			$estatus_enviado_conciliado = isset($_POST['estatus_enviado_conciliado']) ? $_POST['estatus_enviado_conciliado'] : 0;
 			$listado_procesadas = isset($_POST['listado_procesadas']) ? $_POST['listado_procesadas'] : 0;
 			$suma_platillos = isset($_POST['suma_platillos']) ? $_POST['suma_platillos'] : 0;
 			$total_pagar = isset($_POST['total_pagar']) ? $_POST['total_pagar'] : 0;
@@ -1370,6 +1371,8 @@
 			$validar = true;
 			$mensaje;
 			$contador = 0;
+			$stmt = '';
+			$stmt2 = '';
 
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
@@ -1381,7 +1384,7 @@
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
 				$sql3 = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?)}";
-				$params3 = array($fecha_inicial, $fecha_final, 1, $numero_conciliado, $numero_empleado);
+				$params3 = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado);
 				$stmt3 = sqlsrv_query($conn, $sql3, $params3);
 			}
 
@@ -1459,6 +1462,7 @@
 					}
 				}
 			}else{
+				$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 				foreach ($query as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
 						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
@@ -1489,10 +1493,18 @@
 					}
 					$contador++;
 				}
-				sqlsrv_free_stmt( $stmt2 );
+				if ($stmt != '' && $stmt2 != '') {
+					sqlsrv_free_stmt( $stmt );
+					sqlsrv_free_stmt( $stmt2 );
+				}else{
+					$data = array(
+						"estatus" => "error",
+						"Validar" => $validar,
+						"Mensaje" => 'ocurrio un error.'
+					);
+				}
 			}
 
-			sqlsrv_free_stmt( $stmt );
 			sqlsrv_free_stmt( $exec );
 			sqlsrv_close($conn);
 			

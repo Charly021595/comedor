@@ -930,7 +930,6 @@ function ValidarPlatillos(){
 }
 
 function GuardarOrden(){
-	debugger;
 	$("#GuardarOrdenS").addClass("deshabilitar");
   	$('#GuardarOrdenS').attr("disabled", true);
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
@@ -1140,13 +1139,13 @@ function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
 		success: function(result) {
 			data = JSON.parse(result);
 			if (data.estatus == 'success') {
-				Swal.fire(
-					'Confirmado',
-					'Tu platillo se confirmo.',
-					'success'
-				  ).then(function(){
+				// Swal.fire(
+				// 	'Confirmado',
+				// 	'Tu platillo se confirmo.',
+				// 	'success'
+				//   ).then(function(){
 					  MostrarInforme();
-				  });
+				//   });
 			}else{
 				if (res.isConfirmed) {
 					Swal.fire( 

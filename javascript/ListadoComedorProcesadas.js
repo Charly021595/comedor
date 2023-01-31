@@ -2189,6 +2189,8 @@ function Contraseña() {
 function DescargarTablaComedor(){
 	$("#btn_conciliar_comedor").addClass("deshabilitar");
   	$('#btn_conciliar_comedor').attr("disabled", true);
+	$('#lbl_btn_conciliar_pe').hide();
+	$('#cargando_conciliar_pe').show();
 	let Fecha = $("#txtFechaSeleccionado").val();
 	$.ajax({
 		url: "../../utileria.php",
@@ -2207,6 +2209,8 @@ function DescargarTablaComedor(){
 					$("#btn_conciliar_comedor").removeAttr("disabled, disabled");
 					$("#btn_conciliar_comedor").removeClass("deshabilitar");
 					$('#btn_conciliar_comedor').attr("disabled", false);
+					$('#cargando_conciliar_pe').hide();
+					$('#lbl_btn_conciliar_pe').show();
 					ObtenerFecha();
 					MostrarInforme();
 				});
@@ -2215,6 +2219,8 @@ function DescargarTablaComedor(){
 				$("#btn_conciliar_comedor").removeAttr("disabled, disabled");
 				$("#btn_conciliar_comedor").removeClass("deshabilitar");
 				$('#btn_conciliar_comedor').attr("disabled", false);
+				$('#cargando_conciliar_pe').hide();
+				$('#lbl_btn_conciliar_pe').show();
 			}
 		}
 	});
@@ -2223,11 +2229,13 @@ function DescargarTablaComedor(){
 function DescargarTablaGreen(){
 	$("#btn_conciliar_comedor_green_spot").addClass("deshabilitar");
   	$('#btn_conciliar_comedor_green_spot').attr("disabled", true);
+	$('#lbl_btn_conciliar_gs').hide();
+	$('#cargando_conciliar_gs').show();
 	let Fecha = $("#txtFechaSeleccionado").val();
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":20, "estatus_enviado":2, "listado_procesadas":1, "Fecha":Fecha},
+		data: {"param":20, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha},
 		success: function(result) {
 			console.log(result);
 			data = JSON.parse(result);
@@ -2237,6 +2245,8 @@ function DescargarTablaGreen(){
 					$("#btn_conciliar_comedor_green_spot").removeAttr("disabled, disabled");
 					$("#btn_conciliar_comedor_green_spot").removeClass("deshabilitar");
 					$('#btn_conciliar_comedor_green_spot').attr("disabled", false);
+					$('#cargando_conciliar_gs').hide();
+					$('#lbl_btn_conciliar_gs').show();
 					ObtenerFecha();
 					MostrarInforme_green_spot();
 				});
@@ -2245,6 +2255,8 @@ function DescargarTablaGreen(){
 				$("#btn_conciliar_comedor_green_spot").removeAttr("disabled, disabled");
 				$("#btn_conciliar_comedor_green_spot").removeClass("deshabilitar");
 				$('#btn_conciliar_comedor_green_spot').attr("disabled", false);
+				$('#cargando_conciliar_gs').hide();
+				$('#lbl_btn_conciliar_gs').show();
 			}
 		}
 	});
@@ -2318,7 +2330,10 @@ function MostrarInforme(){
 	$("#filtros_green_spot").hide();
 	$("#filtros_plato_express_conciliados").hide();
 	$("#filtros_green_spot_procesadas").hide();
+	$("#btn_conciliar_comedor").hide();
 	$("#EspacioTabla").hide();
+	$("#btn_conciliar_comedor").hide();
+	$("#lbl_btn_conciliar_pe").hide();
 	$("#div_tabla").show();
 	$("#loading_comedor").show();
 	$.ajax({
@@ -2342,6 +2357,8 @@ function MostrarInforme(){
 				$("#filtros_plato_express").show();
 				$("#boton_descarga_excel_comedor").show();
 				$("#EspacioTabla").show();
+				$("#btn_conciliar_comedor").show();
+				$("#lbl_btn_conciliar_pe").show();
 				$("#ContenidoListados").find("tr").remove();
 				datos = data.data;
 				for(let i = 0; i < datos.length; i++){
@@ -2411,6 +2428,8 @@ function MostrarInforme(){
 				$("#filtros_green_spot").hide();
 				$("#filtros_plato_express_conciliados").hide();
 				$("#filtros_green_spot_procesadas").hide();
+				$("#btn_conciliar_comedor").hide();
+				$("#lbl_btn_conciliar_pe").hide();
 				Swal.fire( 
 					data.Mensaje,
 					'',
@@ -2428,6 +2447,8 @@ function MostrarInforme(){
 				$("#filtros_green_spot").hide();
 				$("#filtros_plato_express_conciliados").hide();
 				$("#filtros_green_spot_procesadas").hide();
+				$("#btn_conciliar_comedor").hide();
+				$("#lbl_btn_conciliar_pe").hide();
 				Swal.fire( 
 					data.Mensaje,
 					'',
@@ -2466,6 +2487,8 @@ function MostrarInforme_green_spot(){
 	$("#filtros_green_spot").hide();
 	$("#filtros_plato_express_conciliados").hide();
 	$("#filtros_green_spot_procesadas").hide();
+	$("#btn_conciliar_comedor_green_spot").hide();
+	$("#lbl_btn_conciliar_gs").hide();
 	$("#div_tabla_green_spot").show();
 	$("#loading_comedor_green_spot").show();
 	$.ajax({
@@ -2489,6 +2512,8 @@ function MostrarInforme_green_spot(){
 				$("#filtros_green_spot").show();
 				$("#boton_descarga_excel_green").show();
 				$("#EspacioTabla_green_spot").show();
+				$("#btn_conciliar_comedor_green_spot").show();
+				$("#lbl_btn_conciliar_gs").show();
 				$("#ContenidoListados_green_spot").find("tr").remove();
 				datos_green_spot = data.data;
 				for(var i=0; i < datos_green_spot.length; i++){
@@ -2583,6 +2608,8 @@ function MostrarInforme_green_spot(){
 				$("#filtros_green_spot").hide();
 				$("#filtros_plato_express_conciliados").hide();
 				$("#filtros_green_spot_procesadas").hide();
+				$("#btn_conciliar_comedor_green_spot").hide();
+				$("#lbl_btn_conciliar_gs").hide();
 				Swal.fire( 
 					data.Mensaje,
 					'',
@@ -2600,6 +2627,8 @@ function MostrarInforme_green_spot(){
 				$("#filtros_green_spot").hide();
 				$("#filtros_plato_express_conciliados").hide();
 				$("#filtros_green_spot_procesadas").hide();
+				$("#btn_conciliar_comedor_green_spot").hide();
+				$("#lbl_btn_conciliar_gs").hide();
 				Swal.fire( 
 					data.Mensaje,
 					'',
