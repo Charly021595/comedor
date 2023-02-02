@@ -438,7 +438,7 @@
 				while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 					$record = array(
 						"id" => $row['id'],
-						"IdPedido" => $row['IdPedido'],
+						"IdPedido" => utf8_encode($row['IdPedido']),
 						"NoEmpleado" => $row['NoEmpleado'],
 						"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
 						"TipoPlatillo" => $row['TipoPlatillo'],
@@ -515,7 +515,7 @@
 				while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 					$record = array(
 						"id" => $row['id'],
-						"IdPedido" => $row['IdPedido'],
+						"IdPedido" => utf8_encode($row['IdPedido']),
 						"NoEmpleado" => $row['NoEmpleado'],
 						"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
 						"TipoPlatillo" => $row['TipoPlatillo'],
