@@ -603,7 +603,7 @@
 						$id_conciliacion = isset($row3['Id_Conciliacion']) ? $row3['Id_Conciliacion'] : '';
 						$datos = array(
 							"id" => $row3['id'],
-							"IdPedido" => $row3['IdPedido'],
+							"IdPedido" => utf8_encode($row3['IdPedido']),
 							"NoEmpleado" => $row3['NoEmpleado'],
 							"NombreEmpleado" => utf8_encode($row3['NombreEmpleado']),
 							"TipoPlatillo" => $row3['TipoPlatillo'],
@@ -1688,36 +1688,38 @@
 					echo json_encode($data);	
 				}
 				
-				if ($row != 0) {
-					while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)) {
-						$datos = array(
-							"id" => $row['id'],
-							"IdPedido" => $row['IdPedido'],
-							"NoEmpleado" => $row['NoEmpleado'],
-							"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
-							"TipoPlatillo" => $row['TipoPlatillo'],
-							"Ubicacion" => $row['Ubicacion'],
-							"FechaPedido" => $row['FechaPedido'],
-							"EstatusEnviado" => $row['EstatusEnviado'],
-							"EstatusComedor" => $row['EstatusComedor'],
-							"Tipo_Empleado" => $row['Tipo_Empleado'],
-							"Platillo" => utf8_encode($row['Platillo']),
-							"Comentarios" => utf8_encode($row['Comentarios']),
-							"NoPlatillo" => $row['NoPlatillo'],
-							"idComedorSub" => utf8_encode($row['idComedorSub']),
-							"Precio" => $row['Precio'],
-							"Total" => $row['Total'],
-							"Tipo_comida" => 1,
-						);
-						array_push($query, $datos);
-					}
-				}
+				// if ($row != 0) {
+				// 	while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)) {
+				// 		$datos = array(
+				// 			"id" => $row['id'],
+				// 			"IdPedido" => utf8_encode($row['IdPedido']),
+				// 			"NoEmpleado" => $row['NoEmpleado'],
+				// 			"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
+				// 			"TipoPlatillo" => $row['TipoPlatillo'],
+				// 			"Ubicacion" => $row['Ubicacion'],
+				// 			"FechaPedido" => $row['FechaPedido'],
+				// 			"EstatusEnviado" => $row['EstatusEnviado'],
+				// 			"EstatusComedor" => $row['EstatusComedor'],
+				// 			"Tipo_Empleado" => $row['Tipo_Empleado'],
+				// 			"Platillo" => utf8_encode($row['Platillo']),
+				// 			"Comentarios" => utf8_encode($row['Comentarios']),
+				// 			"NoPlatillo" => $row['NoPlatillo'],
+				// 			"idComedorSub" => utf8_encode($row['idComedorSub']),
+				// 			"Precio" => $row['Precio'],
+				// 			"Total" => $row['Total'],
+				// 			"Tipo_comida" => 1,
+				// 		);
+				// 		array_push($query, $datos);
+				// 	}
+				// }
+
+				
 
 				if ($row2 != 0) {
 					while($row2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
 						$datos = array(
 							"id" => $row2['id'],
-							"IdPedido" => $row2['IdPedido'],
+							"IdPedido" => utf8_encode($row2['IdPedido']),
 							"NoEmpleado" => $row2['NoEmpleado'],
 							"NombreEmpleado" => utf8_encode($row2['NombreEmpleado']),
 							"TipoPlatillo" => $row2['TipoPlatillo'],
@@ -1738,6 +1740,9 @@
 						array_push($query, $datos);
 					}
 				}
+
+				var_dump($query);
+				die();
 
 				sqlsrv_free_stmt($stmt);
 				sqlsrv_free_stmt($stmt2);		
