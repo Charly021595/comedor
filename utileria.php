@@ -29,6 +29,7 @@
 				$_SESSION['Empleado'] =$empleado;
 				$_SESSION['NombreEmpleado'] =$NombreEmpleado;
 				*/
+				ob_clean();//clears the output buffer
 				echo json_encode($query);
 				sqlsrv_free_stmt($stmt);	
 	
@@ -246,6 +247,7 @@
 						"mensaje" => "no seleccionaste un rango de fechas valido"
 					);	
 				} 
+				ob_clean();//clears the output buffer
 				echo json_encode($data);
 			break;
 		case '4':
@@ -267,6 +269,7 @@
 					);
 					array_push($query, $record);
 				}
+				ob_clean();//clears the output buffer
 				echo json_encode($query);
 				sqlsrv_free_stmt( $stmt);	
 			break;
@@ -289,6 +292,7 @@
 					);
 					array_push($query, $record);
 				}
+				ob_clean();//clears the output buffer
 				echo json_encode($query);
 				sqlsrv_free_stmt( $stmt);	
 			break;
@@ -333,6 +337,7 @@
 				//
 				
 				array_push($query2,$record2);
+				ob_clean();//clears the output buffer
 				echo json_encode($query2);
 				/**/
 	
@@ -342,7 +347,6 @@
 			session_unset();
 			session_destroy();
 			echo json_encode("true");
-
 			break;	
 		case '8': //Listado
 			$datos = array();
@@ -399,6 +403,7 @@
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
 			}
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '9':
@@ -475,7 +480,8 @@
 					"estatus" => 'error_fecha',
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
-			} 
+			}
+			ob_clean();//clears the output buffer 
 			echo json_encode($data);
 		break;
 		case '10': //Listado
@@ -549,7 +555,7 @@
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);   
 		break;
 		case '11': 
@@ -737,7 +743,7 @@
 					"Mensaje" => $mensaje[0]['message']
 				);
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '12': 
@@ -773,7 +779,7 @@
 					"Mensaje" => $mensaje
 				);
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '13':
@@ -862,7 +868,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '14':
@@ -949,7 +955,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '15':
@@ -1030,7 +1036,8 @@
 					"estatus" => 'error_fecha',
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
-			} 
+			}
+			ob_clean();//clears the output buffer 
 			echo json_encode($data);
 		break;
 		case '16':
@@ -1111,7 +1118,7 @@
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '17':
@@ -1195,7 +1202,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '18':
@@ -1271,7 +1278,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '19':
@@ -1349,7 +1356,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '20':
@@ -1522,7 +1529,7 @@
 					"Mensaje" => $mensaje[0]['mensaje']
 				);
 			}
-	
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '21':
@@ -1567,6 +1574,7 @@
 					"Mensaje" => $mensaje[0]['message']
 				);
 			}
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '22':
@@ -1636,7 +1644,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '23':
@@ -1751,7 +1759,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '24':
@@ -1869,7 +1877,7 @@
 					"Mensaje" => "Ops ocurrio un error"
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data);
 		break;
 		case '25': 
@@ -1936,7 +1944,7 @@
 					"Mensaje" => $mensaje
 				);
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '26':
@@ -2016,6 +2024,7 @@
 					"mensaje" => "no seleccionaste un rango de fechas valido"
 				);	
 			}
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '27': 
@@ -2081,7 +2090,7 @@
 					"code" => 400
 				);	
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '28': 
@@ -2141,7 +2150,7 @@
 					"Mensaje" => $mensaje
 				);
 			}
-
+			ob_clean();//clears the output buffer
 			echo json_encode($data); 
 		break;
 		case '29':

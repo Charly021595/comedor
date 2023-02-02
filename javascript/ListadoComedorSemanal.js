@@ -321,7 +321,6 @@ function ElimarAlimento(NoAlimentos){
 }
 
 $("#btn_nomina").on("click", function(e){
-	debugger;
 	$("#btn_nomina").addClass("deshabilitar");
   	$('#btn_nomina').attr("disabled", true);
 	$('#lbl_pasar_nomina').hide();
