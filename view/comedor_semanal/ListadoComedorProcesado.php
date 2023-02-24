@@ -494,7 +494,7 @@
 
 		<!-- Modal ver detalles -->
 		<div id="modal_detalles" data-backdrop="static" data-keyboard="false" tabindex="-1" class="modal fade" role="dialog" ria-labelledby="largeModal" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
+			<div class="modal-dialog modal-lg modal_grande">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div id="modal_header_detalles" class="modal-header">

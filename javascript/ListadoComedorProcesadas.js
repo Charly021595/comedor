@@ -1624,8 +1624,10 @@ function boton_ver_detalles_comida(numero_emp){
 							<th scope='col'>No. Empleado</th>
 							<th scope='col'>Empleado</th>
 							<th scope='col'>Tipo de Empleado</th>
+							<th scope='col'>Platillo</th>
 							<th scope='col'>No. Platillos</th>
 							<th scope='col'>Precio</th>
+							<th scope='col'>Break</th>
 							<th scope='col'>Total</th>
 							<th scope='col'>Ubicación</th>
 							<th scope='col'>FechaPedido</th>
@@ -1642,8 +1644,10 @@ function boton_ver_detalles_comida(numero_emp){
 						<td  data-label= 'No. Empleado'>${datos[i].NoEmpleado}</td>
 						<td data-label= 'Empleado'>${datos[i].NombreEmpleado}</td>
 						<td data-label= 'Tipo Empleado'>${tipo_empleado}</td>
+						<td data-label= 'Platillo'>${datos[i].Platillo}</td>
 						<td data-label= 'No. Platillos'>${datos[i].NoPlatillo}</td>
 						<td data-label= 'Precio'>${datos[i].Precio}</td>
+						<td data-label= 'Break'>${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'No Consumió' : datos[i]['Ubicacion'] == 2 ? datos[i]['Precio_Break'] : datos[i]['Ubicacion'] == 3 ? datos[i]['Precio_Break'] : 'No Consumió'}</td>
 						<td data-label= 'Total'>${datos[i].Total}</td>	
 						<td data-label= 'Ubicación'>
 						${ nombre_ubicacion = datos[i]['Ubicacion'] == 1 ? 'Torre TOP' : datos[i]['Ubicacion'] == 2 ? 'Apodaca' : datos[i]['Ubicacion'] == 3 ? 'Cienega' : ''}	

@@ -217,6 +217,10 @@ button.cerrar{
     width: 8%;
 }
 
+.modal_grande{
+    width: 65%;
+}
+
 /* .scroll_tablas_detalle::-webkit-scrollbar {
     width: 12px;
 }

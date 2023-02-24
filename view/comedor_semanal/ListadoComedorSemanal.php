@@ -383,6 +383,12 @@
 								<input type="text" class="form-control" id="txtNumPlatillo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="\d*" maxlength="1" min="1" value="1" onchange="ValidarPlatillos()">
 							</div>
 						 </div>
+						 <div class="form-group row" id="DivCantidad" style="display:none;">
+							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Break:</label>
+							<div class="col-sm-8">
+								<input type="checkbox" id="break" name="break" value="12.50">
+							</div>
+						 </div>
 						 <div id="DivComentarioglobal" style="display:none;">
 							<div class="form-group row">
 								<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>

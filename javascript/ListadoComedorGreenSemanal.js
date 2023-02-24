@@ -65,6 +65,7 @@ function CerrarSesion(){
 }
 
 function buscar_sede(){
+	debugger;
 	let num_empleado = $("#txtNumEmpleado").val();
 	$.ajax({
 		url: "../../utileria.php",

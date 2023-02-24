@@ -2,19 +2,19 @@
   
   
   session_start(); 
-  if(!isset($_SESSION['RHComedor'])){
-	  header('location:../index.php');
-  }else{
-	  //header('location:view/evaluacion_clinicav2.php');
-	  if(!isset($_SESSION['RHComedor'])){ 
-			//$a= "No PAsaria 1";
-			echo "<script> window.location='index.php'</script>";
-	  }else{
-		if($_SESSION['RHComedor']!= '99999999'){
-			echo "<script> window.location='../dashboard.php'</script>";
-		}
-	  }
-  }
+//   if(!isset($_SESSION['RHComedor'])){
+// 	  header('location:../index.php');
+//   }else{
+// 	  //header('location:view/evaluacion_clinicav2.php');
+// 	  if(!isset($_SESSION['RHComedor'])){ 
+// 			//$a= "No PAsaria 1";
+// 			echo "<script> window.location='index.php'</script>";
+// 	  }else{
+// 		if($_SESSION['RHComedor']!= '99999999'){
+// 			echo "<script> window.location='../dashboard.php'</script>";
+// 		}
+// 	  }
+//   }
   
   ?>
 <!DOCTYPE html>

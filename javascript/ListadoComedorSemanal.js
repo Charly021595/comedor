@@ -3,43 +3,13 @@ var FechaInicial = "";
 var FechaFinal = "";
 let fecha_completa = '';
 let datos,
-bandera_descargar = 0;
+bandera_descargar = 0,
+sede = '';
 $(document).ready(function(){	
-	//BuscarEmpleadoLogeado();
-
-	 /*
-	 var Respuesta = Contraseña();
-	 if(Respuesta == true){
-	 */
-		ObtenerFecha();
-		window.location.hash="no-back-button";
-		window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
-		window.onhashchange=function(){window.location.hash="no-back-button";}
-		// var tabla ="<table  id='TablaComedor' class='table table-bordered table-hover TablaResponsiva'>";
-		// 	tabla +="<thead class='table-header'>";
-		// 	tabla +="<tr>"
-		// 	tabla +="<th scope='col'>No. Empleado</th>"
-		// 	tabla +="<th scope='col'>Empleado</th>"
-		// 	tabla +="<th scope='col' >Tipo de Platillo</th>"
-		// 	tabla +="<th scope='col'>No. Platillo</th>"
-		// 	tabla +="<th scope='col'>Platillo</th>"
-		// 	tabla +="<th scope='col'>Comentarios</th>"
-		// 	tabla +="<th scope='col'>Ubicación</th>"
-		// 	tabla +="<th scope='col'>FechaPedido</th>"
-		// 	tabla +="<th scope='col' colspan='2'>Acciones</th>"
-		// 	tabla +="</tr>";
-		// 	tabla +="</thead>";
-		// 	tabla +="<tbody id='ContenidoListados'>";
-		// 	tabla += "</tbody>"
-		// 	tabla +="</table>";
-		// 	$('#EspacioTabla').append(tabla);
-	/*
-	 }else{
-		 alert("La contraseña ingresada es incorrecta");
-		 //location.reload();
-		 window.location.replace('www.google.com'); 
-	 }
-	*/
+	ObtenerFecha();
+	window.location.hash="no-back-button";
+	window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
+	window.onhashchange=function(){window.location.hash="no-back-button";}
 	BuscarEmpleadoLogeadoSesion();
 	buscar_sede();
 });
@@ -71,7 +41,7 @@ function buscar_sede(){
 		type: "post",
 		data: {"param":1, "empleado":num_empleado},
 		success: function(result) {
-			let sede  = JSON.parse(result)[0].Sede;
+			sede  = JSON.parse(result)[0].Sede;
 			switch (sede) {
 				case 'Torre TOP':
 					$("#txtUbicacion").trigger("change").val(1);
@@ -352,7 +322,6 @@ $("#btn_nomina").on("click", function(e){
 });
 
 function enviar_nomina(resultados){
-	debugger;
 	let datos2 = resultados.data,
 	i = 0;
 	while (i < datos2.length) {
@@ -388,7 +357,6 @@ function enviar_nomina(resultados){
 		type: "post",
 		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1},
 		success: function(result) {
-			console.log(result);
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
 				Swal.fire('Estatus Envio', "El estatus enviado se actualizo correctamente", "success");
@@ -456,8 +424,23 @@ function MostrarInforme(){
 					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
 					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
 					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
-					if(datos[i].TipoPlatillo == "3"){
-						tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+
+					switch (datos[i].TipoPlatillo) {
+						case 3:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+						break;
+
+						case 5:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
+						break;
+
+						case 6:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
+						break;
+					
+						default:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+						break;
 					}
 					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
@@ -814,11 +797,32 @@ function TipoPlatillo(){
 			// $("#DivPrecio").css("display", "none");
 			// $("#DivComentario").css("display", "none");
 		}
-	$("#txtNumPlatillo").val("1");
-	$("#txtTotalPlatillo").val("47.50");
-	$("#txtPrecioPlatillo").val("47.50");
-	}
-	else{
+
+		$("#txtNumPlatillo").val("1");
+		switch (sede) {
+			case 'Torre TOP':
+				$("#txtTotalPlatillo").val("49.00");
+				$("#txtPrecioPlatillo").val("49.00");
+			break;
+
+			case 'Apodaca':
+				$("#txtTotalPlatillo").val("49.00");
+				$("#txtPrecioPlatillo").val("49.00");
+			break;
+
+			case 'Cienega':
+				$("#txtTotalPlatillo").val("20.00");
+				$("#txtPrecioPlatillo").val("20.00");
+			break;
+		
+			default:
+				$("#txtTotalPlatillo").val("49.00");
+				$("#txtPrecioPlatillo").val("49.00");
+			break;
+		}
+		// $("#txtTotalPlatillo").val("49.50");
+		$("#txtTotalPlatillo").show();
+	}else{
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		// $("#DivTotal").css("display", "none");
@@ -979,6 +983,9 @@ function GuardarOrden(){
 			Array.Total = TotalFormato;
 			Array.FechaPedido = FechaDeOrden;
 			Array.Comentario = $("#txtComentarioPlatillo").val();
+			if ((sede == 'Apodaca' || sede == 'Cienega') && TipoPlatillo != 3) {
+				Array.Break = 12.50;	
+			}
 			
             arrayListadoComida.push(Array);
 			

@@ -218,11 +218,11 @@
 						  <div class="form-group row" id="divIDVisita">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Ubicación:</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="txtUbicacion">
-									<option value="0"> Seleccione Ubicación</option>
-									<option value="1" selected> Torre TOP</option>
-									<option value="2"> Apodaca</option>
-									<option value="3"> Cienega</option>
+								<select class="form-control" id="txtUbicacion" onchange="ObenerTipoPlatillo();">
+									<option value="0">Seleccione Ubicación</option>
+									<option value="1">Torre TOP</option>
+									<option value="2">Apodaca</option>
+									<option value="3">Cienega</option>
 								</select>
 							</div>
 						 </div>
@@ -230,14 +230,10 @@
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Tipo de platillo:</label>
 							<div class="col-sm-8">
 								<select class="form-control" name="txtTipoPlatillo" id="txtTipoPlatillo" onchange="TipoPlatillo()">
-									<option value="0"> Seleccione el tipo de platillo</option>
 									<!--
 									<option value="1"> Platillo Caliente</option>
 									<option value="2"> Platillo Frío</option>
 									-->
-									<option value="3"> Platillo Unico</option>
-									<option value="4">Platillo Especial</option>
-									
 								</select>
 							</div>
 						</div>
@@ -261,6 +257,12 @@
 							  
 							</div>
 						 </div>
+						 <!-- <div class="form-group row" id="Divbreak" style="display:none;">
+							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Break:</label>
+							<div class="col-sm-8">
+								<input type="checkbox" id="break" name="break" value="12.50">
+							</div>
+						 </div> -->
 						 <!-- ---------- -->
 						 <div class="form-group row" id="DivTotal" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Total:</label>

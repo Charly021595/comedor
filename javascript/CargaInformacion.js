@@ -1,11 +1,53 @@
 var NoAlimento=0;
 var NoDatosBioquimicos = 0;
+var sede = '';
 
 $(document).ready(function () {
 	//var empleado = $("#txtNumEmpleado").val();
 	BuscarEmpleadoLogeado();
 	validarvisitas();
+	//buscar_sede();
 });
+
+function buscar_sede(){
+	$("#txtTipoPlatillo").html('');
+	let num_empleado = $("#txtNumEmpleado").val();
+	$.ajax({
+		url: "utileria.php",
+		type: "post",
+		data: {"param":1, "empleado":num_empleado},
+		success: function(result) {
+			sede  = JSON.parse(result)[0].Sede;
+			if (num_empleado == 4857 || num_empleado == 8999) {
+				sede = 'Cienega';
+				$("#txtUbicacion").val(3);
+			}else{
+				switch (sede) {
+					case 'Torre TOP':
+						sede = 'Torre Top';
+						$("#txtUbicacion").val(1);
+					break;
+	
+					case 'Apodaca':
+						sede = 'Apodaca';
+						$("#txtUbicacion").val(2);
+					break;
+	
+					case 'Cienega':
+						sede = 'Cienega';
+						$("#txtUbicacion").val(3);
+					break;
+				
+					default:
+						sede = 'Torre Top';
+						$("#txtUbicacion").val(1);
+					break;
+				}
+			}
+			ObenerTipoPlatillo();
+		}
+	});
+}
 
 function validarvisitas(){
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
@@ -65,6 +107,7 @@ function BuscarEmpleadoLogeado(){
 						$("#Fecha2").text(FechaAr);
 						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
 					}
+					buscar_sede();
 				}
 				
 			}
@@ -167,6 +210,9 @@ function GuardarOrden(){
 			Array.Total = TotalFormato;
 			Array.FechaPedido = FechaDeOrden;
 			Array.Comentario = $("#txtComentarioPlatillo").val();
+			if ((sede == 'Apodaca' || sede == 'Cienega') && TipoPlatillo != 3) {
+				Array.Break = 12.50;	
+			}
 			
             arrayListadoComida.push(Array);
 			
@@ -195,7 +241,7 @@ function GuardarOrden(){
 		ValidarPlatillos();
         return false;
     }
-	if (TipoPlatillo != "4" && TipoPlatillo != "3") {
+	if (TipoPlatillo != "4" && TipoPlatillo != "3" && TipoPlatillo != "5" && TipoPlatillo != "6") {
         Swal.fire('Tipo de platillo no soportado', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
@@ -344,23 +390,49 @@ function TipoPlatillo(){
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
 	if(tipoplatillo !="4"){
-		$("#ComidaGR").css("display", "none");
+		// $("#ComidaGR").css("display", "none");
 		$("#DivCantidad").css("display", "");
 		// $("#DivTotal").css("display", "");
 		// $("#DivPrecio").css("display", "");
 		// $("#DivComentario").css("display", "");
 		
-		let seleccionar = "<option value='0'> Seleccionar Platillo</option>";
-		$('#txtProductoSeleccionadoGR').append(seleccionar);
+		// let seleccionar = "<option value='0'> Seleccionar Platillo</option>";
+		// $('#txtProductoSeleccionadoGR').append(seleccionar);
 		if(tipoplatillo =="0"){
 			$("#DivCantidad").css("display", "none");
 			// $("#DivTotal").css("display", "none");
 			// $("#DivPrecio").css("display", "none");
 			// $("#DivComentario").css("display", "none");
 		}
-	$("#txtNumPlatillo").val("1");
-	$("#txtTotalPlatillo").val("47.50");
-	$("#txtTotalPlatillo").show();
+		$("#txtNumPlatillo").val("1");
+		switch (sede) {
+			case 'Torre TOP':
+				$("#txtTotalPlatillo").val("49.00");
+				$("#txtPrecioPlatillo").val("49.00");
+			break;
+
+			case 'Apodaca':
+				$("#txtTotalPlatillo").val("20.00");
+				$("#txtPrecioPlatillo").val("20.00");
+			break;
+
+			case 'Cienega':
+				if (tipoplatillo == 6) {
+					$("#txtTotalPlatillo").val("0");
+					$("#txtPrecioPlatillo").val("0");	
+				}else{
+					$("#txtTotalPlatillo").val("20.00");
+					$("#txtPrecioPlatillo").val("20.00");
+				}
+			break;
+		
+			default:
+				$("#txtTotalPlatillo").val("49.00");
+				$("#txtPrecioPlatillo").val("49.00");
+			break;
+		}
+		// $("#txtTotalPlatillo").val("49.50");
+		$("#txtTotalPlatillo").show();
 	}else{
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
@@ -505,63 +577,52 @@ function GuardarListadoGreenSpot() {
         return arrayListadoComida;
 }
 
-$("#txtUbicacion").on('change',function(e){
-    let txtUbicacion = $("#txtUbicacion").val();
-	let tipoplatillo = $("#txtTipoPlatillo").val();
-	$("#txtProductoSeleccionadoGR").empty();
-	$("#ListadoComidaGr").find("tr").remove();
+function ObenerTipoPlatillo(){
+	sede =  $('select[id="txtUbicacion"] option:selected').text();
+	$("#txtTipoPlatillo").html('');
 	 LimpiarCampos();
-	if(tipoplatillo !="4"){
-		$("#ComidaGR").css("display", "none");
-		$("#DivCantidad").css("display", "");
-		// $("#DivTotal").css("display", "");
-		// $("#DivPrecio").css("display", "");
-		// $("#DivComentario").css("display", "");
-		
-		let seleccionar = "<option value='0'> Seleccionar Platillo</option>";
-		$('#txtProductoSeleccionadoGR').append(seleccionar);
-		if(tipoplatillo =="0"){
-			$("#DivCantidad").css("display", "none");
-			// $("#DivTotal").css("display", "none");
-			// $("#DivPrecio").css("display", "none");
-			// $("#DivComentario").css("display", "none");
-		}
-	$("#txtNumPlatillo").val("1");
-	$("#txtTotalPlatillo").val("49.00");
-	}else{
-		$("#ComidaGR").css("display", "");
-		$("#DivCantidad").css("display", "none");
-		// $("#DivTotal").css("display", "none");
-		// $("#DivPrecio").css("display", "none");
-		// $("#DivComentario").css("display", "none");
-		$("#txtNumPlatillo").val("0");
-		$.ajax({
-            type: "POST",
-            data: {
-                param: 4,
-				tipoplatillo: tipoplatillo,
-				txtUbicacion: txtUbicacion
-            },
-            url: "utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
+	 switch (sede) {
+		case 'Torre TOP':
+			sede = 'Torre Top';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="4">Green Spot</option>
+			`);
+		break;
 
-				if(data.length){
-					let seleccionar = "<option value='0'> Seleccione el Platillo</option>"
-					for(i=0;i<data.length;i++){
-						//$("#NombreCont2").text(data[i]['Nombre']);
-						//$("#NombreCont").text(data[i]['Nombre']);
-						
-							seleccionar += "<option value='"+data[i]['IdComida']+"'>"+data[i]['Comida']+"</option>";
-							
-						
-					}
-					$('#txtProductoSeleccionadoGR').append(seleccionar);
-				}
-			}
-		});
+		case 'Apodaca':
+			sede = 'Apodaca';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="4">Green Spot</option>
+				<option value="5">Platillo Unico y Break</option>
+				<option value="6">Break</option>
+			`);
+		break;
+
+		case 'Cienega':
+			sede = 'Cienega';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="4">Green Spot</option>
+				<option value="5">Platillo Unico y Break</option>
+				<option value="6">Break</option>
+			`);
+		break;
+	
+		default:
+			sede = 'Torre Top';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="4">Platillo Especial</option>
+			`);
+		break;
 	}
-});
+};
 
 $("#txtNumPlatillo").on("keyup", function() {
 	let cantidad_platillos = $(this).val().toLowerCase(),
