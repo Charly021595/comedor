@@ -280,7 +280,7 @@
 						 <!-- ////////// -->
 						 <div id="ComidaGR" style="display:none;">
 							<center>
-								<h4>Pedido Platillo Especial</h4>
+								<h4>Pedido Platillo Green Spot</h4>
 								<br>
 							</center>
 							 <div class="form-group col-md-12 col-xs-12 row">

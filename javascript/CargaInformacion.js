@@ -390,7 +390,7 @@ function TipoPlatillo(){
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
 	if(tipoplatillo !="4"){
-		// $("#ComidaGR").css("display", "none");
+		$("#ComidaGR").css("display", "none");
 		$("#DivCantidad").css("display", "");
 		// $("#DivTotal").css("display", "");
 		// $("#DivPrecio").css("display", "");

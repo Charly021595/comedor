@@ -50,10 +50,10 @@
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 			
 			include './db/conectar.php';
-			if (($TipoPlatillo == 3 && $NoEmpleado != 20000) || $TipoPlatillo == 5 || $TipoPlatillo == 6) {
+			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000) {
 				$validar = true;
 				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?)}";
-				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $TipoPlatillo);
+				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
 				if ($stmt_validar_cantidad_platillos === false) {
 					$validar = false;
