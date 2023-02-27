@@ -160,6 +160,7 @@ function ValidarPlatillosGR(){
 }
 
 function GuardarOrden(){
+	debugger;
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
 	let NombreEmpleado =  $("#txtNombreEmpleadoLogeado").val();
 	let NoPlatillos = $("#txtNumPlatillo").val();

@@ -52,7 +52,7 @@
 			include './db/conectar.php';
 			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000) {
 				$validar = true;
-				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?)}";
+				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?)}";
 				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
 				if ($stmt_validar_cantidad_platillos === false) {
