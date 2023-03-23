@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../assets/fontawesome/fontawesome-free-6.3.0-web/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
@@ -176,6 +177,13 @@
 			</a>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
+		<li>
+			<a href="subir_menu.php">
+				<i class="fa-solid fa-utensils"></i> <span>  Subir Menu</span>
+			</a>
+		</li>
+		<?php } ?>
 		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999'){ ?>
 		<li>
 			<a href="GraficasComedor.php">
@@ -290,7 +298,7 @@
 						<div id="EspacioTabla" style="display:none;" class="col-md-12 col-xs-12">
 							<table  id='TablaComedor' class='table table-bordered table-hover TablaResponsiva'>
 								<thead>
-									<tr class='table-header'>
+									<tr class='table-header' id="header_comida_express">
 										<th scope='col'>No. Orden</th>
 										<th scope='col'>No. Empleado</th>
 										<th scope='col'>Empleado</th>
@@ -355,28 +363,28 @@
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Ubicación:</label>
 							<div class="col-sm-8">
 								<select class="form-control" id="txtUbicacion" disabled>
-									<option value="0"> Seleccione Ubicación</option>
-									<option value="1"> Torre TOP</option>
-									<option value="2"> Apodaca</option>
-									<option value="3"> Cienega</option>
+									<option value="0">Seleccione Ubicación</option>
+									<option value="1">Torre TOP</option>
+									<option value="2">Apodaca</option>
+									<option value="3">Cienega</option>
 								</select>
 							</div>
 						 </div>
-						<div class="form-group row" id="divIDVisita" style="display:none;">
+						<div class="form-group row" id="tipo_platillo" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Tipo de platillo:</label>
 							<div class="col-sm-8">
 								<select class="form-control" name="txtTipoPlatillo" id="txtTipoPlatillo" onchange="TipoPlatillo()">
-									<option value="0"> Seleccione el tipo de platillo</option>
-									<!--
-									<option value="1"> Platillo Caliente</option>
-									<option value="2"> Platillo Frío</option>
-									-->
-									<option value="3"> Platillo Unico</option>
-									<!-- <option value="4"> Green Spot</option> -->
 									
 								</select>
 							</div>
 						 </div>
+						 <div class="form-group row" id="menu_secreto" style="display:none;">
+							<label for="lblMenu_Cienega" class="col-sm-3 col-form-label">Menu:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="menu_secreto_select" id="menu_secreto_select">
+								</select>
+							</div>
+						</div>
 						  <div class="form-group row" id="DivCantidad" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Platillos:</label>
 							<div class="col-sm-8">

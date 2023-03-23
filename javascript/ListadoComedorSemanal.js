@@ -5,6 +5,8 @@ let fecha_completa = '';
 let datos,
 bandera_descargar = 0,
 sede = '';
+const hora_estatica_inicio = '07:00:00', 
+hora_estatica_fin = '17:00:00';
 $(document).ready(function(){	
 	ObtenerFecha();
 	window.location.hash="no-back-button";
@@ -45,14 +47,17 @@ function buscar_sede(){
 			switch (sede) {
 				case 'Torre TOP':
 					$("#txtUbicacion").trigger("change").val(1);
+					ObenerTipoPlatillo();
 				break;
 
 				case 'Apodaca':
 					$("#txtUbicacion").trigger("change").val(2);
+					ObenerTipoPlatillo();
 				break;
 
 				case 'Cienega':
 					$("#txtUbicacion").trigger("change").val(3);
+					ObenerTipoPlatillo();
 				break;
 			
 				default:
@@ -402,6 +407,25 @@ function MostrarInforme(){
 	$("#EspacioTabla").hide();
 	$("#div_tabla").show();
 	$("#loading_comedor").show();
+	if (txtUbicacion != 0) {
+		$("#header_comida_express").html("");
+		$("#header_comida_express").append(`
+			<th scope='col'>No. Orden</th>
+			<th scope='col'>No. Empleado</th>
+			<th scope='col'>Empleado</th>
+			<th scope='col'>Tipo de Platillo</th>
+			<th scope='col'>No. Platillo</th>
+			<th scope='col'>Platillo</th>
+			<th scope='col'>Nombre Platillo</th>
+			<th scope='col'>Descripción Platillo</th>
+			<th scope='col'>Comentarios</th>
+			<th scope='col'>Ubicación</th>
+			<th scope='col'>FechaPedido</th>
+			<th scope='col'>Estatus Enviado</th>
+			<th scope='col'>Estatus Comedor</th>
+			<th scope='col' colspan='2'>Acciones</th>
+		`);
+	}
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -444,6 +468,10 @@ function MostrarInforme(){
 					}
 					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
+					if (datos[i]['Ubicacion'] != 0) {
+						tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].Nombre_Platillo+"</td>"
+						tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Descripcion+"</td>"
+					}
 					tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
 					switch (datos[i]['Ubicacion']) {
 						case 1:
@@ -778,6 +806,7 @@ $("#txtNumeroEmpleado").on('change',function(e){
 
 function TipoPlatillo(){
 	var tipoplatillo = $("#txtTipoPlatillo").val();
+	let Ubicacion = $("#txtUbicacion").val();
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
@@ -803,16 +832,57 @@ function TipoPlatillo(){
 			case 'Torre TOP':
 				$("#txtTotalPlatillo").val("49.00");
 				$("#txtPrecioPlatillo").val("49.00");
+				Menu_secreto();
 			break;
 
 			case 'Apodaca':
-				$("#txtTotalPlatillo").val("49.00");
-				$("#txtPrecioPlatillo").val("49.00");
+				switch (tipoplatillo) {
+					case "3":
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+					case "5":
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+					case "6":
+						$("#txtTotalPlatillo").val("0");
+						$("#txtPrecioPlatillo").val("0");	
+					break;
+				
+					default:
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+				}
 			break;
 
 			case 'Cienega':
-				$("#txtTotalPlatillo").val("20.00");
-				$("#txtPrecioPlatillo").val("20.00");
+				switch (tipoplatillo) {
+					case "3":
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+					case "5":
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+					case "6":
+						$("#txtTotalPlatillo").val("0");
+						$("#txtPrecioPlatillo").val("0");	
+					break;
+				
+					default:
+						$("#txtTotalPlatillo").val("20.00");
+						$("#txtPrecioPlatillo").val("20.00");
+						Menu_secreto();
+					break;
+				}
 			break;
 		
 			default:
@@ -945,13 +1015,16 @@ function GuardarOrden(){
 	let Precio= $("#txtPrecioPlatillo").val();
 	let Tipo_Empleado= $("#tipo_empleado").val(),
 	comentario_global= $("#txtComentarioGlobalPlatillo").val();
+	let platillo_menu = $("#menu_secreto_select").val() != 0 || $("#menu_secreto_select").val() === "undefined" ? $("#menu_secreto_select").val() : 0;
 	//
 	let arrayListadoGreenSpot = {};
 	let arrayListadoPlatilloUnico = {};
 	let fechaActualL = new Date(); //Fecha actual
 	let FechaDeOrden = moment(fechaActualL).format("YYYY-MM-DD HH:mm:ss"),
 	dia_actual = moment(fechaActualL).format('DD'),
-	nombre_dia_actual = moment(fechaActualL).format('dddd');
+	nombre_dia_actual = moment(fechaActualL).format('dddd'),
+	hora_actual = moment(fechaActualL).format('HH:mm:ss')
+	tipo_comedor = 0;
 	switch (nombre_dia_actual) {
 		case 'Saturday':
 			dia_inicial = dia_actual - 1;
@@ -986,20 +1059,14 @@ function GuardarOrden(){
 			if ((sede == 'Apodaca' || sede == 'Cienega') && TipoPlatillo != 3) {
 				Array.Break = 12.50;	
 			}
+			if (sede == 'Cienega' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
+				Array.platillo_menu = platillo_menu;
+			}
 			
             arrayListadoComida.push(Array);
 			
 			arrayListadoPlatilloUnico = arrayListadoComida;
 	}
-	//
-	// if (NoEmpleadoLogeado =="") {
-	// 	Swal.fire( 
-	// 		"Debes llenar el número de empleado",
-	// 		'',
-	// 		'info'
-	// 	);
-	// 	return;
-	// }
 	if (NoPlatillos < 1) {
         Swal.fire('El número de platillos es requerido', "","info");
 		$("#GuardarOrdenS").removeAttr("disabled, disabled");
@@ -1023,6 +1090,18 @@ function GuardarOrden(){
 		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
+	// if ((platillo_menu == 0 && Ubicacion == 3) || platillo_menu == 0 && Ubicacion == 2) {
+	// 	Swal.fire('El campo menu es obligatorio', "","info");
+	// 	$("#GuardarOrdenS").removeAttr("disabled, disabled");
+	// 	$("#GuardarOrdenS").removeClass("deshabilitar");
+	// 	$("#GuardarOrdenS").attr("disabled", false);
+    //     return false;
+	// }
+	if (hora_actual <=  hora_estatica_inicio && hora_actual >=  hora_estatica_fin){
+        tipo_comedor = 1;
+    }else{
+		tipo_comedor = 2;
+	}
 	if((NoEmpleadoLogeado !="" && NombreEmpleado !="" && TipoPlatillo !="0" && TipoPlatillo !="4" && Ubicacion !="0" && Total != "0.00" && Tipo_Empleado != "0")||(CantidadArreglo > 0)){
 		$.ajax({
 			type: "POST",
@@ -1037,7 +1116,9 @@ function GuardarOrden(){
 				arrayListadoGreenSpot : JSON.stringify(arrayListadoGreenSpot),
 				arrayListadoPlatilloUnico : JSON.stringify(arrayListadoPlatilloUnico),
 				pedidoporcomedor:1,
-				comentario_global:comentario_global
+				comentario_global:comentario_global,
+				platillo_menu:platillo_menu,
+				tipo_comedor:tipo_comedor
 			},
 			url: "../../utileria.php", 
 			success: function(result) {
@@ -1059,7 +1140,6 @@ function GuardarOrden(){
 					$("#GuardarOrdenS").attr("disabled", false);
 				}else{
 					Swal.fire('La información no pudo ser guardada.', "","error");
-					console.log(data.mensaje);
 					$("#GuardarOrdenS").removeAttr("disabled, disabled");
 					$("#GuardarOrdenS").removeClass("deshabilitar");
 					$("#GuardarOrdenS").attr("disabled", false);
@@ -1080,11 +1160,13 @@ function GuardarOrden(){
 }
 
 function CargarPedido(){
+	$("#menu_secreto_select").html('');
+	$("#menu_secreto").hide();
 	$("#DivComentarioglobal").hide();
 	$("#txtNumEmpleadoLogeado").val("");
 	$("#txtNombreEmpleadoLogeado").val("");
 	$("#txtTipoPlatillo").val("0");
-	TipoPlatillo();
+	// TipoPlatillo();
 	$("#txtNumPlatillo").val("1");
 	ValidarPlatillos()
 	$("#txtComentarioPlatillo").val("");
@@ -1092,50 +1174,10 @@ function CargarPedido(){
 	$('#ModalCargaEvidenciaVisual').modal('show');
 	let ubicacion = $("#txtUbicacion").val();
 	// if (ubicacion == 1) {
-		$("#txtTipoPlatillo").trigger("change").val(3);
-		TipoPlatillo();
+		$("#txtTipoPlatillo").trigger("change").val(0);
+		// TipoPlatillo();
 	// }
 }
-
-// function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
-// 	Swal.fire({
-// 		title: '¿Quieres confirmar el pedido?',
-// 		icon: 'info',
-// 		showCancelButton: true,
-// 		confirmButtonColor: '#3085d6',
-// 		cancelButtonColor: '#d33',
-// 		confirmButtonText: 'Confirmar',
-// 		cancelButtonText: 'Cancelar'
-// 	  }).then((res) => {
-// 		if (res.isConfirmed) {
-// 			$.ajax({
-// 				url: "../../utileria.php",
-// 				type: "post",
-// 				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-// 				success: function(result) {
-// 					data = JSON.parse(result);
-// 					if (data.estatus == 'success') {
-// 						Swal.fire(
-// 							'Confirmado',
-// 							'Tu platillo se confirmo.',
-// 							'success'
-// 						  ).then(function(){
-// 							  MostrarInforme();
-// 						  });
-// 					}else{
-// 						if (res.isConfirmed) {
-// 							Swal.fire( 
-// 								data.mensaje,
-// 								'',
-// 								'error'
-// 							);
-// 						}
-// 					}
-// 				}
-// 			});	
-// 		}
-// 	});
-// }
 
 function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
 	$.ajax({
@@ -1165,46 +1207,6 @@ function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
 	});
 }
 
-// function RechazarEstatusAlimento(id_pedido, estatus_comedor){
-// 	Swal.fire({
-// 		title: '¿Quieres rechazar el pedido?',
-// 		icon: 'info',
-// 		showCancelButton: true,
-// 		confirmButtonColor: '#3085d6',
-// 		cancelButtonColor: '#d33',
-// 		confirmButtonText: 'Rechazar',
-// 		cancelButtonText: 'Cancelar'
-// 	  }).then((res) => {
-// 		if (res.isConfirmed) {
-// 			$.ajax({
-// 				url: "../../utileria.php",
-// 				type: "post",
-// 				data: {"param":12, "id_pedido":id_pedido, "estatus_comedor":estatus_comedor},
-// 				success: function(result) {
-// 					data = JSON.parse(result);
-// 					if (data.estatus == 'success') {
-// 						Swal.fire(
-// 							'Rechazado',
-// 							'Tu platillo fue Rechazado.',
-// 							'success'
-// 						  ).then(function(){
-// 							  MostrarInforme();
-// 						  });	
-// 					}else{
-// 						if (res.isConfirmed) {
-// 							Swal.fire( 
-// 								data.mensaje,
-// 								'',
-// 								'error'
-// 							);
-// 						}
-// 					}
-// 				}
-// 			});				
-// 		}
-// 	});
-// }
-
 function RechazarEstatusAlimento(id_pedido, estatus_comedor){
 	$.ajax({
 		url: "../../utileria.php",
@@ -1228,6 +1230,84 @@ function RechazarEstatusAlimento(id_pedido, estatus_comedor){
 						'error'
 					);
 				}
+			}
+		}
+	});
+}
+
+function ObenerTipoPlatillo(){
+	$("#tipo_platillo").hide();
+	sede =  $('select[id="txtUbicacion"] option:selected').text();
+	$("#txtTipoPlatillo").html('');
+	 LimpiarCampos();
+	 switch (sede) {
+		case 'Torre TOP':
+			$("#tipo_platillo").show();
+			sede = 'Torre Top';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+			`);
+		break;
+
+		case 'Apodaca':
+			$("#tipo_platillo").show();
+			sede = 'Apodaca';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="5">Platillo Unico y Break</option>
+				<option value="6">Break</option>
+			`);
+		break;
+
+		case 'Cienega':
+			$("#tipo_platillo").show();
+			sede = 'Cienega';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+				<option value="5">Platillo Unico y Break</option>
+				<option value="6">Break</option>
+			`);
+		break;
+	
+		default:
+			$("#tipo_platillo").show();
+			sede = 'Torre Top';
+			$("#txtTipoPlatillo").append(`
+				<option value="0"> Seleccione el tipo de platillo</option>
+				<option value="3"> Platillo Unico</option>
+			`);
+		break;
+	}
+};
+
+function Menu_secreto(){
+	var date = new Date();
+	let fecha_actual = moment(date).format('YYYY-MM-DD');
+	$("#menu_secreto_select").html('');
+	$("#menu_secreto").hide();
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":31, "fecha_actual":fecha_actual, "sede":sede},
+		success: function(result) {
+			let data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				$("#menu_secreto").show();
+				$("#menu_secreto_select").html('');
+				$("#menu_secreto_select").append(`
+					<option value="0"> Seleccione el platillo</option>
+				`);	
+				for (let i = 0; i < data.datos.length; i++) {
+					$("#menu_secreto_select").append(`
+						<option value="${data.datos[i].IDPlatillo}">${data.datos[i].Nombre_Platillo}</option>
+					`);
+				}	
+			}else{
+				$("#menu_secreto_select").html('');
+				$("#menu_secreto").hide();
 			}
 		}
 	});

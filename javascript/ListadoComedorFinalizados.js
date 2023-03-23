@@ -32,6 +32,7 @@ $(document).ready(function(){
 });
 
 function ObtenerFecha(){
+	let dia_cambio = 0;
 	var date = new Date();
 	let dia = date.getDate(),
 	mes = date.getMonth() + 1,
@@ -157,6 +158,7 @@ function ObtenerFecha(){
 		case 'Feb':
 			switch (nombre_dia_actual) {
 				case 'Monday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? 
@@ -168,7 +170,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) : 
 						dia_actual == 25 ? Number(0)+Number(1) : dia_actual == 28 ? Number(0)+Number(4) : Number(dia_actual)+Number(4);
 						mes_inicial = mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -215,6 +217,7 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Thursday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
@@ -225,7 +228,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -234,6 +237,7 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Friday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual;
@@ -244,7 +248,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -1377,6 +1381,7 @@ $("#buscar_finalizados").click(function(e){
 });
 
 function boton_ver_primer_detalle_finalizados(numero_conciliado){
+	debugger;
 	$('#modal_detalles_segundo').modal('hide');
 	$("#mostrar_tabla_primer_detalle_finalizados").html('');
 	$("#filtro_pirmer_detalle_finalizado").html('');

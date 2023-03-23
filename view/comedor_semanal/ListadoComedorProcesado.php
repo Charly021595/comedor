@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../assets/fontawesome/fontawesome-free-6.3.0-web/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
@@ -176,6 +177,13 @@
 			</a>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
+		<li>
+			<a href="subir_menu.php">
+				<i class="fa-solid fa-utensils"></i> <span>  Subir Menu</span>
+			</a>
+		</li>
+		<?php } ?>
 		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
 		|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
         <li>
@@ -246,12 +254,23 @@
 							</div>
 						</form>
 
-						<!-- -->
+						<!-- filtros -->
 						<div id="filtros_plato_express" style="display:none;" class="col-md-8 col-xs-12">
 						   <div class="form-group row">
 								<label for="lblNombreVisita_plato_express" class="col-sm-3 col-form-label">Filtrar por No. Empleado:</label>
 								<div class="col-sm-6">
 								  <input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_plato_express" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+								</div>
+							</div>
+							<div class="row form-group">
+								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
+								<div class="col-sm-6">
+									<select name="razon_social_plato_express" id="razon_social_plato_express" class="form-control">
+										<option value="todos">Todos</option>
+										<option value="FRATECH S.A.">FRATECH S.A.</option>
+										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
+										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -262,12 +281,34 @@
 								  <input type="text" class="form-control" maxlength="6" id="txtNumeroEmpleado_green_spot" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 								</div>
 							</div>
+							<div class="row form-group">
+								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
+								<div class="col-sm-6">
+									<select name="razon_social_green_spot" id="razon_social_green_spot" class="form-control">
+										<option value="todos">Todos</option>
+										<option value="FRATECH S.A.">FRATECH S.A.</option>
+										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
+										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
+									</select>
+								</div>
+							</div>
 						</div>
 						<div id="filtros_plato_express_conciliados" style="display:none;" class="col-md-8 col-xs-12">
 						   <div class="form-group row">
 								<label for="lblNombreVisita_plato_express_conciliados" class="col-sm-3 col-form-label">Filtrar por Id Conciliación:</label>
 								<div class="col-sm-6">
 								  <input type="text" class="form-control" maxlength="12" id="txtNumeroConciliacion_plato_express_conciliacion">
+								</div>
+							</div>
+							<div class="row form-group">
+								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
+								<div class="col-sm-6">
+									<select name="razon_social_plato_express_conciliacion" id="razon_social_plato_express_conciliacion" class="form-control">
+										<option value="todos">Todos</option>
+										<option value="FRATECH S.A.">FRATECH S.A.</option>
+										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
+										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -278,8 +319,19 @@
 								  <input type="text" class="form-control" maxlength="12" id="txtNumeroEmpleado_plato_especial_conciliados">
 								</div>
 							</div>
+							<div class="row form-group">
+								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
+								<div class="col-sm-6">
+									<select name="razon_social_plato_especial_conciliados" id="razon_social_plato_especial_conciliados" class="form-control">
+										<option value="todos">Todos</option>
+										<option value="FRATECH S.A.">FRATECH S.A.</option>
+										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
+										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
+									</select>
+								</div>
+							</div>
 						</div>
-						<!-- -->
+						<!-- botones descarga -->
 						<div style="text-align:right; display:none;" id="boton_descarga_excel_comedor">
 							<button id="btn_conciliar_comedor" class="btn btn-primary" onclick="DescargarTablaComedor()"><label style="display: none;" for="" id="lbl_btn_conciliar_pe">Conciliar</label><img id="cargando_conciliar_pe" class="gif_cargando_btn" src="../../assets/img/loading.gif" style="display:none;"></button>
 						</div>

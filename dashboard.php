@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/fontawesome/fontawesome-free-6.3.0-web/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
@@ -149,6 +150,13 @@
 			</a>
 		</li>
 		<?php } ?>
+		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
+		<li>
+			<a href="view/comedor_semanal/subir_menu.php">
+				<i class="fa-solid fa-utensils"></i> <span>  Subir Menu</span>
+			</a>
+		</li>
+		<?php } ?>
 		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '4603' || $_SESSION['RHComedor'] == '4984' 
 		|| $_SESSION['RHComedor'] == '8938' || $_SESSION['RHComedor'] == '5074' || $_SESSION['RHComedor'] == '8711'){ ?>
         <li>
@@ -218,7 +226,7 @@
 						  <div class="form-group row" id="divIDVisita">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Ubicación:</label>
 							<div class="col-sm-8">
-								<select class="form-control" id="txtUbicacion" onchange="ObenerTipoPlatillo();">
+								<select class="form-control" id="txtUbicacion">
 									<option value="0">Seleccione Ubicación</option>
 									<option value="1">Torre TOP</option>
 									<option value="2">Apodaca</option>
@@ -234,6 +242,13 @@
 									<option value="1"> Platillo Caliente</option>
 									<option value="2"> Platillo Frío</option>
 									-->
+								</select>
+							</div>
+						</div>
+						<div class="form-group row" id="menu_secreto" style="display:none;">
+							<label for="lblMenu_Cienega" class="col-sm-3 col-form-label">Menu:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="menu_secreto_select" id="menu_secreto_select">
 								</select>
 							</div>
 						</div>

@@ -65,7 +65,6 @@ function CerrarSesion(){
 }
 
 function buscar_sede(){
-	debugger;
 	let num_empleado = $("#txtNumEmpleado").val();
 	$.ajax({
 		url: "../../utileria.php",
@@ -920,9 +919,8 @@ function TipoPlatillo(){
 			$("#DivComentario").css("display", "none");
 		}
 	$("#txtNumPlatillo").val("1");
-	$("#txtTotalPlatillo").val("49.00");
-	}
-	else{
+	// $("#txtTotalPlatillo").val("49.00");
+	}else{
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		$("#DivTotal").css("display", "none");
@@ -981,7 +979,7 @@ function TipoPlatillo_Editar(){
 			// $("#DivComentario_Editar").css("display", "none");
 		}
 	$("#txtNumPlatilloGR_Editar").val("1");
-	$("#txtTotalPlatillo_Editar").val("49.00");
+	// $("#txtTotalPlatillo_Editar").val("49.00");
 	}
 	else{
 		// $("#ComidaGR_Editar").css("display", "");
@@ -1027,17 +1025,18 @@ function LimpiarCampos(){
 }
 
 function ValidarPlatillos(){
-	let platillos = parseInt($("#txtNumPlatillo").val());
-	if (platillos != 1) {
-		Swal.fire('Solo puedes pedir un platillo de comida.', "","info");
-	}
-	if(platillos < 1 || platillos == '' || isNaN(platillos)){
-		$("#txtNumPlatillo").val(1);
-		platillos = parseInt($("#txtNumPlatillo").val());
-	}
-	let Precio = parseFloat($("#txtPrecioPlatillo").val());
+	let platillos = parseInt($("#txtNumPlatilloGR").val());
+	// if (platillos != 1) {
+	// 	Swal.fire('Solo puedes pedir un platillo de comida.', "","info");
+	// }
+	// if(platillos < 1 || platillos == '' || isNaN(platillos)){
+	// 	$("#txtNumPlatilloGR").val(1);
+	// 	platillos = parseInt($("#txtNumPlatilloGR").val());
+	// }
+	let Precio = parseFloat($("#txtPrecioGR").val());
 	let Calculo = Precio * platillos;
 	$("#txtTotalPlatillo").val(parseFloat(Calculo).toFixed(2));
+	$("#txtPrecioTotal").val(parseFloat(Calculo).toFixed(2));
 }
 
 function BuscarEmpleadoLogeado(){
@@ -1116,7 +1115,7 @@ function InfoPlatillo(valor){
 							$("#txtCaloriasGR").val(data[i]['Calorias']);
 						
 						}
-					ValidarPlatillosGR();
+					ValidarPlatillos();
 					}
 				}
 			});
@@ -1130,7 +1129,6 @@ function InfoPlatillo(valor){
 		}	
 	}else if (tipo_peticion == 2) {
 		var InfoPlatillo = $("#txtProductoSeleccionadoGR_Editar").val();
-		//
 		$("#txtComentariosGR_Editar").val("");
 		$("#txtNumPlatilloGR_Editar").val(1);
 		$("#txtPrecioGR_Editar").val("0.00");
@@ -1138,8 +1136,6 @@ function InfoPlatillo(valor){
 		$("#txtPrecioTotal_Editar").val("0.00");
 		var TipoPlatillo = $("#txtTipoPlatillo_Editar").val();
 		$("#txtTipoPlatilloGR_Editar").val(TipoPlatillo);
-		
-		//
 		if(InfoPlatillo !="0"){
 			$.ajax({
 				type: "POST",
@@ -1151,12 +1147,11 @@ function InfoPlatillo(valor){
 				dataType: 'JSON',
 				success: function(data) {
 					if(data.length){
-						
 						for(i=0;i<data.length;i++){
-							$("#txtPrecioTotal_Editar").val(data[i]['Precio']);
+							$("#txtPrecioGR_Editar").val(data[i]['Precio']);
 							$("#txtCaloriasGR_Editar").val(data[i]['Calorias']);
 						}
-					ValidarPlatillosGR();
+						ValidarPlatillosGR();
 					}
 				}
 			});
@@ -1171,21 +1166,22 @@ function InfoPlatillo(valor){
 }
 
 function ValidarPlatillosGR(){
-	let platillos = parseInt($("#txtNumPlatilloGR").val());
-	let NomPlatillo = $("#txtProductoSeleccionadoGR").val();
+	let platillos = parseInt($("#txtNumPlatilloGR_Editar").val());
+	let NomPlatillo = $("#txtProductoSeleccionadoGR_Editar").val();
 	if(NomPlatillo !="0"){
 		if(platillos < 1 || platillos == '' || isNaN(platillos)){
-			$("#txtNumPlatilloGR").val(1);
-			platillos = parseInt($("#txtNumPlatilloGR").val());
+			$("#txtNumPlatilloGR_Editar").val(1);
+			platillos = parseInt($("#txtNumPlatilloGR_Editar").val());
 		}
-		let Precio = parseFloat($("#txtPrecioGR").val());
+		let Precio = parseFloat($("#txtPrecioGR_Editar").val());
 		let Calculo = Precio * platillos;
-		$("#txtPrecioTotal").val(parseFloat(Calculo).toFixed(2));
+		$("#txtPrecioTotal_Editar").val(parseFloat(Calculo).toFixed(2));
+		$("#txtTotalPlatillo_Editar").val(parseFloat(Calculo).toFixed(2));
 	}else{
-		$("#txtNumPlatilloGR").val(1);
-		$("#txtPrecioGR").val("0.00");
-		$("#txtCaloriasGR").val("");
-		$("#txtPrecioTotal").val("0.00");
+		$("#txtNumPlatilloGR_Editar").val(1);
+		$("#txtPrecioGR_Editar").val("0.00");
+		$("#txtCaloriasGR_Editar").val("");
+		$("#txtPrecioTotal_Editar").val("0.00");
 	}
 }
 
@@ -1200,7 +1196,7 @@ function AgregarComidaGr(){
 	var tipoplatillo = $("#txtTipoPlatilloGR").val();
 	//var ComentariosGR = $("#txtComentariosGR").val();
 	var ComentariosGR =document.getElementById("txtComentariosGR").value;
-	if(Platillo !="0" && PrecioTotal != "0.00"){
+	if(Platillo !="" && PrecioTotal != "0.00"){
 		$("#div_mostrar_tabla_pedido").show();
 		NoAlimento = NoAlimento +1;
 		var NuevoAlimento = '<tr id="Alimento'+NoAlimento+'">';
@@ -1265,7 +1261,7 @@ function EditarComidaGr(){
 	let tipoplatillo_Editar = $("#txtTipoPlatilloGR_Editar").val();
 	//let ComentariosGR = $("#txtComentariosGR").val();
 	let ComentariosGR_Editar = document.getElementById("txtComentariosGR_Editar").value;
-	if(Platillo_Editar !="0" && PrecioTotal_Editar != "0.00" && IdPlatillo_Editar != 0){
+	if(Platillo_Editar !="" && PrecioTotal_Editar != "0.00" && IdPlatillo_Editar != 0){
 		NoAlimento_Editar = NoAlimento_Editar + 1;
 		$("#div_mostrar_tabla_pedido_Editar").show();
 		let NuevoAlimento = '<tr id="AlimentoEditar'+NoAlimento_Editar+'">';
@@ -1395,6 +1391,8 @@ $("#btn_nomina").on("click", function(e){
 				$("#btn_nomina").removeAttr("disabled, disabled");
 				$("#btn_nomina").removeClass("deshabilitar");
 				$('#btn_nomina').attr("disabled", false);
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
 			}
 		}
 	}); 
@@ -1619,7 +1617,6 @@ function GuardarOrden(){
 				$("#GuardarOrdenS").attr("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
-				console.log(data.mensaje);
 				$("#GuardarOrdenS").removeAttr("disabled, disabled");
 				$("#GuardarOrdenS").removeClass("deshabilitar");
 				$("#GuardarOrdenS").attr("disabled", false);
@@ -1789,20 +1786,14 @@ function EditarOrden(){
 		},
 		url: "../../utileria.php",
 		success: function(result) {
-			console.log(result);
 			data = JSON.parse(result);
 			if (data.estatus === "success") {
 				Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
 				.then(function(){
-					// $("#txtNumEmpleadoLogeado").val("");
-					// $("#txtNombreEmpleadoLogeado").val("");
-					// $("#txtNumPlatillo").val("");
-					// $("#txtTipoPlatillo").val("");
-					// $("#txtUbicacion").val("");
-					// $("#txtTotalPlatillo").val("");
-					// $("#txtPrecioPlatillo").val("");
-					// $("#tipo_empleado").val("");
-					// $("#txtComentarioGlobalPlatillo").val("");
+					$("#txtNumPlatilloGR_Editar").val("1");
+					$("#txtTipoPlatillo_Editar").val("4");
+					$("#txtTotalPlatillo_Editar").val("");
+					$("#txtPrecioPlatillo_Editar").val("");
 					MostrarInforme();
 					$("#EditarOrden").prop("disabled", false);
 				});
@@ -1945,7 +1936,7 @@ $("#txtUbicacion").on('change',function(e){
 			// $("#DivComentario").css("display", "none");
 		}
 	$("#txtNumPlatillo").val("1");
-	$("#txtTotalPlatillo").val("49.00");
+	// $("#txtTotalPlatillo").val("49.00");
 	}
 	else{
 		$("#ComidaGR").css("display", "");

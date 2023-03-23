@@ -10,8 +10,14 @@
 	$conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 	if( !$conn ) {
-		echo "No se pudo establecer la conexión.<br />";
-		die( print_r( sqlsrv_errors(), true));
+		$mensaje = '';
+		$data = array(
+			"estatus" => 'error_consulta',
+			"Validar" => $validar,
+			"mensaje" => 'No se pudo establecer la conexión.'
+		);
+		echo json_encode($data);
+		die();
 	}
 
 ?>

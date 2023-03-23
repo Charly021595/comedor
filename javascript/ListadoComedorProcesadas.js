@@ -63,6 +63,7 @@ $(document).ready(function(){
 });
 
 function ObtenerFecha(){
+	let dia_cambio = 0;
 	var date = new Date();
 	let dia = date.getDate(),
 	mes = date.getMonth() + 1,
@@ -188,6 +189,7 @@ function ObtenerFecha(){
 		case 'Feb':
 			switch (nombre_dia_actual) {
 				case 'Monday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? 
@@ -199,7 +201,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) : 
 						dia_actual == 25 ? Number(0)+Number(1) : dia_actual == 28 ? Number(0)+Number(4) : Number(dia_actual)+Number(4);
 						mes_inicial = mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -246,6 +248,7 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Thursday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
@@ -256,7 +259,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -265,6 +268,7 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Friday':
+					dia_cambio = Number(dia_actual) + 5;
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_final = dia_actual;
@@ -275,7 +279,7 @@ function ObtenerFecha(){
 						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -1381,9 +1385,11 @@ function BuscarEmpleadoLogeadoSesion(){
              success: function(data) {
 				if(data.length){
 					for(i=0;i<data.length;i++){
-						var FechaAr =  "Fecha: "+ fechaActual2; 
+						var FechaAr =  "Fecha: "+ fechaActual2;
+						razon_social =  data[0].RazonSocial;
 						$("#NombreCont2").text(data[i]['Nombre']);
 						$("#NombreCont").text(data[i]['Nombre']);
+						$("#razon_social_plato_express").val(razon_social);
 						$("#Fecha2").text(FechaAr);
 						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
 					}
@@ -2319,6 +2325,7 @@ function MostrarInforme(){
 	datos = '';
 	numero_empleado = 0;
 	let Fecha = $("#txtFechaSeleccionado").val();
+	razon_social = $("#razon_social_plato_express").val();
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2330,6 +2337,7 @@ function MostrarInforme(){
 	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
   	formData.append("dato", "valor");
 	formData.append("param", 13);
+	formData.append("razon_social_plato_express", razon_social);
 	$("#boton_descarga_excel_green").hide();
 	$("#boton_descarga_excel_comedor").hide();
 	$("#boton_descarga_excel_green_procesadas").hide();
@@ -2475,6 +2483,7 @@ function MostrarInforme_green_spot(){
 	ID = "",
 	RowID = 0,
 	numero_empleado_green_spot = 0;
+	razon_social = $("#razon_social_green_spot").val();
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2486,6 +2495,7 @@ function MostrarInforme_green_spot(){
 	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
   	formData.append("dato", "valor");
 	formData.append("param", 14);
+	formData.append("razon_social_green_spot", razon_social);
 	$("#EspacioTabla_green_spot").hide();
 	$("#boton_descarga_excel_comedor").hide();
 	$("#boton_descarga_excel_green").hide();
@@ -2653,6 +2663,7 @@ function MostrarInforme_plato_express_conciliados(){
 	let Fecha = $("#txtFechaSeleccionado").val(),
 	procesadas = 2,
 	id_conciliacion = 0;
+	razon_social = $("#razon_social_plato_express_conciliacion").val();
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2666,6 +2677,7 @@ function MostrarInforme_plato_express_conciliados(){
 	formData.append("param", 17);
 	formData.append("estatus_enviado", procesadas);
 	formData.append("tipo_comida", 1);
+	formData.append("razon_social_plato_express_conciliacion", razon_social);
 	$("#boton_descarga_excel_green").hide();
 	$("#boton_descarga_excel_comedor").hide();
 	$("#boton_descarga_excel_green_conciliados").hide();
@@ -2961,6 +2973,7 @@ function MostrarInforme_green_spot_conciliados(){
 	procesadas = 2,
 	numero_empleado_green_spot = 0,
 	id_conciliacion = 0;
+	razon_social = $("#razon_social_plato_especial_conciliados").val();
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2974,6 +2987,7 @@ function MostrarInforme_green_spot_conciliados(){
 	formData.append("param", 17);
 	formData.append("estatus_enviado", procesadas);
 	formData.append("tipo_comida", 2);
+	formData.append("razon_social_plato_express_conciliacion", razon_social);
 	$("#EspacioTabla_green_spot_procesadas").hide();
 	$("#boton_descarga_excel_green").hide();
 	$("#boton_descarga_excel_comedor").hide();

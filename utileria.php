@@ -1,6 +1,8 @@
 <?php
 	header('Content-Type: text/html; charset=utf-8');
 
+	require 'PHPExcel/Classes/PHPExcel.php';
+
 	$param = $_POST['param'];	
 	switch($param) {
 		case '1': //Consulta
@@ -17,10 +19,11 @@
 
 					$NombreEmpleado =  utf8_encode ($row['NombreCompleto']);
 					$record = array(
-						"Empleado"	=> utf8_encode ($row['Empleado']),
-						"Nombre" 	=>utf8_encode ( $row['NombreCompleto'])!= null ? utf8_encode ($row['NombreCompleto']):"",
-						"Sede" 	=>utf8_encode ( $row['Sede'])!= null ? utf8_encode ($row['Sede']):"",
-						"Tipo_Empleado" 	=>utf8_encode ( $row['Turno'])!= null ? $row['Turno']:0,
+						"Empleado" => utf8_encode($row['Empleado']),
+						"Nombre" =>utf8_encode( $row['NombreCompleto'])!= null ? utf8_encode ($row['NombreCompleto']):"",
+						"Sede" =>utf8_encode( $row['Sede'])!= null ? utf8_encode ($row['Sede']):"",
+						"Tipo_Empleado" => $row['Turno'] != null ? $row['Turno'] : 0,
+						"RazonSocial" =>utf8_encode( $row['RazonSocial']) != null ? $row['RazonSocial']: '',
 					);
 					array_push($query, $record);
 				}
@@ -44,16 +47,17 @@
 			$arrayListadoPlatilloUnico = isset($_POST['arrayListadoPlatilloUnico']) ? json_decode($_POST['arrayListadoPlatilloUnico'], true) : 0;
 			$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
 			$Tipo_Empleado =  $_POST['Tipo_Empleado'];
-			//$FechaDeOrden = DateTime::createFromFormat('d/m/Y H:i A', $FechaDeOrden );
-			$validar = false;
+			$validar = true;
 			$pedidoporcomedor =  $_POST['pedidoporcomedor'];
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
+			$platillo_menu =  isset($_POST['platillo_menu']) ? $_POST['platillo_menu'] : 0;
+			$tipo_comedor =  isset($_POST['tipo_comedor']) ? $_POST['tipo_comedor'] : 0;
+			$estatus_comedor = $Ubicacion == 2 || $Ubicacion == 3 ? 1 : 0;
 			
 			include './db/conectar.php';
 			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000) {
-				$validar = true;
-				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?)}";
-				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion);
+				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?)}";
+				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $tipo_comedor);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
 				if ($stmt_validar_cantidad_platillos === false) {
 					$validar = false;
@@ -68,6 +72,7 @@
 				}else{
 					$row_validar_cantidad_platillos = sqlsrv_fetch_array($stmt_validar_cantidad_platillos, SQLSRV_FETCH_ASSOC);
 					if (count($row_validar_cantidad_platillos) != 0) {
+						$validar = false;
 						$data = array(
 							"estatus" => "pedido_duplicado",
 							"mensaje" => "Solo puedes realizar un pedido por día"
@@ -77,11 +82,9 @@
 					}
 				}
 			}
-
 			if (($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 3) || ($arrayListadoGreenSpot != 0 && $TipoPlatillo == 4) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 5) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 6)) {
-				$validar = true;
-				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?)}";
-				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado);
+				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?,?,?,?)}";
+				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado,$platillo_menu,$tipo_comedor,$estatus_comedor);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 				if ( $stmt === false) {
 					$validar = false;
@@ -105,7 +108,6 @@
 					if($TipoPlatillo == "3"){
 						foreach ($record as $row1) {
 							foreach ($arrayListadoPlatilloUnico as $row3) {
-								
 								$IdPedidoInsertado = $row1;
 								$Precio = $row3['Precio'];
 								$Break = isset($row3['Break']) ? (float)$row3['Break'] : (float)0;
@@ -498,7 +500,6 @@
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
 				$sql = "{call RHCom_ListadoPedidoSemanal(?, ?, ?, ?)}";
-			
 				$params = array($fecha_inicial, $fecha_final, $numero_empleado, $ubicacion);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
@@ -507,6 +508,7 @@
 				if ( $stmt === false) {
 					die( print_r( sqlsrv_errors(), true) );
 				}	
+
 				while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 					$record = array(
 						"id" => $row['id'],
@@ -521,7 +523,9 @@
 						"Platillo" => utf8_encode($row['Platillo']),
 						"Comentarios" => utf8_encode($row['Comentarios']),
 						"NoPlatillo" => $row['NoPlatillo'],
-						"idComedorSub" => utf8_encode($row['idComedorSub'])
+						"idComedorSub" => utf8_encode($row['idComedorSub']),
+						"Nombre_Platillo" => utf8_encode($row['Nombre_Platillo']),
+						"Descripcion" => utf8_encode($row['Descripcion'])
 					);
 					array_push($query, $record);
 				}
@@ -865,18 +869,18 @@
 			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 1;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '';
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
+			$razon_social_plato_express = isset($_POST['razon_social_plato_express']) ? $_POST['razon_social_plato_express'] : 'todos';
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
 				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
 				list($dia_fin,$mes_fin,$anio_fin) = explode("/",$f_final);//Extrae la fecha final
 				$fecha_inicial="$anio_inicio-$mes_inicio-$dia_inicio";//Fecha inicial formato ingles
 				$fecha_final = "$anio_fin-$mes_fin-$dia_fin";
-				
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?)}";
-				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado);
+				$sql = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $razon_social_plato_express);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
 
@@ -956,6 +960,7 @@
 			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 1;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '' ;
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
+			$razon_social_green_spot = isset($_POST['razon_social_green_spot']) ? $_POST['razon_social_green_spot'] : 'todos';
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
 				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
@@ -965,8 +970,8 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?)}";
-				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado);
+				$sql = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $razon_social_green_spot);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
 
@@ -1203,6 +1208,7 @@
 			$fecha_final = "";
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '' ;
 			$tipo_comida = isset($_POST['tipo_comida']) ? $_POST['tipo_comida'] : 0;
+			$razon_social_plato_express_conciliacion = isset($_POST['razon_social_plato_express_conciliacion']) ? $_POST['razon_social_plato_express_conciliacion'] : 'todos';
 			if ($tipo_comida === 0) {
 				$data = array(
 					"estatus" => 'error',
@@ -1760,30 +1766,30 @@
 					echo json_encode($data);	
 				}
 				
-				// if ($row != 0) {
-				// 	while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)) {
-				// 		$datos = array(
-				// 			"id" => $row['id'],
-				// 			"IdPedido" => utf8_encode($row['IdPedido']),
-				// 			"NoEmpleado" => $row['NoEmpleado'],
-				// 			"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
-				// 			"TipoPlatillo" => $row['TipoPlatillo'],
-				// 			"Ubicacion" => $row['Ubicacion'],
-				// 			"FechaPedido" => $row['FechaPedido'],
-				// 			"EstatusEnviado" => $row['EstatusEnviado'],
-				// 			"EstatusComedor" => $row['EstatusComedor'],
-				// 			"Tipo_Empleado" => $row['Tipo_Empleado'],
-				// 			"Platillo" => utf8_encode($row['Platillo']),
-				// 			"Comentarios" => utf8_encode($row['Comentarios']),
-				// 			"NoPlatillo" => $row['NoPlatillo'],
-				// 			"idComedorSub" => utf8_encode($row['idComedorSub']),
-				// 			"Precio" => $row['Precio'],
-				// 			"Total" => $row['Total'],
-				// 			"Tipo_comida" => 1,
-				// 		);
-				// 		array_push($query, $datos);
-				// 	}
-				// }
+				if ($row != 0) {
+					while($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)) {
+						$datos = array(
+							"id" => $row['id'],
+							"IdPedido" => utf8_encode($row['IdPedido']),
+							"NoEmpleado" => $row['NoEmpleado'],
+							"NombreEmpleado" => utf8_encode($row['NombreEmpleado']),
+							"TipoPlatillo" => $row['TipoPlatillo'],
+							"Ubicacion" => $row['Ubicacion'],
+							"FechaPedido" => $row['FechaPedido'],
+							"EstatusEnviado" => $row['EstatusEnviado'],
+							"EstatusComedor" => $row['EstatusComedor'],
+							"Tipo_Empleado" => $row['Tipo_Empleado'],
+							"Platillo" => utf8_encode($row['Platillo']),
+							"Comentarios" => utf8_encode($row['Comentarios']),
+							"NoPlatillo" => $row['NoPlatillo'],
+							"idComedorSub" => utf8_encode($row['idComedorSub']),
+							"Precio" => $row['Precio'],
+							"Total" => $row['Total'],
+							"Tipo_comida" => 1,
+						);
+						array_push($query, $datos);
+					}
+				}
 
 				
 
@@ -1812,9 +1818,6 @@
 						array_push($query, $datos);
 					}
 				}
-
-				var_dump($query);
-				die();
 
 				sqlsrv_free_stmt($stmt);
 				sqlsrv_free_stmt($stmt2);		
@@ -2362,29 +2365,232 @@
 			ob_clean();//clears the output buffer
 			echo json_encode($data);	
 		break;
-  }
-	/*
+		case '30':
+			$query = array();
+			$data = array();
+			include './db/conectar.php';
+			$bandera = isset($_POST['bandera']) ? $_POST['bandera'] : 0;
+			$fecha_actual = isset($_POST['fecha_actual']) ? $_POST['fecha_actual'] : '';
+			$estatus = 1;
+			$validar = true;
+
+			switch ($bandera) {
+				case 0:
+					$nombre_platillo = isset($_POST['nombre_platillo']) ? utf8_decode($_POST['nombre_platillo']) : '';
+					$descripcion = isset($_POST['descripcion']) ? utf8_decode($_POST['descripcion']) : '';
+					$sede = isset($_POST['sede']) ? utf8_decode($_POST['sede']) : '';
+					$fecha_dia = isset($_POST['fecha_dia']) ? $_POST['fecha_dia'] : '';
+					$nueva_fecha = date("Y-m-d", strtotime($fecha_dia));
+
+					if ($nombre_platillo != '' && $descripcion != '' && $sede != '' && $fecha_dia != '' && $fecha_actual != '') {
+						if ($nueva_fecha < $fecha_actual ) {
+							$data = array(
+								"estatus" => "error",
+								"validar" => "false",
+								"mensaje" => "La fecha dia publicar no puede ser menor que la fecha actual"
+							);
+							ob_clean();//clears the output buffer
+							echo json_encode($data);
+							die(); 
+						}
+						$sql = "{call RHCom_Guardar_Menu(?,?,?,?,?)}";
+						$params = array($nombre_platillo, $descripcion, $sede, $nueva_fecha, $estatus);
+						$stmt = sqlsrv_query($conn, $sql, $params);
+						if ($stmt === false) {
+							$validar = false;
+							$mensaje = sqlsrv_errors();
+							$data = array(
+								"estatus" => 'error_guardar_menu',
+								"Validar" => $validar,
+								"mensaje" => $mensaje[0]['message']
+							);
+							echo json_encode($data);
+							die();	
+						}
+
+						while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+							$record = array(
+								"Resultado" => $row['Resultado']
+							);
+							array_push($query, $record);
+						}
+					}
+
+					if($validar && count($query) != 0) {
+						$data = array(
+							"estatus" => "success",
+							"validar" => "true",
+							"mensaje" => "Se guardo correctamente"
+						);
+					}else{
+						$data = array(
+							"estatus" => "error",
+							"validar" => "false",
+							"mensaje" => "no se guardo correctamente"
+						);
+					}
+				break;
+
+				case 1:
+					$nombre_archivo = $_FILES['file_excel']['name'];
+					$tipo_archivo = $_FILES['file_excel']['type'];
+					$tamano_archivo = $_FILES['file_excel']['size'];
+					$extension = pathinfo($nombre_archivo, PATHINFO_EXTENSION);
+					$allowedfileExtensions = array('xlsx');
+					
+					if (in_array($extension, $allowedfileExtensions) && $fecha_actual != '') {
+						$directorio = 'archivos/';
+						$subir_archivo = $directorio.basename("menu.xlsx");
+
+						if (move_uploaded_file($_FILES['file_excel']['tmp_name'], $subir_archivo)){
+							$validar = true;
+							$mensaje = '';
+							$contador = 0;
+
+							//Cargar nuestra hoja de excel
+							$excel = PHPExcel_IOFactory::load($subir_archivo);
+
+							//Cargar la hoja de calculo que queremos
+							$excel->setActiveSheetIndex(0);
+
+							$numerofila = $excel->setActiveSheetIndex(0)->getHighestRow();
+
+							for ($i=2; $i <= $numerofila; $i++) {
+								$fecha = $excel->getActiveSheet()->getCell('D'. $i)->getValue();
+								$nueva_fecha = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($fecha)); 
+								if ($nueva_fecha < $fecha_actual ) {
+									$data = array(
+										"estatus" => "error",
+										"validar" => "false",
+										"mensaje" => "La fecha dia publicar no puede ser menor que la fecha actual"
+									);
+									ob_clean();//clears the output buffer
+									echo json_encode($data);
+									die(); 
+								}
+							}
+							
+							for ($i=2; $i <= $numerofila; $i++) { 
+								if ($excel->getActiveSheet()->getCell('A'. $i)->getValue() == null) {
+									break;
+								}
+								$nombre_platillo = $excel->getActiveSheet()->getCell('A'. $i)->getValue();
+								$descripcion = $excel->getActiveSheet()->getCell('B'. $i)->getValue();
+								$sede = $excel->getActiveSheet()->getCell('C'. $i)->getValue();
+								$fecha = $excel->getActiveSheet()->getCell('D'. $i)->getValue();
+								$nueva_fecha = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($fecha));
+
+								$sql = "{call RHCom_Guardar_Menu(?,?,?,?,?)}";
+								$params = array($nombre_platillo, $descripcion, $sede, $nueva_fecha, $estatus);
+								$stmt = sqlsrv_query($conn, $sql, $params);
+								if ($stmt === false) {
+									$validar = false;
+									$mensaje = sqlsrv_errors();
+									$data = array(
+										"estatus" => 'error_guardar_menu',
+										"Validar" => $validar,
+										"mensaje" => $mensaje[0]['message']
+									);
+									echo json_encode($data);
+									die();	
+								}
+
+								while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+									$record = array(
+										"Resultado" => $row['Resultado']
+									);
+									array_push($query, $record);
+								}
+								
+							
+								sqlsrv_free_stmt($stmt);
+							}
+							if ($validar && count($query) != 0) {
+								$data = array(
+									"estatus" => "success",
+									"validar" => "true",
+									"mensaje" => "Se guardo correctamente"
+								);
+							}else{
+								$data = array(
+									"estatus" => "success",
+									"validar" => "true",
+									"mensaje" => "no se guardo correctamente"
+								);
+							}
+						}else{
+							$data = array(
+								"estatus" => "error",
+								"validar" => "false",
+								"mensaje" => "no se guardo correctamente"
+							);
+						}	
+					}else{
+						$data = array(
+							"estatus" => "error",
+							"validar" => "false",
+							"mensaje" => "solo los archivos dee excel son permitidos"
+						);
+					}
+				break;
+				
+				default:
+					$data = array(
+						"estatus" => "error",
+						"validar" => "false",
+						"mensaje" => "no se guardo correctamente"
+					);
+				break;
+			}
+			ob_clean();//clears the output buffer
+			echo json_encode($data); 
+		break;
+		case '31':
+			$query = array();
+			$data = array();
+			include './db/conectar.php';
+			$fechaActual = isset($_POST['fecha_actual']) ? $_POST['fecha_actual'] : '';
+			$sede = isset($_POST['sede']) ? $_POST['sede'] : '';
+			$validar = true;
+
+			$sql = "{call RHCom_ObtenerMenuPlatillos(?, ?)}";
+			$params = array($fechaActual, $sede);
+			$stmt = sqlsrv_query($conn, $sql, $params);
+			if ($stmt === false) {
+				$mensaje = sqlsrv_errors();
+				$data = array(
+					"estatus" => 'error_guardar_menu',
+					"Validar" => $validar,
+					"mensaje" => $mensaje[0]['message']
+				);
+				echo json_encode($data);
+				die();	
+			}else{
+				while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+					$record = array(
+						"IDPlatillo" => $row['IDPlatillo'] != null ? $row['IDPlatillo']:0,
+						"Nombre_Platillo" => $row['Nombre_Platillo'] != null ? utf8_encode ($row['Nombre_Platillo']):"",
+						"Descripcion" => $row['Descripcion'] != null ? utf8_encode ($row['Descripcion']):"",
+						"Sede" => $row['Sede'] != null ? utf8_encode ($row['Sede']):"",
+						"DiaPublicar" => $row['Fecha'] != null ? $row['Fecha']:""
+					);
+					array_push($query, $record);
+				}
 	
-select * from RHCom_Pedidos
-
-select * from RHCom_ComedorSubsidiado
-
-select * from RHCom_comedorGreenSpot
-
-select Id,IdComedorGr,IdPedido,Posicion,IdPlatillo,Platillo,Comentario,Kcal,Cantidad,Precio,Total,FechaPedido,FechaInsercion from RHCom_comedorGreenSpot
-
-
-select ComPe.NoEmpleado,
-	   ComPe.NombreEmpleado,
-	   ComPe.TipoPlatillo,
-	   ComPe.Ubicacion,
-	   ComSub.Platillo,
-	   ComSub.Comentarios,
-	   ComSub.NoPlatillo
-	   
-	   from RHCom_Pedidos ComPe
-	   inner join  RHCom_ComedorSubsidiado ComSub on Compe.IdPedido = ComSub.idPedido
-	   where Compe.FechaPedido =  
-
-	*/
+				if (count($query) != 0) {
+					$data = array(
+						"estatus" => "success",
+						"datos" => $query
+					);
+				}else{
+					$data = array(
+						"estatus" => "error",
+						"mensaje" => "ocurrio un error"
+					);
+				}
+			}
+			ob_clean();//clears the output buffer
+			echo json_encode($data); 
+		break;
+  }
 ?>

@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../assets/fontawesome/fontawesome-free-6.3.0-web/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
@@ -173,6 +174,13 @@
 					</a>
 				</li>
 				<?php } ?>
+				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
+					<li>
+						<a href="subir_menu.php">
+						<i class="fa-solid fa-utensils"></i> <span>  Subir Menu</span>
+						</a>
+					</li>
+				<?php } ?>
 				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'|| $_SESSION['RHComedor'] == '99999999'){ ?>
 				<li>
 					<a href="GraficasComedor.php">
@@ -193,7 +201,7 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 			<h1>
-			Comedor Green Spot
+				Green spot
 			</h1>
 			</section>
 
@@ -378,7 +386,7 @@
 											<div class="form-group row" id="DivPrecio" style="display:none;">
 												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio:</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control" id="txtPrecioPlatillo" value="49.00" disabled>
+													<input type="text" class="form-control" id="txtPrecioPlatillo" value="0.00" disabled>
 												</div>
 											</div>
 											<!-- ---------- -->
@@ -402,7 +410,7 @@
 													<label for="lblNombreVisita" class="col-sm-12 col-form-label">Cantidad:</label>
 												</div>
 												<div class="form-group col-sm-8 col-xs-8">
-													<input type="text" class="form-control" id="txtNumPlatilloGR" pattern="\d*" maxlength="2" min="1" value="1" onchange="ValidarPlatillosGR()" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+													<input type="text" class="form-control" id="txtNumPlatilloGR" pattern="\d*" maxlength="2" min="1" value="1" onchange="ValidarPlatillos()" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
 												</div>
 												<div id="DivComentario">
 													<div class="form-group col-md-3 col-xs-3">
@@ -527,7 +535,7 @@
 												<div class="col-sm-8">
 													<select class="form-control" name="txtTipoPlatillo_Editar" id="txtTipoPlatillo_Editar" disabled>
 														<option value="0">Seleccione el tipo de platillo</option>
-														<option value="4">Platillo Especial</option>
+														<option value="4">Green Spot</option>
 													</select>
 												</div>
 											</div>
@@ -541,7 +549,7 @@
 											<div class="form-group row" id="DivPrecio_Editar" style="display:none;">
 												<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio:</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control" id="txtPrecioPlatillo_Editar" value="49.00" disabled>
+													<input type="text" class="form-control" id="txtPrecioPlatillo_Editar" value="0.00" disabled>
 												</div>
 											</div>
 											<!-- ---------- -->

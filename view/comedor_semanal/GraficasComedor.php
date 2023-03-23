@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../../assets/fontawesome/fontawesome-free-6.3.0-web/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
@@ -139,6 +140,7 @@
 					</a>
 				</li>
 				<?php } ?>
+				<?php if($_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
 				<li>
 					<a href="ListadoComedorGreenSpotSemanal.php">
 					<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span> Green Spot</span>
@@ -163,12 +165,20 @@
 					</span>
 					</a>
 				</li>
+				<?php } ?>
 				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
 				<li>
 					<a href="ListadoComedorProcesado.php">
 						<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Listado Enviado Nomina</span>
 						<span class="pull-right-container">  
 						</span>
+					</a>
+				</li>
+				<?php } ?>
+				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999' || $_SESSION['RHComedor'] == '100000000' || $_SESSION['RHComedor'] == '100000001'){ ?>
+				<li>
+					<a href="subir_menu.php">
+						<i class="fa-solid fa-utensils"></i> <span>  Subir Menu</span>
 					</a>
 				</li>
 				<?php } ?>

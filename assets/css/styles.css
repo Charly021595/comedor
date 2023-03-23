@@ -210,7 +210,7 @@ button.cerrar{
 }
 
 .gif_cargando_btn{
-    width: 21%;
+    width: 10%;
 }
 
 .nuevo_style_btn_nomina{
@@ -218,7 +218,7 @@ button.cerrar{
 }
 
 .modal_grande{
-    width: 65%;
+    width: 85%;
 }
 
 /* .scroll_tablas_detalle::-webkit-scrollbar {
