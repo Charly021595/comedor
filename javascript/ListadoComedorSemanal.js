@@ -45,23 +45,23 @@ function buscar_sede(){
 		success: function(result) {
 			sede  = JSON.parse(result)[0].Sede;
 			switch (sede) {
-				case 'Torre TOP':
+				case 'T.OP':
 					$("#txtUbicacion").trigger("change").val(1);
 					ObenerTipoPlatillo();
 				break;
 
-				case 'Apodaca':
+				case 'APODACA':
 					$("#txtUbicacion").trigger("change").val(2);
 					ObenerTipoPlatillo();
 				break;
 
-				case 'Cienega':
+				case 'CIENEGA DE FLORES':
 					$("#txtUbicacion").trigger("change").val(3);
 					ObenerTipoPlatillo();
 				break;
 			
 				default:
-					$("#txtUbicacion").trigger("change").val(1);
+					$("#txtUbicacion").trigger("change").val(0);
 				break;
 			}
 			MostrarInforme();
@@ -328,7 +328,8 @@ $("#btn_nomina").on("click", function(e){
 
 function enviar_nomina(resultados){
 	let datos2 = resultados.data,
-	i = 0;
+	i = 0
+	fecha = $('#txtFechaSeleccionado').val();
 	while (i < datos2.length) {
 		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
@@ -360,7 +361,7 @@ function enviar_nomina(resultados){
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1},
+		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1, "Fecha":fecha},
 		success: function(result) {
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
@@ -829,13 +830,13 @@ function TipoPlatillo(){
 
 		$("#txtNumPlatillo").val("1");
 		switch (sede) {
-			case 'Torre TOP':
+			case 'T.OP':
 				$("#txtTotalPlatillo").val("49.00");
 				$("#txtPrecioPlatillo").val("49.00");
 				Menu_secreto();
 			break;
 
-			case 'Apodaca':
+			case 'APODACA':
 				switch (tipoplatillo) {
 					case "3":
 						$("#txtTotalPlatillo").val("20.00");
@@ -860,7 +861,7 @@ function TipoPlatillo(){
 				}
 			break;
 
-			case 'Cienega':
+			case 'CIENEGA DE FLORES':
 				switch (tipoplatillo) {
 					case "3":
 						$("#txtTotalPlatillo").val("20.00");
@@ -1025,18 +1026,20 @@ function GuardarOrden(){
 	nombre_dia_actual = moment(fechaActualL).format('dddd'),
 	hora_actual = moment(fechaActualL).format('HH:mm:ss')
 	tipo_comedor = 0;
-	switch (nombre_dia_actual) {
-		case 'Saturday':
-			dia_inicial = dia_actual - 1;
-			FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
-		break;
-		case 'Sunday':
-			dia_inicial = dia_actual - 2;
-			FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
-		break;
-	
-		default:
-		break;
+	if (Ubicacion == 1) {
+		switch (nombre_dia_actual) {
+			case 'Saturday':
+				dia_inicial = dia_actual - 1;
+				FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
+			break;
+			case 'Sunday':
+				dia_inicial = dia_actual - 2;
+				FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
+			break;
+		
+			default:
+			break;
+		}	
 	}
 	//
 	if(TipoPlatillo== "4"){
@@ -1241,18 +1244,16 @@ function ObenerTipoPlatillo(){
 	$("#txtTipoPlatillo").html('');
 	 LimpiarCampos();
 	 switch (sede) {
-		case 'Torre TOP':
+		case 'T.OP':
 			$("#tipo_platillo").show();
-			sede = 'Torre Top';
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
 			`);
 		break;
 
-		case 'Apodaca':
+		case 'APODACA':
 			$("#tipo_platillo").show();
-			sede = 'Apodaca';
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
@@ -1261,9 +1262,8 @@ function ObenerTipoPlatillo(){
 			`);
 		break;
 
-		case 'Cienega':
+		case 'CIENEGA DE FLORES':
 			$("#tipo_platillo").show();
-			sede = 'Cienega';
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
@@ -1274,7 +1274,6 @@ function ObenerTipoPlatillo(){
 	
 		default:
 			$("#tipo_platillo").show();
-			sede = 'Torre Top';
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>

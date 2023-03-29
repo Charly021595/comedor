@@ -21,24 +21,20 @@ function buscar_sede(){
 		success: function(result) {
 			sede  = JSON.parse(result)[0].Sede;
 			switch (sede) {
-				case 'Torre TOP':
-					sede = 'Torre TOP';
+				case 'T.OP':
 					$("#txtUbicacion").val(1);
 				break;
 
-				case 'Apodaca':
-					sede = 'Apodaca';
+				case 'APODACA':
 					$("#txtUbicacion").val(2);
 				break;
 
-				case 'Cienega':
-					sede = 'Cienega';
+				case 'CIENEGA DE FLORES':
 					$("#txtUbicacion").val(3);
 				break;
 			
 				default:
-					sede = 'Torre Top';
-					$("#txtUbicacion").val(1);
+					$("#txtUbicacion").val(0);
 				break;
 			}
 			
@@ -423,13 +419,13 @@ function TipoPlatillo(){
 		}
 		$("#txtNumPlatillo").val("1");
 		switch (sede) {
-			case 'Torre TOP':
+			case 'T.OP':
 				$("#txtTotalPlatillo").val("49.00");
 				$("#txtPrecioPlatillo").val("49.00");
 				Menu_secreto();
 			break;
 
-			case 'Apodaca':
+			case 'APODACA':
 				switch (tipoplatillo) {
 					case "3":
 						$("#txtTotalPlatillo").val("20.00");
@@ -454,7 +450,7 @@ function TipoPlatillo(){
 				}
 			break;
 
-			case 'Cienega':
+			case 'CIENEGA DE FLORES':
 				switch (tipoplatillo) {
 					case "3":
 						$("#txtTotalPlatillo").val("20.00");
@@ -635,8 +631,7 @@ function ObenerTipoPlatillo(){
 	$("#txtTipoPlatillo").html('');
 	 LimpiarCampos();
 	 switch (sede) {
-		case 'Torre TOP':
-			sede = 'Torre TOP';
+		case 'T.OP':
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
@@ -644,8 +639,7 @@ function ObenerTipoPlatillo(){
 			`);
 		break;
 
-		case 'Apodaca':
-			sede = 'Apodaca';
+		case 'APODACA':
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
@@ -655,8 +649,7 @@ function ObenerTipoPlatillo(){
 			`);
 		break;
 
-		case 'Cienega':
-			sede = 'Cienega';
+		case 'CIENEGA DE FLORES':
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
@@ -667,7 +660,6 @@ function ObenerTipoPlatillo(){
 		break;
 	
 		default:
-			sede = 'Torre Top';
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>

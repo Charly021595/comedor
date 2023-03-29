@@ -18,8 +18,8 @@ numero_empleado = 0,
 id_conciliacion = 0,
 numero_empleado_green_spot = 0,
 num_orden,
-bandera_descargar = 0;
-
+bandera_descargar = 0,
+sede = 'todos';
 let numero_empleado_global = 0;
 
 $(document).ready(function(){	
@@ -33,32 +33,6 @@ $(document).ready(function(){
 		window.location.hash="no-back-button";
 		window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
 		window.onhashchange=function(){window.location.hash="no-back-button";}
-		cargar_plato_express();
-		// var tabla ="<table  id='TablaComedor' class='table table-bordered table-hover TablaResponsiva'>";
-		// 	tabla +="<thead class='table-header'>";
-		// 	tabla +="<tr>"
-		// 	tabla +="<th scope='col'>No. Empleado</th>"
-		// 	tabla +="<th scope='col'>Empleado</th>"
-		// 	tabla +="<th scope='col' >Tipo de Platillo</th>"
-		// 	tabla +="<th scope='col'>No. Platillo</th>"
-		// 	tabla +="<th scope='col'>Platillo</th>"
-		// 	tabla +="<th scope='col'>Comentarios</th>"
-		// 	tabla +="<th scope='col'>Ubicación</th>"
-		// 	tabla +="<th scope='col'>FechaPedido</th>"
-		// 	tabla +="<th scope='col' colspan='2'>Acciones</th>"
-		// 	tabla +="</tr>";
-		// 	tabla +="</thead>";
-		// 	tabla +="<tbody id='ContenidoListados'>";
-		// 	tabla += "</tbody>"
-		// 	tabla +="</table>";
-		// 	$('#EspacioTabla').append(tabla);
-	/*
-	 }else{
-		 alert("La contraseña ingresada es incorrecta");
-		 //location.reload();
-		 window.location.replace('www.google.com'); 
-	 }
-	*/
 	BuscarEmpleadoLogeadoSesion();
 });
 
@@ -1372,7 +1346,7 @@ function BuscarEmpleadoLogeadoSesion(){
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
 	$("#txtFechaPedido").val(fechaActual2);
-	var empleado = $("#txtNumEmpleado").val()
+	var empleado = $("#txtNumEmpleado").val();
 	if(empleado.replace(/\s/g,"") != ""){
 		$.ajax({
             type: "POST",
@@ -1386,13 +1360,18 @@ function BuscarEmpleadoLogeadoSesion(){
 				if(data.length){
 					for(i=0;i<data.length;i++){
 						var FechaAr =  "Fecha: "+ fechaActual2;
-						razon_social =  data[0].RazonSocial;
+						sede =  data[0].Sede;
 						$("#NombreCont2").text(data[i]['Nombre']);
 						$("#NombreCont").text(data[i]['Nombre']);
-						$("#razon_social_plato_express").val(razon_social);
+						$("#sede_plato_express").val(sede);
+						$("#sede_green_spot").val(sede);
+						$("#sede_plato_express_conciliacion").val(sede);
+						$("#sede_green_spot_conciliacion").val(sede);
+						$('.filter-option-inner-inner').text(sede);
 						$("#Fecha2").text(FechaAr);
 						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
 					}
+					cargar_plato_express();
 				}
 				
 			}
@@ -2206,12 +2185,13 @@ function DescargarTablaComedor(){
 	$('#lbl_btn_conciliar_pe').hide();
 	$('#cargando_conciliar_pe').show();
 	let Fecha = $("#txtFechaSeleccionado").val();
+	sede = $("#sede_plato_express").val();
+	let numero_empleado_logueado = $("#txtNumEmpleado").val();
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":11, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha},
+		data: {"param":11, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha, "sede_conciliar":sede, "usuario_conectado":numero_empleado_logueado},
 		success: function(result) {
-			console.log(result);
 			// $("#btn_conciliar_comedor").removeAttr("disabled, disabled");
 			// $("#btn_conciliar_comedor").removeClass("deshabilitar");
 			// $('#btn_conciliar_comedor').attr("disabled", false);
@@ -2246,12 +2226,13 @@ function DescargarTablaGreen(){
 	$('#lbl_btn_conciliar_gs').hide();
 	$('#cargando_conciliar_gs').show();
 	let Fecha = $("#txtFechaSeleccionado").val();
+	sede = $("#sede_green_spot").val();
+	let numero_empleado_logueado = $("#txtNumEmpleado").val();
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":20, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha},
+		data: {"param":20, "estatus_enviado":1, "estatus_enviado_conciliado":2, "listado_procesadas":1, "Fecha":Fecha, "sede_conciliar":sede, "usuario_conectado":numero_empleado_logueado},
 		success: function(result) {
-			console.log(result);
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
 				Swal.fire('Estatus Envio', "El estatus enviado se actualizo correctamente", "success").then(function() {
@@ -2321,23 +2302,6 @@ function descargar_plato_express_procesadas() {
 }
 
 function MostrarInforme(){
-	$("#opcion").val(1);
-	datos = '';
-	numero_empleado = 0;
-	let Fecha = $("#txtFechaSeleccionado").val();
-	razon_social = $("#razon_social_plato_express").val();
-	if (Fecha == "") {
-		Swal.fire( 
-			"El campo fecha no puede ir vació",
-			'',
-			'info'
-		);
-		return;
-	}
-	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
-  	formData.append("dato", "valor");
-	formData.append("param", 13);
-	formData.append("razon_social_plato_express", razon_social);
 	$("#boton_descarga_excel_green").hide();
 	$("#boton_descarga_excel_comedor").hide();
 	$("#boton_descarga_excel_green_procesadas").hide();
@@ -2352,6 +2316,24 @@ function MostrarInforme(){
 	$("#lbl_btn_conciliar_pe").hide();
 	$("#div_tabla").show();
 	$("#loading_comedor").show();
+	$("#opcion").val(1);
+	datos = '';
+	numero_empleado = 0;
+	let Fecha = $("#txtFechaSeleccionado").val();
+	sede = $("#sede_plato_express").val();
+	$('.filter-option-inner-inner').text(sede);
+	if (Fecha == "") {
+		Swal.fire( 
+			"El campo fecha no puede ir vació",
+			'',
+			'info'
+		);
+		return;
+	}
+	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
+  	formData.append("dato", "valor");
+	formData.append("param", 13);
+	formData.append("sede_plato_express", sede);
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -2411,6 +2393,7 @@ function MostrarInforme(){
 						}else if (datos[i].EstatusEnviado == 2) {
 							tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado</td>"
 						}
+						tablacontenido += "<td data-label= 'FechaRangos' style=''>"+datos[i].RangoFecha+"</td>"
 						tablacontenido += "<td data-label= 'Acciones' ><button id='boton_ver_detalles_comida' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary' onclick='boton_ver_detalles_comida("+datos[i].NoEmpleado+")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>"
 						tablacontenido +="</tr>";
 						$('#ContenidoListados').append(tablacontenido);	
@@ -2432,6 +2415,8 @@ function MostrarInforme(){
 					// descargar_plato_express();
 					bandera_descargar = 0;
 				}	
+				$("#sede_plato_express").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else if (data.estatus == "error_fecha") {
 				$("#loading_comedor").hide();
 				$("#EspacioTabla").hide();
@@ -2451,6 +2436,9 @@ function MostrarInforme(){
 					'',
 					'info'
 				);
+				sede = 'todos';
+				$("#sede_plato_express").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else{
 				$("#loading_comedor").hide();
 				$("#EspacioTabla").hide();
@@ -2470,32 +2458,15 @@ function MostrarInforme(){
 					'',
 					'error'
 				);
+				sede = 'todos';
+				$("#sede_plato_express").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}
 		}
 	});
 }
 
 function MostrarInforme_green_spot(){
-	$("#opcion").val(2);
-	datos_green_spot = '';
-	num_orden = 0;
-	let Fecha = $("#txtFechaSeleccionado").val(),
-	ID = "",
-	RowID = 0,
-	numero_empleado_green_spot = 0;
-	razon_social = $("#razon_social_green_spot").val();
-	if (Fecha == "") {
-		Swal.fire( 
-			"El campo fecha no puede ir vació",
-			'',
-			'info'
-		);
-		return;
-	}
-	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
-  	formData.append("dato", "valor");
-	formData.append("param", 14);
-	formData.append("razon_social_green_spot", razon_social);
 	$("#EspacioTabla_green_spot").hide();
 	$("#boton_descarga_excel_comedor").hide();
 	$("#boton_descarga_excel_green").hide();
@@ -2509,6 +2480,27 @@ function MostrarInforme_green_spot(){
 	$("#lbl_btn_conciliar_gs").hide();
 	$("#div_tabla_green_spot").show();
 	$("#loading_comedor_green_spot").show();
+	$("#opcion").val(2);
+	datos_green_spot = '';
+	num_orden = 0;
+	let Fecha = $("#txtFechaSeleccionado").val(),
+	ID = "",
+	RowID = 0,
+	numero_empleado_green_spot = 0;
+	sede = $("#sede_green_spot").val();
+	$('.filter-option-inner-inner').text(sede);
+	if (Fecha == "") {
+		Swal.fire( 
+			"El campo fecha no puede ir vació",
+			'',
+			'info'
+		);
+		return;
+	}
+	let formData = new FormData(document.getElementById("form_comedor_conciliados"));
+  	formData.append("dato", "valor");
+	formData.append("param", 14);
+	formData.append("sede_green_spot", sede);
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -2573,7 +2565,7 @@ function MostrarInforme_green_spot(){
 							}else{
 								tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
 							}
-
+							tablacontenido += "<td data-label= 'FechaRangos' style=''>"+datos_green_spot[i].RangoFecha+"</td>"
 							tablacontenido += "<td data-label= 'Acciones' ><button id='boton_ver_detalles' type='button' data-toggle='modal' data-target='#modal_detalles' class='btn btn-primary' onclick='boton_ver_detalles_desayunos("+datos_green_spot[i].NoEmpleado+")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>"
 							tablacontenido +="</tr>";
 							$('#ContenidoListados_green_spot').append(tablacontenido);
@@ -2614,6 +2606,8 @@ function MostrarInforme_green_spot(){
 					// descargar_green_spot();
 					bandera_descargar = 0;
 				}
+				$("#sede_green_spot").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else if (data.estatus == "error_fecha") {
 				$("#loading_comedor_green_spot").hide();
 				$("#EspacioTabla_green_spot").hide();
@@ -2633,6 +2627,9 @@ function MostrarInforme_green_spot(){
 					'',
 					'info'
 				);
+				sede = 'todos';
+				$("#sede_green_spot").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else{
 				$("#loading_comedor_green_spot").hide();
 				$("#EspacioTabla_green_spot").hide();
@@ -2652,18 +2649,33 @@ function MostrarInforme_green_spot(){
 					'',
 					'error'
 				);
+				sede = 'todos';
+				$("#sede_green_spot").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}
 		}	
 	});
 }
 
 function MostrarInforme_plato_express_conciliados(){
+	$("#boton_descarga_excel_green").hide();
+	$("#boton_descarga_excel_comedor").hide();
+	$("#boton_descarga_excel_green_conciliados").hide();
+	$("#boton_descarga_excel_comedor_conciliados").hide();
+	$("#filtros_plato_express").hide();
+	$("#filtros_green_spot").hide();
+	$("#filtros_plato_express_conciliados").hide();
+	$("#filtros_green_spot_procesadas").hide();
+	$("#EspacioTabla_plato_express_conciliados").hide();
+	$("#div_tabla_plato_express_conciliados").show();
+	$("#loading_comedor_conciliados").show();
 	$("#opcion").val(3);
 	datos_procesados = '';
 	let Fecha = $("#txtFechaSeleccionado").val(),
 	procesadas = 2,
 	id_conciliacion = 0;
-	razon_social = $("#razon_social_plato_express_conciliacion").val();
+	sede = $("#sede_plato_express_conciliacion").val();
+	$('.filter-option-inner-inner').text(sede);
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2677,18 +2689,7 @@ function MostrarInforme_plato_express_conciliados(){
 	formData.append("param", 17);
 	formData.append("estatus_enviado", procesadas);
 	formData.append("tipo_comida", 1);
-	formData.append("razon_social_plato_express_conciliacion", razon_social);
-	$("#boton_descarga_excel_green").hide();
-	$("#boton_descarga_excel_comedor").hide();
-	$("#boton_descarga_excel_green_conciliados").hide();
-	$("#boton_descarga_excel_comedor_conciliados").hide();
-	$("#filtros_plato_express").hide();
-	$("#filtros_green_spot").hide();
-	$("#filtros_plato_express_conciliados").hide();
-	$("#filtros_green_spot_procesadas").hide();
-	$("#EspacioTabla_plato_express_conciliados").hide();
-	$("#div_tabla_plato_express_conciliados").show();
-	$("#loading_comedor_conciliados").show();
+	formData.append("sede_plato_express_conciliacion", sede);
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -2723,6 +2724,7 @@ function MostrarInforme_plato_express_conciliados(){
 						if (datos_procesados[i].estatus == 0) {
 							tablacontenido += "<td data-label= 'Estatus Enviado' >Conciliado</td>"
 						}
+						tablacontenido += "<td data-label= 'FechaRangos' style=''>"+datos_procesados[i].RangoFecha+"</td>"
 						tablacontenido +=`<td data-label='Acciones'><button id='boton_ver_detalles_comida' type='button' data-toggle='modal' data-target='#modal_detalles_primer' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_comida_con("${datos_procesados[i].id_conciliacion}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>`;		
 					
 						$('#ContenidoListados_plato_express_conciliados').append(tablacontenido);	
@@ -2740,6 +2742,8 @@ function MostrarInforme_plato_express_conciliados(){
 					}
 					id_conciliacion = datos_procesados[i].id_conciliacion;
 				}
+				$("#sede_plato_express_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else if (data.estatus == "error_fecha") {
 				$("#loading_comedor_conciliados").hide();
 				$("#EspacioTabla_plato_express_conciliados").hide();
@@ -2757,6 +2761,9 @@ function MostrarInforme_plato_express_conciliados(){
 					'',
 					'info'
 				);
+				sede = 'todos';
+				$("#sede_plato_express_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else{
 				$("#loading_comedor_conciliados").hide();
 				$("#EspacioTabla_plato_express_conciliados").hide();
@@ -2774,6 +2781,9 @@ function MostrarInforme_plato_express_conciliados(){
 					'',
 					'error'
 				);
+				sede = 'todos';
+				$("#sede_plato_express_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}
 		}
 	});
@@ -2964,6 +2974,17 @@ function MostrarInforme_plato_express_conciliados(){
 // }
 
 function MostrarInforme_green_spot_conciliados(){
+	$("#EspacioTabla_green_spot_procesadas").hide();
+	$("#boton_descarga_excel_green").hide();
+	$("#boton_descarga_excel_comedor").hide();
+	$("#boton_descarga_excel_green_procesadas").hide();
+	$("#boton_descarga_excel_comedor_conciliados").hide();
+	$("#filtros_plato_express").hide();
+	$("#filtros_green_spot").hide();
+	$("#filtros_plato_express_conciliados").hide();
+	$("#filtros_green_spot_procesadas").hide();
+	$("#div_tabla_green_spot_procesadas").show();
+	$("#loading_comedor_green_spot_procesadas").show();
 	$("#opcion").val(4);
 	datos_green_spot_procesados = '';
 	num_orden = 0;
@@ -2973,7 +2994,8 @@ function MostrarInforme_green_spot_conciliados(){
 	procesadas = 2,
 	numero_empleado_green_spot = 0,
 	id_conciliacion = 0;
-	razon_social = $("#razon_social_plato_especial_conciliados").val();
+	sede = $("#sede_green_spot_conciliacion").val();
+	$('.filter-option-inner-inner').text(sede);
 	if (Fecha == "") {
 		Swal.fire( 
 			"El campo fecha no puede ir vació",
@@ -2987,18 +3009,7 @@ function MostrarInforme_green_spot_conciliados(){
 	formData.append("param", 17);
 	formData.append("estatus_enviado", procesadas);
 	formData.append("tipo_comida", 2);
-	formData.append("razon_social_plato_express_conciliacion", razon_social);
-	$("#EspacioTabla_green_spot_procesadas").hide();
-	$("#boton_descarga_excel_green").hide();
-	$("#boton_descarga_excel_comedor").hide();
-	$("#boton_descarga_excel_green_procesadas").hide();
-	$("#boton_descarga_excel_comedor_conciliados").hide();
-	$("#filtros_plato_express").hide();
-	$("#filtros_green_spot").hide();
-	$("#filtros_plato_express_conciliados").hide();
-	$("#filtros_green_spot_procesadas").hide();
-	$("#div_tabla_green_spot_procesadas").show();
-	$("#loading_comedor_green_spot_procesadas").show();
+	formData.append("sede_plato_express_conciliacion", sede);
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
@@ -3033,6 +3044,7 @@ function MostrarInforme_green_spot_conciliados(){
 						if (datos_green_spot_procesados[i].estatus == 0) {
 							tablacontenido += "<td data-label= 'Estatus Enviado' >Conciliado</td>"
 						}
+						tablacontenido += "<td data-label= 'FechaRangos' style=''>"+datos_green_spot_procesados[i].RangoFecha+"</td>"
 						tablacontenido +=`<td data-label='Acciones'><button id='boton_ver_detalles_comida' type='button' data-toggle='modal' data-target='#modal_detalles_primer' class='btn btn-primary boton_ver_detalles' onclick='boton_ver_detalles_desayunos_con("${datos_green_spot_procesados[i].id_conciliacion}")'>Ver Detalles  <span><i class='fa fa-eye' aria-hidden='true'></i></span></button></td>`;		
 					
 						$('#ContenidoListados_green_spot_procesadas').append(tablacontenido);	
@@ -3050,6 +3062,8 @@ function MostrarInforme_green_spot_conciliados(){
 					}
 					id_conciliacion = datos_green_spot_procesados[i].id_conciliacion;
 				}
+				$("#sede_plato_express_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else if (data.estatus == "error_fecha") {
 				$("#loading_comedor_green_spot_procesadas").hide();
 				$("#EspacioTabla_green_spot_procesadas").hide();
@@ -3067,6 +3081,9 @@ function MostrarInforme_green_spot_conciliados(){
 					'',
 					'info'
 				);
+				sede = 'todos';
+				$("#sede_green_spot_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}else{
 				$("#loading_comedor_green_spot_procesadas").hide();
 				$("#EspacioTabla_green_spot_procesadas").hide();
@@ -3084,6 +3101,9 @@ function MostrarInforme_green_spot_conciliados(){
 					'',
 					'error'
 				);
+				sede = 'todos';
+				$("#sede_green_spot_conciliacion").val(sede);
+				$('.filter-option-inner-inner').text(sede);
 			}
 		}	
 	});

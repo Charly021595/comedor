@@ -22,8 +22,7 @@
 						"Empleado" => utf8_encode($row['Empleado']),
 						"Nombre" =>utf8_encode( $row['NombreCompleto'])!= null ? utf8_encode ($row['NombreCompleto']):"",
 						"Sede" =>utf8_encode( $row['Sede'])!= null ? utf8_encode ($row['Sede']):"",
-						"Tipo_Empleado" => $row['Turno'] != null ? $row['Turno'] : 0,
-						"RazonSocial" =>utf8_encode( $row['RazonSocial']) != null ? $row['RazonSocial']: '',
+						"Tipo_Empleado" => $row['Turno'] != null ? $row['Turno'] : 0
 					);
 					array_push($query, $record);
 				}
@@ -52,7 +51,7 @@
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 			$platillo_menu =  isset($_POST['platillo_menu']) ? $_POST['platillo_menu'] : 0;
 			$tipo_comedor =  isset($_POST['tipo_comedor']) ? $_POST['tipo_comedor'] : 0;
-			$estatus_comedor = $Ubicacion == 2 || $Ubicacion == 3 ? 1 : 0;
+			$estatus_comedor = $TipoPlatillo != 4 ? 1 : 0;
 			
 			include './db/conectar.php';
 			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000) {
@@ -648,6 +647,47 @@
 			$listado_procesadas = isset($_POST['listado_procesadas']) ? $_POST['listado_procesadas'] : 0;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '';
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
+			$sede_conciliar = isset($_POST['sede_conciliar']) ? $_POST['sede_conciliar'] : 'todos';
+			$usuario_conectado = isset($_POST['usuario_conectado']) ? $_POST['usuario_conectado'] : '';
+			$sede_todos = ''; 
+			$sede_apodaca = ''; 
+			$sede_casa_palmas = ''; 
+			$sede_cdmx = ''; 
+			$sede_cienega_flores = ''; 
+			$sede_cienega_flores_dos = ''; 
+			$sede_cienega_flores_fase_dos = ''; 
+			$sede_depto_msrzl = ''; 
+			$sede_logistica = ''; 
+			$sede_milimex = ''; 
+			$sede_obispado = '';
+			$sede_palmas = ''; 
+			$sede_queretaro = '';
+			$sede_top = ''; 
+			$sede_volkram = '';
+			if ($sede_conciliar != 'todos') {
+				$sede_conciliar = is_array($sede_conciliar) && 
+				count($sede_conciliar) ? implode(",", $sede_conciliar) : $sede_conciliar;
+				$sedes = explode(',', $sede_conciliar);
+				foreach ($sedes as $sede) {
+					$sede_todos = $sede == 'todos' ? $sede : $sede_todos; 
+					$sede_apodaca = $sede == 'APODACA' ? $sede : $sede_apodaca; 
+					$sede_casa_palmas = $sede == 'CASA PALMAS' ? $sede : $sede_casa_palmas; 
+					$sede_cdmx = $sede == 'CDMX' ? $sede : $sede_cdmx; 
+					$sede_cienega_flores = $sede == 'CIENEGA DE FLORES' ? $sede : $sede_cienega_flores;
+					$sede_cienega_flores_dos = $sede == 'CIÉNEGA DE FLORES' ? $sede : $sede_cienega_flores_dos; 
+					$sede_cienega_flores_fase_dos = $sede == 'CIÉNEGA DE FLORES - FASE II' ? $sede : $sede_cienega_flores_fase_dos;  
+					$sede_depto_msrzl = $sede == 'DEPTO MSRZL' ? $sede : $sede_depto_msrzl; 
+					$sede_logistica = $sede == 'LOGISTICA' ? $sede : $sede_logistica; 
+					$sede_milimex = $sede == 'MILIMEX' ? $sede : $sede_milimex; 
+					$sede_obispado = $sede == 'OBISPADO' ? $sede : $sede_obispado;
+					$sede_palmas = $sede == 'PALMAS' ? $sede : $sede_palmas; 
+					$sede_queretaro = $sede == 'QUERETARO' ? $sede : $sede_queretaro;
+					$sede_top = $sede == 'T.OP' ? $sede : $sede_top;
+					$sede_volkram = $sede == 'VOLKRAM' ? $sede : $sede_volkram;  
+				}
+			}else{
+				$razon_todos = $razon_social_conciliar;
+			}
 			$validar = true;
 			$mensaje;
 			$contador = 0;
@@ -663,8 +703,9 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql3 = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?)}";
-				$params3 = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado);
+				$sql3 = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+				$params3 = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $sede_todos, $sede_apodaca, $sede_casa_palmas,
+				$sede_cdmx, $sede_cienega_flores, $sede_cienega_flores_dos, $sede_cienega_flores_fase_dos, $sede_depto_msrzl, $sede_logistica, $sede_milimex, $sede_obispado, $sede_palmas, $sede_queretaro, $sede_top, $sede_volkram);
 				$stmt3 = sqlsrv_query($conn, $sql3, $params3);
 
 				if (isset($stmt3)) {
@@ -694,6 +735,7 @@
 							"idComedorSub" => utf8_encode($row3['idComedorSub']),
 							"Precio" => $row3['Precio'],
 							"Total" => $row3['Total'],
+							"RangoFecha" => $row3['RangoFecha'],
 							"Id_Conciliacion" => $id_conciliacion
 						);
 						array_push($query, $datos);
@@ -702,7 +744,7 @@
 					sqlsrv_free_stmt( $stmt3);
 				}
 			}
-
+		
 			$consulta = "{call RHCom_Obtener_IdConciliado()}";
 			$exec = sqlsrv_query($conn, $consulta);
 
@@ -721,17 +763,18 @@
 				$row = sqlsrv_fetch_array( $exec, SQLSRV_FETCH_ASSOC);
 				if ($row != NULL && $row != '') {
 					$id_consecutivo = $row['Id_Conciliacion'] != NULL && $row['Id_Conciliacion'] != '' ? str_pad(substr($row['Id_Conciliacion'], 6) + 1, 6, '0', STR_PAD_LEFT) : '000001';
-					$id_conciliado = $row['Id_Conciliacion'] != '' && $row['Id_Conciliacion'] != NULL ? 'RHCon-'.$id_consecutivo : 'RHCon-'.$id_consecutivo;
+					$id_conciliado = $row['Id_Conciliacion'] != '' && $row['Id_Conciliacion'] != NULL ? 'RHCon-'.$id_consecutivo.'-'.$usuario_conectado : 'RHCon-'.$id_consecutivo.'-'.$usuario_conectado;
 				}else{
-					$id_conciliado = "RHCon-000001";
+					$id_conciliado = "RHCon-000001-".$usuario_conectado;
 				}
 			}
+
 			if ($listado_procesadas == 0) {
 				foreach ($datos as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 0) {
-						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?, ?, ?)}";
 						$IdPedido = $dato["IdPedido"];
-						$params = array($IdPedido, $estatus_enviado);
+						$params = array($IdPedido, $estatus_enviado, $Fecha);
 						$stmt = sqlsrv_query($conn, $sql, $params);
 	
 						if ( $stmt === false) {
@@ -750,9 +793,9 @@
 				$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 				foreach ($query as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
-						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?, ?, ?)}";
 						$IdPedido = $dato["IdPedido"];
-						$params = array($IdPedido, $estatus_enviado);
+						$params = array($IdPedido, $estatus_enviado, $dato["RangoFecha"]);
 						$stmt = sqlsrv_query($conn, $sql, $params);
 	
 						if ( $stmt === false) {
@@ -766,15 +809,16 @@
 							echo json_encode($data);
 						}
 
-						$consulta2 = "{call RHCom_Insertar_Con(?, ?, ?, ?, ?, ?, ?)}";
+						$consulta2 = "{call RHCom_Insertar_Con(?, ?, ?, ?, ?, ?, ?, ?)}";
 						$id_pedido = $dato["IdPedido"];
 						$no_empleado = $dato["NoEmpleado"];
 						$total_platillos = $dato["NoPlatillo"];
 						$total_pagar = $dato["Total"];
 						$estatus = 0;
 						$tipo_empleado = $dato["Tipo_Empleado"];
+						$rango_fecha = $dato["RangoFecha"];
 						
-						$parametros = array($id_conciliado, $id_pedido, $no_empleado, $total_platillos, $total_pagar, $estatus, $tipo_empleado);
+						$parametros = array($id_conciliado, $id_pedido, $no_empleado, $total_platillos, $total_pagar, $estatus, $tipo_empleado, $rango_fecha);
 						$stmt2 = sqlsrv_query($conn, $consulta2, $parametros);
 
 						if ($stmt2 === false) {
@@ -869,7 +913,45 @@
 			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 1;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '';
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
-			$razon_social_plato_express = isset($_POST['razon_social_plato_express']) ? $_POST['razon_social_plato_express'] : 'todos';
+			$sede_plato_express = isset($_POST['sede_plato_express']) ? $_POST['sede_plato_express'] : 'todos';
+			$sede_todos = ''; 
+			$sede_apodaca = ''; 
+			$sede_casa_palmas = ''; 
+			$sede_cdmx = ''; 
+			$sede_cienega_flores = '';
+			$sede_cienega_flores_dos = ''; 
+			$sede_cienega_flores_fase_dos = '';  
+			$sede_depto_msrzl = ''; 
+			$sede_logistica = ''; 
+			$sede_milimex = ''; 
+			$sede_obispado = '';
+			$sede_palmas = ''; 
+			$sede_queretaro = '';
+			$sede_top = ''; 
+			$sede_volkram = '';  
+
+			if ($sede_plato_express != 'todos') {
+				$sedes = explode(',', $sede_plato_express);
+				foreach ($sedes as $sede) {
+					$sede_todos = $sede == 'todos' ? $sede : $sede_todos; 
+					$sede_apodaca = $sede == 'APODACA' ? $sede : $sede_apodaca; 
+					$sede_casa_palmas = $sede == 'CASA PALMAS' ? $sede : $sede_casa_palmas; 
+					$sede_cdmx = $sede == 'CDMX' ? $sede : $sede_cdmx; 
+					$sede_cienega_flores = $sede == 'CIENEGA DE FLORES' ? $sede : $sede_cienega_flores;
+					$sede_cienega_flores_dos = $sede == 'CIÉNEGA DE FLORES' ? $sede : $sede_cienega_flores_dos; 
+					$sede_cienega_flores_fase_dos = $sede == 'CIÉNEGA DE FLORES - FASE II' ? $sede : $sede_cienega_flores_fase_dos;  
+					$sede_depto_msrzl = $sede == 'DEPTO MSRZL' ? $sede : $sede_depto_msrzl; 
+					$sede_logistica = $sede == 'LOGISTICA' ? $sede : $sede_logistica; 
+					$sede_milimex = $sede == 'MILIMEX' ? $sede : $sede_milimex; 
+					$sede_obispado = $sede == 'OBISPADO' ? $sede : $sede_obispado;
+					$sede_palmas = $sede == 'PALMAS' ? $sede : $sede_palmas; 
+					$sede_queretaro = $sede == 'QUERETARO' ? $sede : $sede_queretaro;
+					$sede_top = $sede == 'T.OP' ? $sede : $sede_top;
+					$sede_volkram = $sede == 'VOLKRAM' ? $sede : $sede_volkram;  
+				}
+			}else{
+				$sede_todos = $sede_plato_express;
+			}
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
 				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
@@ -879,8 +961,9 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?, ?)}";
-				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $razon_social_plato_express);
+				$sql = "{call RHCom_Listar_Procesadas(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $sede_todos, $sede_apodaca, $sede_casa_palmas,
+				$sede_cdmx, $sede_cienega_flores, $sede_cienega_flores_dos, $sede_cienega_flores_fase_dos, $sede_depto_msrzl, $sede_logistica, $sede_milimex, $sede_obispado, $sede_palmas, $sede_queretaro, $sede_top, $sede_volkram);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
 
@@ -914,7 +997,8 @@
 						"Precio_Break" => $row['Precio_Break'],
 						"Precio" => $row['Precio'],
 						"Total" => $row['Total'],
-						"Id_Conciliacion" => $id_conciliacion
+						"Id_Conciliacion" => $id_conciliacion,
+						"RangoFecha" => $row['RangoFecha']
 					);
 					array_push($query, $datos);
 				}
@@ -960,7 +1044,45 @@
 			$estatus_enviado = isset($_POST['estatus_enviado']) ? $_POST['estatus_enviado'] : 1;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '' ;
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
-			$razon_social_green_spot = isset($_POST['razon_social_green_spot']) ? $_POST['razon_social_green_spot'] : 'todos';
+			$sede_green_spot = isset($_POST['sede_green_spot']) ? $_POST['sede_green_spot'] : 'todos';
+			$sede_todos = ''; 
+			$sede_apodaca = ''; 
+			$sede_casa_palmas = ''; 
+			$sede_cdmx = ''; 
+			$sede_cienega_flores = '';
+			$sede_cienega_flores_dos = ''; 
+			$sede_cienega_flores_fase_dos = ''; 
+			$sede_depto_msrzl = ''; 
+			$sede_logistica = ''; 
+			$sede_milimex = ''; 
+			$sede_obispado = '';
+			$sede_palmas = ''; 
+			$sede_queretaro = '';
+			$sede_top = ''; 
+			$sede_volkram = '';
+
+			if ($sede_green_spot != 'todos') {
+				$sedes = explode(',', $sede_green_spot);
+				foreach ($sedes as $sede) {
+					$sede_todos = $sede == 'todos' ? $sede : $sede_todos; 
+					$sede_apodaca = $sede == 'APODACA' ? $sede : $sede_apodaca; 
+					$sede_casa_palmas = $sede == 'CASA PALMAS' ? $sede : $sede_casa_palmas; 
+					$sede_cdmx = $sede == 'CDMX' ? $sede : $sede_cdmx; 
+					$sede_cienega_flores = $sede == 'CIENEGA DE FLORES' ? $sede : $sede_cienega_flores;
+					$sede_cienega_flores_dos = $sede == 'CIÉNEGA DE FLORES' ? $sede : $sede_cienega_flores_dos; 
+					$sede_cienega_flores_fase_dos = $sede == 'CIÉNEGA DE FLORES - FASE II' ? $sede : $sede_cienega_flores_fase_dos; 
+					$sede_depto_msrzl = $sede == 'DEPTO MSRZL' ? $sede : $sede_depto_msrzl; 
+					$sede_logistica = $sede == 'LOGISTICA' ? $sede : $sede_logistica; 
+					$sede_milimex = $sede == 'MILIMEX' ? $sede : $sede_milimex; 
+					$sede_obispado = $sede == 'OBISPADO' ? $sede : $sede_obispado;
+					$sede_palmas = $sede == 'PALMAS' ? $sede : $sede_palmas; 
+					$sede_queretaro = $sede == 'QUERETARO' ? $sede : $sede_queretaro;
+					$sede_top = $sede == 'T.OP' ? $sede : $sede_top;
+					$sede_volkram = $sede == 'VOLKRAM' ? $sede : $sede_volkram;
+				}
+			}else{
+				$sede_todos = $sede_green_spot;
+			}
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
 				list ($dia_inicio,$mes_inicio,$anio_inicio) = explode("/", $f_inicio);//Extrae fecha inicial 
@@ -970,8 +1092,9 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?, ?)}";
-				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $razon_social_green_spot);
+				$sql = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $sede_todos, $sede_apodaca, $sede_casa_palmas,
+				$sede_cdmx, $sede_cienega_flores, $sede_cienega_flores_dos, $sede_cienega_flores_fase_dos, $sede_depto_msrzl, $sede_logistica, $sede_milimex, $sede_obispado, $sede_palmas, $sede_queretaro, $sede_top, $sede_volkram);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
 
@@ -1002,6 +1125,7 @@
 						"Kcal" =>utf8_encode($row['Kcal']),
 						"Precio" => $row['Precio'],
 						"total" => $row['total'],
+						"RangoFecha" => $row['RangoFecha'],
 						"IdPedido" => utf8_encode($row['IdPedido'])
 					);
 					array_push($query, $datos);
@@ -1208,7 +1332,45 @@
 			$fecha_final = "";
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '' ;
 			$tipo_comida = isset($_POST['tipo_comida']) ? $_POST['tipo_comida'] : 0;
-			$razon_social_plato_express_conciliacion = isset($_POST['razon_social_plato_express_conciliacion']) ? $_POST['razon_social_plato_express_conciliacion'] : 'todos';
+			$sede_plato_express_conciliacion = isset($_POST['sede_plato_express_conciliacion']) ? $_POST['sede_plato_express_conciliacion'] : 'todos';
+			$sede_todos = ''; 
+			$sede_apodaca = ''; 
+			$sede_casa_palmas = ''; 
+			$sede_cdmx = ''; 
+			$sede_cienega_flores = '';
+			$sede_cienega_flores_dos = ''; 
+			$sede_cienega_flores_fase_dos = '';  
+			$sede_depto_msrzl = ''; 
+			$sede_logistica = ''; 
+			$sede_milimex = ''; 
+			$sede_obispado = '';
+			$sede_palmas = ''; 
+			$sede_queretaro = '';
+			$sede_top = ''; 
+			$sede_volkram = ''; 
+
+			if ($sede_plato_express_conciliacion != 'todos') {
+				$sedes = explode(',', $sede_plato_express_conciliacion);
+				foreach ($sedes as $sede) {
+					$sede_todos = $sede == 'todos' ? $sede : $sede_todos; 
+					$sede_apodaca = $sede == 'APODACA' ? $sede : $sede_apodaca; 
+					$sede_casa_palmas = $sede == 'CASA PALMAS' ? $sede : $sede_casa_palmas; 
+					$sede_cdmx = $sede == 'CDMX' ? $sede : $sede_cdmx; 
+					$sede_cienega_flores = $sede == 'CIENEGA DE FLORES' ? $sede : $sede_cienega_flores;
+					$sede_cienega_flores_dos = $sede == 'CIÉNEGA DE FLORES' ? $sede : $sede_cienega_flores_dos; 
+					$sede_cienega_flores_fase_dos = $sede == 'CIÉNEGA DE FLORES - FASE II' ? $sede : $sede_cienega_flores_fase_dos;  
+					$sede_depto_msrzl = $sede == 'DEPTO MSRZL' ? $sede : $sede_depto_msrzl; 
+					$sede_logistica = $sede == 'LOGISTICA' ? $sede : $sede_logistica; 
+					$sede_milimex = $sede == 'MILIMEX' ? $sede : $sede_milimex; 
+					$sede_obispado = $sede == 'OBISPADO' ? $sede : $sede_obispado;
+					$sede_palmas = $sede == 'PALMAS' ? $sede : $sede_palmas; 
+					$sede_queretaro = $sede == 'QUERETARO' ? $sede : $sede_queretaro;
+					$sede_top = $sede == 'T.OP' ? $sede : $sede_top;
+					$sede_volkram = $sede == 'VOLKRAM' ? $sede : $sede_volkram;
+				}
+			}else{
+				$sede_todos = $sede_plato_express_conciliacion;
+			}
 			if ($tipo_comida === 0) {
 				$data = array(
 					"estatus" => 'error',
@@ -1226,8 +1388,10 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql = "{call RHCom_Listar_Conciliadas(?, ?, ?, ?)}";
-				$params = array($fecha_inicial, $fecha_final, $numero_conciliado, $tipo_comida);
+				$sql = "{call RHCom_Listar_Conciliadas(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+				$params = array($fecha_inicial, $fecha_final, $numero_conciliado, $tipo_comida, $sede_todos, $sede_apodaca, $sede_casa_palmas, $sede_cdmx, $sede_cienega_flores,
+				$sede_cienega_flores_dos, $sede_cienega_flores_fase_dos, $sede_depto_msrzl, $sede_logistica, $sede_milimex, $sede_obispado, $sede_palmas, $sede_queretaro, $sede_top, 
+				$sede_volkram);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 			}
 
@@ -1248,7 +1412,8 @@
 						"total_platillos" => $row['Total_Platillos'],
 						"total_pagar" => $row['Total_Pagar'],
 						"fecha_conciliado" => $row['Fecha_Conciliado'],
-						"estatus" => $row['Estatus']
+						"estatus" => $row['Estatus'],
+						"RangoFecha" => $row['RangoFecha']
 					);
 					array_push($query, $datos);
 				}
@@ -1453,11 +1618,51 @@
 			$total_pagar = isset($_POST['total_pagar']) ? $_POST['total_pagar'] : 0;
 			$numero_conciliado = isset($_POST['numero_conciliado']) ? $_POST['numero_conciliado'] : '' ;
 			$numero_empleado = isset($_POST['numero_empleado']) ? $_POST['numero_empleado'] : 0;
+			$sede_green_spot = isset($_POST['sede_green_spot']) ? $_POST['sede_green_spot'] : 'todos';
+			$usuario_conectado = isset($_POST['usuario_conectado']) ? $_POST['usuario_conectado'] : '';
+			$sede_todos = ''; 
+			$sede_apodaca = ''; 
+			$sede_casa_palmas = ''; 
+			$sede_cdmx = ''; 
+			$sede_cienega_flores = '';
+			$sede_cienega_flores_dos = ''; 
+			$sede_cienega_flores_fase_dos = '';  
+			$sede_depto_msrzl = ''; 
+			$sede_logistica = ''; 
+			$sede_milimex = ''; 
+			$sede_obispado = '';
+			$sede_palmas = ''; 
+			$sede_queretaro = '';
+			$sede_top = ''; 
+			$sede_volkram = '';
 			$validar = true;
 			$mensaje;
 			$contador = 0;
 			$stmt = '';
 			$stmt2 = '';
+
+			if ($sede_green_spot != 'todos') {
+				$sedes = explode(',', $sede_green_spot);
+				foreach ($sedes as $sede) {
+					$sede_todos = $sede == 'todos' ? $sede : $sede_todos; 
+					$sede_apodaca = $sede == 'APODACA' ? $sede : $sede_apodaca; 
+					$sede_casa_palmas = $sede == 'CASA PALMAS' ? $sede : $sede_casa_palmas; 
+					$sede_cdmx = $sede == 'CDMX' ? $sede : $sede_cdmx; 
+					$sede_cienega_flores = $sede == 'CIENEGA DE FLORES' ? $sede : $sede_cienega_flores;
+					$sede_cienega_flores_dos = $sede == 'CIÉNEGA DE FLORES' ? $sede : $sede_cienega_flores_dos; 
+					$sede_cienega_flores_fase_dos = $sede == 'CIÉNEGA DE FLORES - FASE II' ? $sede : $sede_cienega_flores_fase_dos;  
+					$sede_depto_msrzl = $sede == 'DEPTO MSRZL' ? $sede : $sede_depto_msrzl; 
+					$sede_logistica = $sede == 'LOGISTICA' ? $sede : $sede_logistica; 
+					$sede_milimex = $sede == 'MILIMEX' ? $sede : $sede_milimex; 
+					$sede_obispado = $sede == 'OBISPADO' ? $sede : $sede_obispado;
+					$sede_palmas = $sede == 'PALMAS' ? $sede : $sede_palmas; 
+					$sede_queretaro = $sede == 'QUERETARO' ? $sede : $sede_queretaro;
+					$sede_top = $sede == 'T.OP' ? $sede : $sede_top;
+					$sede_volkram = $sede == 'VOLKRAM' ? $sede : $sede_volkram;
+				}
+			}else{
+				$sede_todos = $sede_green_spot;
+			}
 
 			if ($Fecha != '') {
 				list($f_inicio, $f_final) = explode(" - ", $Fecha);//Extrae la fecha inicial y la fecha final en formato espa?ol
@@ -1468,8 +1673,10 @@
 			}
 
 			if (($fecha_inicial != "" && $fecha_inicial != null) && ($fecha_final != "" && $fecha_final != null)) {
-				$sql3 = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?)}";
-				$params3 = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado);
+				$sql3 = "{call RHCom_Listar_Procesadas_Green_Spot(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+				$params3 = array($fecha_inicial, $fecha_final, $estatus_enviado, $numero_conciliado, $numero_empleado, $sede_todos, $sede_apodaca, 
+				$sede_casa_palmas, $sede_cdmx, $sede_cienega_flores, $sede_cienega_flores_dos, $sede_cienega_flores_fase_dos, $sede_depto_msrzl, $sede_logistica, $sede_milimex, 
+				$sede_obispado, $sede_palmas, $sede_queretaro, $sede_top, $sede_volkram);
 				$stmt3 = sqlsrv_query($conn, $sql3, $params3);
 			}
 
@@ -1500,6 +1707,7 @@
 						"Kcal" =>utf8_encode($row3['Kcal']),
 						"Precio" => $row3['Precio'],
 						"total" => $row3['total'],
+						"RangoFecha" => $row3['RangoFecha'],
 						"IdPedido" => utf8_encode($row3['IdPedido'])
 					);
 					array_push($query, $datos);
@@ -1526,9 +1734,9 @@
 				$row = $row != NULL ? $row : array();
 				if (count($row) != 0) {
 					$id_consecutivo = $row['Id_Conciliacion'] != NULL && $row['Id_Conciliacion'] != '' ? str_pad(substr($row['Id_Conciliacion'], 6) + 1, 6, '0', STR_PAD_LEFT) : '000001';
-					$id_conciliado = $row['Id_Conciliacion'] != '' && $row['Id_Conciliacion'] != NULL ? 'RHCon-'.$id_consecutivo : 'RHCon-'.$id_consecutivo;
+					$id_conciliado = $row['Id_Conciliacion'] != '' && $row['Id_Conciliacion'] != NULL ? 'RHCon-'.$id_consecutivo.'-'.$usuario_conectado : 'RHCon-'.$id_consecutivo.'-'.$usuario_conectado;
 				}else{
-					$id_conciliado = "RHCon-000001";
+					$id_conciliado = "RHCon-000001-".$usuario_conectado;
 				}
 			}
 
@@ -1550,9 +1758,9 @@
 				$estatus_enviado = $estatus_enviado_conciliado == 2 ? $estatus_enviado_conciliado : $estatus_enviado;
 				foreach ($query as $dato) {
 					if ($dato['EstatusComedor'] == 1 && $dato['EstatusEnviado'] == 1) {
-						$sql = "{call RHCom_AcualizarEstatus(?, ?)}";
+						$sql = "{call RHCom_AcualizarEstatus(?, ?, ?)}";
 						$IdPedido = $dato["IdPedido"];
-						$params = array($IdPedido, $estatus_enviado);
+						$params = array($IdPedido, $estatus_enviado, $dato["RangoFecha"]);
 						$stmt = sqlsrv_query($conn, $sql, $params);
 	
 						if ( $stmt === false) {
@@ -1560,15 +1768,16 @@
 							$mensaje = sqlsrv_errors();
 						}
 
-						$consulta2 = "{call RHCom_Insertar_Con(?, ?, ?, ?, ?, ?, ?)}";
+						$consulta2 = "{call RHCom_Insertar_Con(?, ?, ?, ?, ?, ?, ?, ?)}";
 						$id_pedido = $dato["IdPedido"];
 						$no_empleado = $dato["NoEmpleado"];
 						$total_platillos = $dato["NoPlatillo"];
 						$total_pagar = $dato["total"];
 						$estatus = 0;
 						$tipo_empleado = $dato["Tipo_Empleado"];
+						$rango_fecha = $dato["RangoFecha"];
 						
-						$parametros = array($id_conciliado, $id_pedido, $no_empleado, $total_platillos, $total_pagar, $estatus, $tipo_empleado);
+						$parametros = array($id_conciliado, $id_pedido, $no_empleado, $total_platillos, $total_pagar, $estatus, $tipo_empleado, $rango_fecha);
 						$stmt2 = sqlsrv_query($conn, $consulta2, $parametros);
 
 						if ($stmt2 === false) {

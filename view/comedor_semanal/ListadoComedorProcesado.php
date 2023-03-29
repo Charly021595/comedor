@@ -265,12 +265,26 @@
 							<div class="row form-group">
 								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
 								<div class="col-sm-6">
-									<select name="razon_social_plato_express" id="razon_social_plato_express" class="form-control">
-										<option value="todos">Todos</option>
-										<option value="FRATECH S.A.">FRATECH S.A.</option>
-										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
-										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
-									</select>
+									<?php include "../../src/mi_select.php"; ?>
+									<div class="container">
+										<div class="col-12">
+											<select name="sede_plato_express" id="sede_plato_express" class="selectpicker" multiple data-live-search="false">
+												<option value="todos">Todos</option>
+												<option value="APODACA">APODACA</option>
+												<option value="CASA PALMAS">CASA PALMAS</option>
+												<option value="CDMX">CDMX</option>
+												<option value="CIENEGA DE FLORES">CIENEGA DE FLORES</option>
+												<option value="DEPTO MSRZL">DEPTO MSRZL</option>
+												<option value="LOGISTICA">LOGISTICA</option>
+												<option value="MILIMEX">MILIMEX</option>
+												<option value="OBISPADO">OBISPADO</option>
+												<option value="PALMAS">PALMAS</option>
+												<option value="QUERETARO">QUERETARO</option>
+												<option value="T.OP">T.OP</option>
+												<option value="VOLKRAM">VOLKRAM</option>
+											</select>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -284,12 +298,25 @@
 							<div class="row form-group">
 								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
 								<div class="col-sm-6">
-									<select name="razon_social_green_spot" id="razon_social_green_spot" class="form-control">
-										<option value="todos">Todos</option>
-										<option value="FRATECH S.A.">FRATECH S.A.</option>
-										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
-										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
-									</select>
+									<div class="container">
+										<div class="col-12">
+											<select name="sede_green_spot" id="sede_green_spot" class="selectpicker" multiple data-live-search="false">
+												<option value="todos">Todos</option>
+												<option value="APODACA">APODACA</option>
+												<option value="CASA PALMAS">CASA PALMAS</option>
+												<option value="CDMX">CDMX</option>
+												<option value="CIENEGA DE FLORES">CIENEGA DE FLORES</option>
+												<option value="DEPTO MSRZL">DEPTO MSRZL</option>
+												<option value="LOGISTICA">LOGISTICA</option>
+												<option value="MILIMEX">MILIMEX</option>
+												<option value="OBISPADO">OBISPADO</option>
+												<option value="PALMAS">PALMAS</option>
+												<option value="QUERETARO">QUERETARO</option>
+												<option value="T.OP">T.OP</option>
+												<option value="VOLKRAM">VOLKRAM</option>
+											</select>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -303,12 +330,25 @@
 							<div class="row form-group">
 								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
 								<div class="col-sm-6">
-									<select name="razon_social_plato_express_conciliacion" id="razon_social_plato_express_conciliacion" class="form-control">
-										<option value="todos">Todos</option>
-										<option value="FRATECH S.A.">FRATECH S.A.</option>
-										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
-										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
-									</select>
+									<div class="container">
+										<div class="col-12">
+											<select name="sede_plato_express_conciliacion" id="sede_plato_express_conciliacion" class="selectpicker" multiple data-live-search="false">
+												<option value="todos">Todos</option>
+												<option value="APODACA">APODACA</option>
+												<option value="CASA PALMAS">CASA PALMAS</option>
+												<option value="CDMX">CDMX</option>
+												<option value="CIENEGA DE FLORES">CIENEGA DE FLORES</option>
+												<option value="DEPTO MSRZL">DEPTO MSRZL</option>
+												<option value="LOGISTICA">LOGISTICA</option>
+												<option value="MILIMEX">MILIMEX</option>
+												<option value="OBISPADO">OBISPADO</option>
+												<option value="PALMAS">PALMAS</option>
+												<option value="QUERETARO">QUERETARO</option>
+												<option value="T.OP">T.OP</option>
+												<option value="VOLKRAM">VOLKRAM</option>
+											</select>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -322,12 +362,25 @@
 							<div class="row form-group">
 								<label for="lblRazonSocial" class="col-sm-3 col-form-label">Filtrar por Razón Social:</label>
 								<div class="col-sm-6">
-									<select name="razon_social_plato_especial_conciliados" id="razon_social_plato_especial_conciliados" class="form-control">
-										<option value="todos">Todos</option>
-										<option value="FRATECH S.A.">FRATECH S.A.</option>
-										<option value="ARZYZ TECNOLOGIA S.A. DE C.V.">ARZYZ TECNOLOGIA S.A. DE C.V.</option>
-										<option value="ARZYZ S.A. DE C.V.">ARZYZ S.A. DE C.V.</option>
-									</select>
+									<div class="container">
+										<div class="col-12">
+											<select name="sede_green_spot_conciliacion" id="sede_green_spot_conciliacion" class="selectpicker" multiple data-live-search="false">
+												<option value="todos">Todos</option>
+												<option value="APODACA">APODACA</option>
+												<option value="CASA PALMAS">CASA PALMAS</option>
+												<option value="CDMX">CDMX</option>
+												<option value="CIENEGA DE FLORES">CIENEGA DE FLORES</option>
+												<option value="DEPTO MSRZL">DEPTO MSRZL</option>
+												<option value="LOGISTICA">LOGISTICA</option>
+												<option value="MILIMEX">MILIMEX</option>
+												<option value="OBISPADO">OBISPADO</option>
+												<option value="PALMAS">PALMAS</option>
+												<option value="QUERETARO">QUERETARO</option>
+												<option value="T.OP">T.OP</option>
+												<option value="VOLKRAM">VOLKRAM</option>
+											</select>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -388,6 +441,7 @@
 														<th scope='col' style='display:none;'>Ubicación</th>
 														<th scope='col' style="display:none;">FechaPedido</th>
 														<th scope='col'>Estatus</th>
+														<th scope='col'>Rango Fechas</th>
 														<th scope='col'>Acciones</th>
 													</tr>
 												</thead>
@@ -424,6 +478,7 @@
 														<th scope='col' style='display:none;'>Ubicación</th>
 														<th scope='col' style='display:none;'>FechaPedido</th>
 														<th scope='col'>Estatus Enviado</th>
+														<th scope='col'>Rango Fechas</th>
 														<th scope='col'>Acciones</th>
 													</tr>
 												</thead>
@@ -454,6 +509,7 @@
 														<th scope='col'>Total Pagar</th>
 														<th scope='col'>Fecha_Conciliado</th>
 														<th scope='col'>Estatus</th>
+														<th scope='col'>Rango Fechas</th>
 														<th scope='col'>Acciones</th>
 													</tr>
 												</thead>
@@ -484,6 +540,7 @@
 														<th scope='col'>Total Pagar</th>
 														<th scope='col'>Fecha_Conciliado</th>
 														<th scope='col'>Estatus</th>
+														<th scope='col'>Rango Fechas</th>
 														<th scope='col'>Acciones</th>
 													</tr>
 												</thead>

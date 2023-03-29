@@ -19,27 +19,6 @@ $(document).ready(function(){
 
 	BuscarEmpleadoLogeadoSesion();
 	buscar_sede();
-	// setInterval(function(){
-	// 	let hoy = new Date();
-	// 	let dia = hoy.getDay(),
-	// 	hora = hoy.getHours(),
-	// 	minutos = hoy.getMinutes();
-	// 	let Fecha = $("#txtFechaSeleccionado").val(),
-	// 	Ubicacion = $("#txtUbicacion").val();
-	// 	console.log(hora+':'+minutos);
-	// 	return false;
-    //     // if(hora == 21 && minutos == 0 && dia != 6 && dia != 7) {
-	// 		$.ajax({
-	// 			url: "../../utileria.php",
-	// 			type: "post",
-	// 			data: {"param":25, "Fecha":Fecha, "Ubicacion":Ubicacion, "estatus_comedor":2},
-	// 			success: function(result) {
-	// 				data = JSON.parse(result);
-	// 				MostrarInforme();
-	// 			}
-	// 		});
-    //     // }
-    // }, 1000000);
 });
 
 function CerrarSesion(){
@@ -73,20 +52,20 @@ function buscar_sede(){
 		success: function(result) {
 			let sede  = JSON.parse(result)[0].Sede;
 			switch (sede) {
-				case 'Torre TOP':
+				case 'T.OP':
 					$("#txtUbicacion").trigger("change").val(1);
 				break;
 
-				case 'Apodaca':
+				case 'APODACA':
 					$("#txtUbicacion").trigger("change").val(2);
 				break;
 
-				case 'Cienega':
+				case 'CIENEGA DE FLORES':
 					$("#txtUbicacion").trigger("change").val(3);
 				break;
 			
 				default:
-					$("#txtUbicacion").trigger("change").val(1);
+					$("#txtUbicacion").trigger("change").val(0);
 				break;
 			}
 			MostrarInforme();
@@ -1401,6 +1380,7 @@ $("#btn_nomina").on("click", function(e){
 function enviar_nomina(resultados){
 	let datos2 = resultados.data,
 	i = 0;
+	fecha = $('#txtFechaSeleccionado').val();
 	while (i < datos2.length) {
 		if (datos2[i].EstatusComedor == 0) {
 			Swal.fire('Sin Envio', "este pedido no puede ser enviado a nomina porque no esta confirmado o rechazado, No. Orden: "+datos[i].IdPedido,"info");
@@ -1432,7 +1412,7 @@ function enviar_nomina(resultados){
 	$.ajax({
 		url: "../../utileria.php",
 		type: "post",
-		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1},
+		data: {"param":11, "datos":datos_limpios, "estatus_enviado":1, "Fecha":fecha},
 		success: function(result) {
 			data = JSON.parse(result);
 			if (data.estatus == "success"){
@@ -1481,18 +1461,20 @@ function GuardarOrden(){
 	let FechaDeOrden = moment(fechaActualL).format("YYYY-MM-DD HH:mm:ss"),
 	dia_actual = moment(fechaActualL).format('DD'),
 	nombre_dia_actual = moment(fechaActualL).format('dddd');
-	switch (nombre_dia_actual) {
-		case 'Saturday':
-			dia_inicial = dia_actual - 1;
-			FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
-		break;
-		case 'Sunday':
-			dia_inicial = dia_actual - 2;
-			FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
-		break;
-	
-		default:
-		break;
+	if (Ubicacion == 1) {
+		switch (nombre_dia_actual) {
+			case 'Saturday':
+				dia_inicial = dia_actual - 1;
+				FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
+			break;
+			case 'Sunday':
+				dia_inicial = dia_actual - 2;
+				FechaDeOrden = moment(fechaActualL).format("YYYY-MM-"+dia_inicial+" HH:mm:ss");
+			break;
+		
+			default:
+			break;
+		}
 	}
 	//
 	if(TipoPlatillo == "4"){
