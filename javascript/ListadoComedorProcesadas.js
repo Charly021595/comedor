@@ -66,11 +66,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -79,11 +79,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -92,9 +92,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -103,10 +105,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -115,10 +119,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -127,10 +131,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -140,11 +144,11 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -163,17 +167,18 @@ function ObtenerFecha(){
 		case 'Feb':
 			switch (nombre_dia_actual) {
 				case 'Monday':
-					dia_cambio = Number(dia_actual) + 5;
+					dia_cambio = Number(dia_actual) + 7;
 					dia_inicial = dia_actual;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
-						dia_final = dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? 
-						Number(0)+Number(1) : Number(dia_actual)+Number(4);
+						dia_final = dia_actual == 29 ? Number(0)+Number(6) : dia_actual == 28 ? Number(0)+Number(5) : dia_actual == 27 ? Number(0)+Number(4) : dia_actual == 26 ? 
+						Number(0)+Number(3) : dia_actual == 25 ? Number(0)+Number(2) : dia_actual == 24 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 						mes_inicial = mes_actual;
 						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? 
-						Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
+						Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) 
+						: dia_actual == 24 ? Number(mes_actual)+Number(1) : mes_actual;
 					}else{
-						dia_final = dia_actual == 28 ? Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) : 
-						dia_actual == 25 ? Number(0)+Number(1) : dia_actual == 28 ? Number(0)+Number(4) : Number(dia_actual)+Number(4);
+						dia_final = dia_actual == 28 ? Number(0)+Number(6) : dia_actual == 27 ? Number(0)+Number(5) : dia_actual == 26 ? Number(0)+Number(4) : 
+						dia_actual == 25 ? Number(0)+Number(3) : dia_actual == 24 ? Number(0)+Number(2) : dia_actual == 23 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 						mes_inicial = mes_actual;
 						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
@@ -186,17 +191,17 @@ function ObtenerFecha(){
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
-						dia_final = dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : 
-						Number(dia_actual)+Number(3);
+						dia_final = dia_actual == 29 ? Number(0)+Number(5) : dia_actual == 28 ? Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : 
+						dia_actual == 26 ? Number(0)+Number(2) : dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
 						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? 
-						Number(mes_actual)+Number(1) : mes_actual;
+						Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					}else{
-						dia_final = dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : 
-						Number(dia_actual)+Number(4);
+						dia_final = dia_actual == 28 ? Number(0)+Number(5) : dia_actual == 27 ? Number(0)+Number(4) : dia_actual == 26 ? Number(0)+Number(3) :
+						dia_actual == 25 ? Number(0)+Number(2) : dia_actual == 24 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
 						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? 
-						Number(mes_actual)+Number(1) : mes_actual;
+						Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : dia_actual == 24 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -207,13 +212,17 @@ function ObtenerFecha(){
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
-						dia_final = dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+						dia_final = dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) 
+						: dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+						: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					}else{
-						dia_final = dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
+						dia_final = dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : dia_actual == 26 ? Number(0)+Number(2) 
+						: dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : 
+						dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
@@ -222,15 +231,18 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Thursday':
-					dia_cambio = Number(dia_actual) + 5;
+					dia_cambio = Number(dia_actual) + 7;
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
-						dia_final = dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+						dia_final = dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) : 
+						dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
+						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+						: dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					}else{
-						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+						dia_final = dia_actual == 28 ? Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) 
+						: dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
 						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
@@ -242,13 +254,13 @@ function ObtenerFecha(){
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
 				case 'Friday':
-					dia_cambio = Number(dia_actual) + 5;
+					dia_cambio = Number(dia_actual) + 7;
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
-						dia_final = dia_actual;
+						dia_final = dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : dia_actual;
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-						mes_final = mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;;
 					}else{
 						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
 						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
@@ -263,10 +275,19 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
-					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
-					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
+						dia_final = dia_actual == 29 ? Number(0)+Number(1) : dia_actual;
+						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
+						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? 
+						Number(mes_actual)-Number(1) : mes_actual;
+						mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
+					}else{
+						dia_final = dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
+						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
+						mes_final = dia_cambio > 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					}
+					
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -276,18 +297,24 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual) - Number(2);
-					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
-					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
-					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual) - Number(1) : dia_actual == 2 ? Number(mes_actual) - Number(1) : mes_actual;
+					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
+						dia_final = dia_actual;
+						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
+						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? 
+						Number(mes_actual)-Number(1) : mes_actual;
+						mes_final = mes_actual;
+					}else{
+						dia_final = dia_actual;
+						mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
+						dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
+						mes_final = mes_actual;
+					}
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -301,11 +328,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -318,11 +345,11 @@ function ObtenerFecha(){
 					}else{
 						dia_inicial = dia_actual == 1 ? 28 : dia_actual - 1;
 					}
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -335,9 +362,11 @@ function ObtenerFecha(){
 					}else{
 						dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual - 2;
 					}
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -350,10 +379,12 @@ function ObtenerFecha(){
 					}else{
 						dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual - 3;
 					}
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -366,10 +397,10 @@ function ObtenerFecha(){
 					}else{
 						dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual - 4;
 					}
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -379,14 +410,13 @@ function ObtenerFecha(){
 				case 'Saturday':
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual == 5 ? 29 : dia_actual - 5;
-						dia_final = dia_actual == 1 ? 29 : Number(dia_actual)-Number(1);
 					}else{
 						dia_inicial = dia_actual == 1 ? 24 : dia_actual == 2 ? 25 : dia_actual == 3 ? 26 : dia_actual == 4 ? 27 : dia_actual == 5 ? 28 : dia_actual - 5;
-						dia_final = dia_actual == 1 ? 28 : Number(dia_actual)-Number(1);
 					}
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -397,23 +427,21 @@ function ObtenerFecha(){
 					if (((anio_actual % 4 == 0) && (anio_actual % 100 != 0 )) || (anio_actual % 400 == 0)) {
 						dia_inicial = dia_actual == 1 ? 24 : dia_actual == 2 ? 25 : dia_actual == 3 ? 26 : dia_actual == 4 ? 27 : dia_actual == 5 ? 28 : dia_actual == 6 ? 29 : 
 						dia_actual - 6;
-						dia_final = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : Number(dia_actual)-Number(2);
 					}else{
 						dia_inicial = dia_actual == 1 ? 23 : dia_actual == 2 ? 24 : dia_actual == 3 ? 25 : dia_actual == 4 ? 26 : dia_actual == 5 ? 27 : dia_actual == 6 ? 28 : 
 						dia_actual - 6;
-						dia_final = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : Number(dia_actual)-Number(2);
 					}
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -427,11 +455,12 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 30 ? Number(0)+Number(6) : dia_actual == 29 ? Number(0)+Number(5) : dia_actual == 28 ? 
+					Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) 
+					: dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -440,11 +469,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) :
+					dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -453,9 +482,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) 
+					: dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -464,10 +495,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -476,10 +509,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -488,10 +521,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -501,18 +534,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -526,11 +558,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -539,11 +571,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -552,9 +584,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -563,10 +597,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -575,10 +611,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -587,10 +623,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -600,18 +636,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual == 5 ? 29 : dia_actual == 6 ? 30 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -625,11 +660,12 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 30 ? Number(0)+Number(6) : dia_actual == 29 ? Number(0)+Number(5) : dia_actual == 28 ? 
+					Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) 
+					: dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -638,11 +674,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) :
+					dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -651,9 +687,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) 
+					: dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -662,10 +700,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -674,10 +714,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -686,10 +726,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 30 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -699,18 +739,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -724,11 +763,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -737,11 +776,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -750,9 +789,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -761,10 +802,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -773,10 +816,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -785,10 +828,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 30 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -798,18 +841,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual == 5 ? 29 : dia_actual == 6 ? 30 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -823,11 +865,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -836,11 +878,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -849,9 +891,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -860,10 +904,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -872,10 +918,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -884,10 +930,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					ddia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -897,18 +943,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
-				break;
-			
+				break;	
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -922,11 +967,12 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 30 ? Number(0)+Number(6) : dia_actual == 29 ? Number(0)+Number(5) : dia_actual == 28 ? 
+					Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) 
+					: dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -935,11 +981,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) :
+					dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -948,9 +994,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) 
+					: dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -959,10 +1007,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -971,10 +1021,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -983,10 +1033,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 30 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -996,18 +1046,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -1021,11 +1070,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1034,11 +1083,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1047,9 +1096,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1058,10 +1109,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1070,10 +1123,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1082,10 +1135,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 30 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1095,18 +1148,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual == 5 ? 29 : dia_actual == 6 ? 30 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -1120,9 +1172,12 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 30 ? Number(0)+Number(4) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 30 ? Number(0)+Number(6) : dia_actual == 29 ? Number(0)+Number(5) : dia_actual == 28 ? 
+					Number(0)+Number(4) : dia_actual == 27 ? Number(0)+Number(3) : dia_actual == 26 ? Number(0)+Number(2) 
+					: dia_actual == 25 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : dia_actual == 25 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1131,11 +1186,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 31 : dia_actual - 1;
-					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? Number(0)+Number(3) :
+					dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1144,9 +1199,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
-					dia_final = dia_actual == 29 ? Number(0)+Number(1) : dia_actual == 30 ? Number(0)+Number(2) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) : dia_actual == 28 ? Number(0)+Number(2) 
+					: dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : dia_actual == 28 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1155,10 +1212,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual == 3 ? 31 : dia_actual - 3;
-					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : dia_actual == 3 ? 
 					Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1167,10 +1226,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual == 4 ? 31 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : dia_actual == 3 ? 
 					Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1179,10 +1238,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual == 5 ? 31 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : dia_actual == 3 ? 
 					Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1192,18 +1251,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual == 6 ? 31 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : dia_actual - 2;
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : dia_actual == 3 ? 
 					Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
@@ -1217,11 +1275,11 @@ function ObtenerFecha(){
 			switch (nombre_dia_actual) {
 				case 'Monday':
 					dia_inicial = dia_actual;
-					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) : dia_actual == 28 ? 
-					Number(0)+Number(1) : Number(dia_actual)+Number(4);
+					dia_final = dia_actual == 31 ? Number(0)+Number(6) : dia_actual == 30 ? Number(0)+Number(5) : dia_actual == 29 ? Number(0)+Number(4) : dia_actual == 28 ? 
+					Number(0)+Number(3) : dia_actual == 27 ? Number(0)+Number(2) : dia_actual == 26 ? Number(0)+Number(1) : Number(dia_actual)+Number(6);
 					mes_inicial = mes_actual;
 					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : dia_actual == 26 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1230,11 +1288,11 @@ function ObtenerFecha(){
 				break;
 				case 'Tuesday':
 					dia_inicial = dia_actual == 1 ? 30 : dia_actual - 1;
-					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) : 
-					Number(dia_actual)+Number(3);
+					dia_final = dia_actual == 31 ? Number(0)+Number(5) : dia_actual == 30 ? Number(0)+Number(4) : dia_actual == 29 ? Number(0)+Number(3) :
+					dia_actual == 28 ? Number(0)+Number(2) : dia_actual == 27 ? Number(0)+Number(1) : Number(dia_actual)+Number(5);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) : 
-					mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) :
+					dia_actual == 28 ? Number(mes_actual)+Number(1) : dia_actual == 27 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1243,9 +1301,11 @@ function ObtenerFecha(){
 				break;
 				case 'Wednesday':
 					dia_inicial = dia_actual == 1 ? 29 : dia_actual == 2 ? 30 : dia_actual - 2;
-					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(dia_actual)+Number(2);
+					dia_final = dia_actual == 31 ? Number(0)+Number(4) : dia_actual == 30 ? Number(0)+Number(3) : dia_actual == 29 ? Number(0)+Number(2) 
+					: dia_actual == 28 ? Number(0)+Number(1) : Number(dia_actual)+Number(4);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : dia_actual == 29 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 28 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1254,10 +1314,12 @@ function ObtenerFecha(){
 				break;
 				case 'Thursday':
 					dia_inicial = dia_actual == 1 ? 28 : dia_actual == 2 ? 29 : dia_actual == 3 ? 30 : dia_actual - 3;
-					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual)+Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(3) : dia_actual == 30 ? Number(0)+Number(2) : dia_actual == 29 ? Number(0)+Number(1) 
+					: Number(dia_actual)+Number(3);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) 
+					: dia_actual == 29 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1266,10 +1328,10 @@ function ObtenerFecha(){
 				break;
 				case 'Friday':
 					dia_inicial = dia_actual == 1 ? 27 : dia_actual == 2 ? 28 : dia_actual == 3 ? 29 : dia_actual == 4 ? 30 : dia_actual - 4;
-					dia_final = dia_actual;
+					dia_final = dia_actual == 31 ? Number(0)+Number(2) : dia_actual == 30 ? Number(0)+Number(1) : Number(0)+Number(2);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : dia_actual == 30 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1278,10 +1340,10 @@ function ObtenerFecha(){
 				break;
 				case 'Saturday':
 					dia_inicial = dia_actual == 1 ? 26 : dia_actual == 2 ? 27 : dia_actual == 3 ? 28 : dia_actual == 4 ? 29 : dia_actual == 5 ? 30 : dia_actual - 5;
-					dia_final = dia_actual == 1 ? 31 : Number(dia_actual)-Number(1);
+					dia_final = dia_actual == 31 ? Number(0)+Number(1) : Number(dia_actual) + Number(1);
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = dia_actual == 31 ? Number(mes_actual)+Number(1) : mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
@@ -1291,18 +1353,17 @@ function ObtenerFecha(){
 				case 'Sunday':
 					dia_inicial = dia_actual == 1 ? 25 : dia_actual == 2 ? 26 : dia_actual == 3 ? 27 : dia_actual == 4 ? 28 : dia_actual == 5 ? 29 : dia_actual == 6 ? 30 : 
 					dia_actual - 6;
-					dia_final = dia_actual == 1 ? 30 : dia_actual == 2 ? 31 : Number(dia_actual)-Number(2);
+					dia_final = dia_actual;
 					mes_inicial = dia_actual == 1 ? Number(mes_actual)-Number(1) :  dia_actual == 2 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 3 ? Number(mes_actual)-Number(1) : dia_actual == 4 ? Number(mes_actual)-Number(1) : dia_actual == 5 ? Number(mes_actual)-Number(1) : 
 					dia_actual == 6 ? Number(mes_actual)-Number(1) : mes_actual;
-					mes_final = dia_actual == 1 ? Number(mes_actual)-Number(1) : dia_actual == 2 ? Number(mes_actual)-Number(1) : mes_actual;
+					mes_final = mes_actual;
 					fecha_actual_inicial = moment(date).format(mes_inicial+'/YYYY');
 					fecha_actual_final =  moment(date).format(mes_final+'/YYYY');
 					fecha_inicial = dia_inicial+'/'+fecha_actual_inicial;
 					fecha_final = dia_final+'/'+fecha_actual_final;
 					$("#txtFechaSeleccionado").val(fecha_inicial+' - '+fecha_final);
 				break;
-			
 				default:
 					Swal.fire( 
 						'Formato de fecha erroneo',
