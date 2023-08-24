@@ -157,7 +157,9 @@ function ValidarPlatillos(){
 	}
 	let Precio = parseFloat($("#txtPrecioPlatillo").val());
 	let Calculo = Precio * platillos;
+	let Precio_break = 5 * platillos;
 	$("#txtTotalPlatillo").val(parseFloat(Calculo).toFixed(2));
+	$("#txtTotalBreak").val(parseFloat(Precio_break).toFixed(2));
 }
 
 function ValidarPlatillosGR(){
@@ -188,6 +190,7 @@ function GuardarOrden(){
 	//let FechaDeOrden = $("#txtFechaPedido").val();
 	let Total = $("#txtTotalPlatillo").val();
 	let Precio = $("#txtPrecioPlatillo").val();
+	let Precio_break = $("#txtTotalBreak").val();
 	let Tipo_Empleado= $("#tipo_empleado").val();
 	let CantidadArreglo = "";
 	let platillo_menu = $("#menu_secreto_select").val() != 0 || $("#menu_secreto_select").val() === "undefined" ? $("#menu_secreto_select").val() : 0;
@@ -200,8 +203,8 @@ function GuardarOrden(){
 	dia_actual = moment(fechaActualL).format('DD'),
 	nombre_dia_actual = moment(fechaActualL).format('dddd'),
 	comentario_global= $("#txtComentarioGlobalPlatillo").val(),
-	hora_actual = moment(fechaActualL).format('HH:mm:ss')
-	tipo_comedor = 0;;
+	hora_actual = moment(fechaActualL).tz("America/Mexico_City").format('HH:mm:ss'),
+	tipo_comedor = 0;
 	switch (nombre_dia_actual) {
 		case 'Saturday':
 			dia_inicial = dia_actual - 1;
@@ -238,10 +241,8 @@ function GuardarOrden(){
 			Array.Total = TotalFormato;
 			Array.FechaPedido = FechaDeOrden;
 			Array.Comentario = $("#txtComentarioPlatillo").val();
-			if ((sede == 'Apodaca' || sede == 'Cienega') && TipoPlatillo != 3) {
-				Array.Break = 12.50;	
-			}
-			if (sede == 'Cienega' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
+			Array.Break = Precio_break;	
+			if (sede == 'CIENEGA DE FLORES' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
 				Array.platillo_menu = platillo_menu;
 			}
 			
@@ -272,7 +273,7 @@ function GuardarOrden(){
 		ValidarPlatillos();
         return false;
     }
-	if (TipoPlatillo != "4" && TipoPlatillo != "3" && TipoPlatillo != "5" && TipoPlatillo != "6") {
+	if (TipoPlatillo != "0" && TipoPlatillo != "4" && TipoPlatillo != "3" && TipoPlatillo != "5" && TipoPlatillo != "6" && TipoPlatillo != "7") {
         Swal.fire('Tipo de platillo no soportado', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
@@ -287,7 +288,7 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	if (Total == "0.00" && TipoPlatillo != "4") {
+	if (Total == "" && TipoPlatillo != "4") {
         Swal.fire('El saldo total no puede ser 0.00', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
@@ -312,6 +313,13 @@ function GuardarOrden(){
     }else{
 		tipo_comedor = 2;
 	}
+	if (!window.navigator.onLine) {
+        Swal.fire('La red esta inestable favor de contactar a wilfredo.morales@arzyz.com', "","info");
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").attr("disabled", false);
+        return false;
+    }
 	$.ajax({
 		type: "POST",
 		data: {
@@ -337,12 +345,20 @@ function GuardarOrden(){
 				Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
 				.then(function(){
 					location.reload();
+					$("#GuardarOrden").removeAttr("disabled, disabled");
+					$("#GuardarOrden").removeClass("deshabilitar");
+					$("#GuardarOrden").attr("disabled", false);
+					$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
 				});
 			}else if(data.estatus === "pedido_duplicado"){
 				Swal.fire('Solo se puede realizar un pedido al día.', "","info");
+				$("#GuardarOrden").removeAttr("disabled, disabled");
+				$("#GuardarOrden").removeClass("deshabilitar");
 				$("#GuardarOrden").prop("disabled", false);
 			}else{
 				Swal.fire('La información no pudo ser guardada.', "","error");
+				$("#GuardarOrden").removeAttr("disabled, disabled");
+				$("#GuardarOrden").removeClass("deshabilitar");
 				$("#GuardarOrden").prop("disabled", false);
 			}
 		}
@@ -432,7 +448,7 @@ function TipoPlatillo(){
 	let tipoplatillo = $("#txtTipoPlatillo").val();
 	let empleado = $("#txtNumEmpleado").val();
 	let date = new Date();
-	let hora_actual = moment(date).format('HH:mm:ss');
+	let hora_actual = moment(date).tz("America/Mexico_City").format('HH:mm:ss');
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
@@ -467,13 +483,19 @@ function TipoPlatillo(){
 						Menu_secreto();
 					break;
 					case "5":
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("45.00");
+						$("#txtPrecioPlatillo").val("45.00");
 						Menu_secreto();
 					break;
+
 					case "6":
-						$("#txtTotalPlatillo").val("0");
-						$("#txtPrecioPlatillo").val("0");	
+						$("#txtTotalPlatillo").val("55.00");
+						$("#txtPrecioPlatillo").val("55.00");	
+					break;
+
+					case "7":
+						$("#txtTotalPlatillo").val("65.00");
+						$("#txtPrecioPlatillo").val("65.00");	
 					break;
 				
 					default:
@@ -492,13 +514,19 @@ function TipoPlatillo(){
 						Menu_secreto();
 					break;
 					case "5":
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("45.00");
+						$("#txtPrecioPlatillo").val("45.00");
 						Menu_secreto();
 					break;
+
 					case "6":
-						$("#txtTotalPlatillo").val("0");
-						$("#txtPrecioPlatillo").val("0");	
+						$("#txtTotalPlatillo").val("55.00");
+						$("#txtPrecioPlatillo").val("55.00");	
+					break;
+
+					case "7":
+						$("#txtTotalPlatillo").val("65.00");
+						$("#txtPrecioPlatillo").val("65.00");	
 					break;
 				
 					default:
@@ -517,12 +545,12 @@ function TipoPlatillo(){
 		// $("#txtTotalPlatillo").val("49.50");
 		$("#txtTotalPlatillo").show();
 	}else{
-		// if ((hora_actual < hora_estatica_inicio_green_spot || hora_actual >  hora_estatica_fin_green_spot)){
-		// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
-		// 	$("#GuardarOrden").addClass("deshabilitar");
-		// 	$('#GuardarOrden').attr("disabled", true);
-		// 	return false;
-    	// }
+		if ((hora_actual < hora_estatica_inicio_green_spot || hora_actual >  hora_estatica_fin_green_spot)){
+			Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+			$("#GuardarOrden").addClass("deshabilitar");
+			$('#GuardarOrden').attr("disabled", true);
+			return false;
+    	}
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		// $("#DivTotal").css("display", "none");
@@ -569,6 +597,9 @@ function LimpiarCampos(){
 	$("#txtComentariosGR").val("");
 	$("#txtTotalPlatillo").val("0.00");
 	$("#txtComentarioPlatillo").val("");
+	$("#txtTotalBreak").val('0.00');
+	$('#txtbreak').prop('checked',false);
+	$("#txtComentarioGlobalPlatillo").val('');
 }
 
 function InfoPlatillo(){
@@ -679,30 +710,34 @@ function ObenerTipoPlatillo(){
 		break;
 
 		case 'APODACA':
+			$("#tipo_platillo").show();
+			$("#break").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="4">Green Spot</option>
-				<option value="5">Platillo Unico y Break</option>
-				<option value="6">Break</option>
+				<option value="5">Platillo Especial 1</option>
+				<option value="6">Platillo Especial 2</option>
+				<option value="7">Platillo Especial 3</option>
 			`);
 		break;
 
 		case 'CIENEGA DE FLORES':
+			$("#tipo_platillo").show();
+			$("#break").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="4">Green Spot</option>
-				<option value="5">Platillo Unico y Break</option>
-				<option value="6">Break</option>
+				<option value="5">Platillo Especial 1</option>
+				<option value="6">Platillo Especial 2</option>
+				<option value="7">Platillo Especial 3</option>
 			`);
 		break;
 	
 		default:
+			$("#tipo_platillo").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="4">Green Spot</option>
 			`);
 		break;
 	}
@@ -732,12 +767,20 @@ function Menu_secreto(){
 				}	
 			}else{
 				if (sede != 'T.OP') {
-					Swal.fire("No hay menu", "no hay platillos cargados en esta sede","info");	
+					// Swal.fire("No hay menu", "no hay platillos cargados en esta sede","info");	
 				}
 			}
 		}
 	});
 }
+
+$("#break").on("click", function(){
+    if($('#txtbreak').prop('checked') ){
+        $("#txtTotalBreak").val("5.00");
+    }else{
+        $("#txtTotalBreak").val("0.00");
+    }
+});
 
 $("#txtUbicacion").on('change',function(e){
 	$("#menu_secreto_select").html('');

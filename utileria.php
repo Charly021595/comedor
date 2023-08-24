@@ -69,7 +69,7 @@
 			}
 			
 			include './db/conectar.php';
-			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000 && $Ubicacion != 3) {
+			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 7 || $TipoPlatillo == 3) && $NoEmpleado != 20000 && $Ubicacion != 3) {
 				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?, ?)}";
 				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $tipo_comedor, $TipoPlatillo);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
@@ -96,7 +96,7 @@
 					}
 				}
 			}
-			if (($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 3) || ($arrayListadoGreenSpot != 0 && $TipoPlatillo == 4) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 5) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 6)) {
+			if (($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 0) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 3) || ($arrayListadoGreenSpot != 0 && $TipoPlatillo == 4) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 5) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 6) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 7)) {
 				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?,?,?,?,?)}";
 				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado,$platillo_menu,$tipo_comedor,$estatus_comedor, $envio_usuario);
 				$stmt = sqlsrv_query($conn, $sql, $params);
@@ -119,7 +119,7 @@
 						array_push($data, $record);
 					}
 					//Insertaria En Pedido de Subsidiado
-					if($TipoPlatillo == "3"){
+					if($TipoPlatillo == "0"){
 						foreach ($record as $row1) {
 							foreach ($arrayListadoPlatilloUnico as $row3) {
 								$IdPedidoInsertado = $row1;
@@ -127,10 +127,44 @@
 								$Break = isset($row3['Break']) ? (float)$row3['Break'] : (float)0;
 								$NoPlatillos = $row3['NoPlatillos'];
 								$TipoPlatillo = $row3['TipoPlatillo'];
-								$Total = $row3['Total'];
+								$Total = $Break != 0 ? (float)$row3['Total'] + $Break : (float)$row3['Total'];
 								$FechaPedido = $row3['FechaPedido'];
 								$Comentario =  utf8_decode($comentario_global);
-								$Platillo  = $row3['Platillo'];
+								$Platillo  = 'Break';
+								
+								include './db/conectar.php';
+								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
+								// $params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo);
+								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break,$envio_usuario);
+								$stmt = sqlsrv_query($conn, $sql, $params);
+								if ( $stmt === false) {
+									$validar = false;
+									$mensaje = sqlsrv_errors();
+									$data = array(
+										"estatus" => 'error_guardar_pedido_subsidiado',
+										"Validar" => $validar,
+										"mensaje" => $mensaje[0]['message']
+									);
+									echo json_encode($data);
+									die();
+								}
+
+								sqlsrv_free_stmt( $stmt );
+								sqlsrv_close($conn);
+							}
+						}
+					}else if($TipoPlatillo == "3"){
+						foreach ($record as $row1) {
+							foreach ($arrayListadoPlatilloUnico as $row3) {
+								$IdPedidoInsertado = $row1;
+								$Precio = $row3['Precio'];
+								$Break = isset($row3['Break']) ? (float)$row3['Break'] : (float)0;
+								$NoPlatillos = $row3['NoPlatillos'];
+								$TipoPlatillo = $row3['TipoPlatillo'];
+								$Total = $Break != 0 ? (float)$row3['Total'] + $Break : (float)$row3['Total'];
+								$FechaPedido = $row3['FechaPedido'];
+								$Comentario =  utf8_decode($comentario_global);
+								$Platillo  = $Break != 0 ? $row3['Platillo'].' y Break' : $row3['Platillo'];
 								
 								include './db/conectar.php';
 								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
@@ -199,10 +233,10 @@
 								$Break = (float)$row3['Break'];
 								$NoPlatillos = $row3['NoPlatillos'];
 								$TipoPlatillo = $row3['TipoPlatillo'];
-								$Total = (float)$row3['Total'] + $Break;
+								$Total = $Break != 0 ? (float)$row3['Total'] + $Break : (float)$row3['Total'];
 								$FechaPedido = $row3['FechaPedido'];
 								$Comentario =  utf8_decode($comentario_global);
-								$Platillo  = $row3['Platillo'];
+								$Platillo  = $Break != 0 ? $row3['Platillo'].' y Break' : $row3['Platillo'];
 								
 								include './db/conectar.php';
 								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
@@ -230,14 +264,48 @@
 						foreach ($record as $row1) {
 							foreach ($arrayListadoPlatilloUnico as $row3) {
 								$IdPedidoInsertado = $row1;
-								$Precio = (float)$row3['Precio'] + (float)$row3['Break'];
+								$Precio = $row3['Precio'];
 								$Break = (float)$row3['Break'];
 								$NoPlatillos = $row3['NoPlatillos'];
 								$TipoPlatillo = $row3['TipoPlatillo'];
-								$Total = (float)$row3['Total'] + $Break;
+								$Total = $Break != 0 ? (float)$row3['Total'] + $Break : (float)$row3['Total'];
 								$FechaPedido = $row3['FechaPedido'];
 								$Comentario =  utf8_decode($comentario_global);
-								$Platillo  = $row3['Platillo'];
+								$Platillo  = $Break != 0 ? $row3['Platillo'].' y Break' : $row3['Platillo'];
+								
+								include './db/conectar.php';
+								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
+								// $params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo);
+								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break,$envio_usuario);
+								$stmt = sqlsrv_query($conn, $sql, $params);
+								if ( $stmt === false) {
+									$validar = false;
+									$mensaje = sqlsrv_errors();
+									$data = array(
+										"estatus" => 'error_guardar_pedido_subsidiado',
+										"Validar" => $validar,
+										"mensaje" => $mensaje[0]['message']
+									);
+									echo json_encode($data);
+									die();
+								}
+
+								sqlsrv_free_stmt( $stmt );
+								sqlsrv_close($conn);
+							}
+						}
+					}else if($TipoPlatillo == "7"){
+						foreach ($record as $row1) {
+							foreach ($arrayListadoPlatilloUnico as $row3) {
+								$IdPedidoInsertado = $row1;
+								$Precio = $row3['Precio'];
+								$Break = (float)$row3['Break'];
+								$NoPlatillos = $row3['NoPlatillos'];
+								$TipoPlatillo = $row3['TipoPlatillo'];
+								$Total = $Break != 0 ? (float)$row3['Total'] + $Break : (float)$row3['Total'];
+								$FechaPedido = $row3['FechaPedido'];
+								$Comentario =  utf8_decode($comentario_global);
+								$Platillo  = $Break != 0 ? $row3['Platillo'].' y Break' : $row3['Platillo'];
 								
 								include './db/conectar.php';
 								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
@@ -277,7 +345,7 @@
 			}
 			ob_clean();//clears the output buffer
 			echo json_encode($data);	
-			break;
+		break;
 		case '3': //Listado
 				$datos = array();
 				$data = null;

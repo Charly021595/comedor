@@ -377,27 +377,36 @@
 									
 								</select>
 							</div>
-						 </div>
-						 <div class="form-group row" id="menu_secreto" style="display:none;">
+						</div>
+						<div class="row form-group" id="break" style="display:none;">
+							<label for="" class="col-sm-3 col-form-label">Con / Sin Break:</label>
+							<div class="col-sm-8">
+								<label class="content-input">
+								<input type="checkbox" name="txtbreak" id="txtbreak" value="0">
+								<i><span class="span_no">NO</span></i>
+								</label>
+							</div>
+						</div>
+						<div class="form-group row" id="menu_secreto" style="display:none;">
 							<label for="lblMenu_Cienega" class="col-sm-3 col-form-label">Menu:</label>
 							<div class="col-sm-8">
 								<select class="form-control" name="menu_secreto_select" id="menu_secreto_select">
 								</select>
 							</div>
 						</div>
-						  <div class="form-group row" id="DivCantidad" style="display:none;">
+						<div class="form-group row" id="DivCantidad" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Platillos:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="txtNumPlatillo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" pattern="\d*" maxlength="1" min="1" value="1" onchange="ValidarPlatillos()">
 							</div>
-						 </div>
-						 <div class="form-group row" id="DivCantidad" style="display:none;">
-							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Break:</label>
+						</div>
+						<div class="form-group row" id="precio_break" style="display:none;">
+							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio Break:</label>
 							<div class="col-sm-8">
-								<input type="checkbox" id="break" name="break" value="12.50">
+								<input type="text" class="form-control" id="txtTotalBreak" name="txtTotalBreak" value="0.00" disabled>
 							</div>
-						 </div>
-						 <div id="DivComentarioglobal" style="display:none;">
+						</div>
+						<div id="DivComentarioglobal" style="display:none;">
 							<div class="form-group row">
 								<label for="lblNombreVisita" class="col-sm-3 col-form-label">Comentarios:</label>
 								<div class="form-group col-sm-8 col-xs-8">
@@ -406,13 +415,13 @@
 							</div>
 						</div>
 						 <!-- ---------- -->
-						 <div class="form-group row" id="DivTotal" style="display:none;">
+						 <div class="form-group row" id="DivTotal" style="display:;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Total:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="txtTotalPlatillo" value="0.00" disabled>
 							</div>
 						 </div>
-						 <div class="form-group row" id="DivPrecio" style="display:none;">
+						 <div class="form-group row" id="DivPrecio" style="display:;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="txtPrecioPlatillo" value="49.00" disabled>

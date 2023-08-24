@@ -12,7 +12,7 @@ let posicion_final_editar = 0;
 let bandera_editar = 0;
 
 const hora_estatica_inicio = '07:00:00', 
-hora_estatica_fin = '09:30:00';
+hora_estatica_fin = '10:00:00';
 
 //Nueva versión del document ready funciona igual.
 jQuery(function(){	
@@ -330,7 +330,7 @@ function construccion_tabla(ID, RowID, datos){
 			tablacontenidoD +="<td data-label= 'Precio'>"+parseFloat(datos[i].Precio).toFixed(2)+"</td>"
 			tablacontenidoD +="<td data-label= 'Total'>"+parseFloat(datos[i].total).toFixed(2)+"</td>"
 			tablacontenidoD +="<td data-label= 'Ubicación'></td>"
-			tablacontenidoD +="<td></td>"
+			tablacontenidoD +="<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
 			tablacontenidoD +="<td></td>"
 			tablacontenidoD +="<td></td>"
 			tablacontenidoD +="<td></td>"
@@ -634,7 +634,7 @@ function CargarPedido(){
 //Función que se utiliza para traer el listado de platillos disponibles
 function TipoPlatillo(){
 	let txtUbicacion = $("#txtUbicacion").val();
-	var tipoplatillo = $("#txtTipoPlatillo").val();
+	let tipoplatillo = $("#txtTipoPlatillo").val();
 	let date = new Date();
 	let hora_actual = moment(date).tz("America/Mexico_City").format('HH:mm:ss');
 	$("#txtProductoSeleccionadoGR").empty();
@@ -1298,6 +1298,16 @@ function GuardarOrden(){
 		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
+	if (!window.navigator.onLine) {
+        Swal.fire('La red esta inestable favor de contactar a wilfredo.morales@arzyz.com', "","info");
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").attr("disabled", false);
+        return false;
+    }
+	// console.log(window.navigator.connection.downlink);
+	// console.log(window.navigator.connection.downlink);
+	// return;
 	$.ajax({
 		type: "POST",
 		data: {

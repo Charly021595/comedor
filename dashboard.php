@@ -228,8 +228,8 @@
 								<select class="form-control" id="txtUbicacion">
 									<option value="0">Seleccione Ubicación</option>
 									<option value="1">T.OP</option>
-									<option value="2">Apodaca</option>
-									<option value="3">Cienega</option>
+									<option value="2">APODACA</option>
+									<option value="3">CIENEGA DE FLORES</option>
 								</select>
 							</div>
 						 </div>
@@ -271,13 +271,16 @@
 							  
 							</div>
 						 </div>
-						 <!-- <div class="form-group row" id="Divbreak" style="display:none;">
-							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Break:</label>
+						 <div class="row form-group" id="break" style="display:none;">
+							<label for="" class="col-sm-3 col-form-label">Con / Sin Break:</label>
 							<div class="col-sm-8">
-								<input type="checkbox" id="break" name="break" value="12.50">
+								<label class="content-input">
+								<input type="checkbox" name="txtbreak" id="txtbreak" value="0">
+								<i><span class="span_no">NO</span></i>
+								</label>
 							</div>
-						 </div> -->
-						 <!-- ---------- -->
+						</div>
+
 						 <div class="form-group row" id="DivTotal" style="display:none;">
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Total:</label>
 							<div class="col-sm-8">
@@ -290,6 +293,13 @@
 								<input type="text" class="form-control" id="txtPrecioPlatillo" value="47.50" disabled>
 							</div>
 						 </div>
+
+						 <div class="form-group row" id="precio_break" style="display:none;">
+							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Precio Break:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="txtTotalBreak" name="txtTotalBreak" value="0.00" disabled>
+							</div>
+						</div>
 						 <!-- ---------- -->
 						 <!-- ////////// -->
 						 <div id="ComidaGR" style="display:none;">
@@ -479,6 +489,8 @@
 <script src="bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <script src="bower_components/moment/min/moment.min.js"></script>
+<script src="javascript/moment-with-locales.min.js"></script>
+<script src="javascript/moment-timezone.min.js"></script>
 <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- datepicker -->
 <script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>

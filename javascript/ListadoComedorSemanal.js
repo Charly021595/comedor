@@ -382,24 +382,25 @@ function construccion_tabla(datos){
 		tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
 		tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
 		tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
+		tablacontenido +="<td data-label= 'Tipo de Platillo'>"+datos[i].Platillo+"</td>"
 
-		switch (datos[i].TipoPlatillo) {
-			case 3:
-				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-			break;
+		// switch (datos[i].TipoPlatillo) {
+		// 	case 3:
+		// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+		// 	break;
 
-			case 5:
-				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
-			break;
+		// 	case 5:
+		// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
+		// 	break;
 
-			case 6:
-				tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
-			break;
+		// 	case 6:
+		// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
+		// 	break;
 		
-			default:
-				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-			break;
-		}
+		// 	default:
+		// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+		// 	break;
+		// }
 		tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 		tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
 		switch (datos[i]['Ubicacion']) {
@@ -464,7 +465,7 @@ function deshabilitar_botones(id, estatus_comedor){
 }
 //Función que se utiliza para traer el listado de platillos disponibles.
 function TipoPlatillo(){
-	var tipoplatillo = $("#txtTipoPlatillo").val();
+	let tipoplatillo = $("#txtTipoPlatillo").val();
 	let Ubicacion = $("#txtUbicacion").val();
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
@@ -477,7 +478,7 @@ function TipoPlatillo(){
 		// $("#DivComentario").css("display", "");
 		
 		
-		var seleccionar = "<option value='0'> Seleccionar Platillo</option>";
+		let seleccionar = "<option value='0'> Seleccionar Platillo</option>";
 		$('#txtProductoSeleccionadoGR').append(seleccionar);
 		if(tipoplatillo =="0"){
 			$("#DivCantidad").css("display", "none");
@@ -501,19 +502,26 @@ function TipoPlatillo(){
 						$("#txtPrecioPlatillo").val("20.00");
 						Menu_secreto();
 					break;
+
 					case "5":
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("45.00");
+						$("#txtPrecioPlatillo").val("45.00");
 						Menu_secreto();
 					break;
+
 					case "6":
-						$("#txtTotalPlatillo").val("0");
-						$("#txtPrecioPlatillo").val("0");	
+						$("#txtTotalPlatillo").val("55.00");
+						$("#txtPrecioPlatillo").val("55.00");	
+					break;
+
+					case "7":
+						$("#txtTotalPlatillo").val("65.00");
+						$("#txtPrecioPlatillo").val("65.00");	
 					break;
 				
 					default:
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("0.00");
+						$("#txtPrecioPlatillo").val("0.00");
 						Menu_secreto();
 					break;
 				}
@@ -522,23 +530,30 @@ function TipoPlatillo(){
 			case 'CIENEGA DE FLORES':
 				switch (tipoplatillo) {
 					case "3":
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("0.00");
+						$("#txtPrecioPlatillo").val("0.00");
 						Menu_secreto();
 					break;
+
 					case "5":
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("45.00");
+						$("#txtPrecioPlatillo").val("45.00");
 						Menu_secreto();
 					break;
+
 					case "6":
-						$("#txtTotalPlatillo").val("0");
-						$("#txtPrecioPlatillo").val("0");	
+						$("#txtTotalPlatillo").val("55.00");
+						$("#txtPrecioPlatillo").val("55.00");	
+					break;
+
+					case "7":
+						$("#txtTotalPlatillo").val("65.00");
+						$("#txtPrecioPlatillo").val("65.00");	
 					break;
 				
 					default:
-						$("#txtTotalPlatillo").val("20.00");
-						$("#txtPrecioPlatillo").val("20.00");
+						$("#txtTotalPlatillo").val("0.00");
+						$("#txtPrecioPlatillo").val("0.00");
 						Menu_secreto();
 					break;
 				}
@@ -592,6 +607,9 @@ function LimpiarCampos(){
 	$("#txtComentariosGR").val("");
 	$("#txtTotalPlatillo").val("0.00");
 	$("#txtComentarioPlatillo").val("");
+	$("#txtTotalBreak").val('0.00');
+	$('#txtbreak').prop('checked',false);
+	$("#txtComentarioGlobalPlatillo").val('');
 }
 //Función que se utiliza para traer la información de un platillo para comida.
 function InfoPlatillo(){
@@ -641,11 +659,11 @@ function ValidarPlatillos(){
 	no_empleado = $("#txtNumEmpleadoLogeado").val();
 	if (platillos > 1 && no_empleado != 20000) {
 		Swal.fire('Solo puedes pedir un platillo de comida.', "","info");
-		$("#txtNumPlatillo").val(1);
+		// $("#txtNumPlatillo").val(1);
 		platillos = parseInt($("#txtNumPlatillo").val());
 	}
 	if(platillos < 1){
-		$("#txtNumPlatillo").val(1);
+		// $("#txtNumPlatillo").val(1);
 		platillos = parseInt($("#txtNumPlatillo").val());
 	}
 	if (platillos == '' || isNaN(platillos)) {
@@ -653,7 +671,9 @@ function ValidarPlatillos(){
 	}
 	let Precio = parseFloat($("#txtPrecioPlatillo").val());
 	let Calculo = Precio * platillos;
+	let Precio_break = 5 * platillos;
 	$("#txtTotalPlatillo").val(parseFloat(Calculo).toFixed(2));
+	$("#txtTotalBreak").val(parseFloat(Precio_break).toFixed(2));
 }
 //Función que se utiliza para guardar un pedido solicitado.
 function GuardarOrden(){
@@ -666,7 +686,8 @@ function GuardarOrden(){
 	let Ubicacion = $("#txtUbicacion").val(),
 	CantidadArreglo = 0;
 	let Total = $("#txtTotalPlatillo").val();
-	let Precio= $("#txtPrecioPlatillo").val();
+	let Precio = $("#txtPrecioPlatillo").val();
+	let Precio_break = $("#txtTotalBreak").val();
 	let Tipo_Empleado= $("#tipo_empleado").val(),
 	comentario_global= $("#txtComentarioGlobalPlatillo").val();
 	let platillo_menu = $("#menu_secreto_select").val() != 0 || $("#menu_secreto_select").val() === "undefined" ? $("#menu_secreto_select").val() : 0;
@@ -695,7 +716,7 @@ function GuardarOrden(){
 		}	
 	}
 	//
-	if(TipoPlatillo== "4"){
+	if(TipoPlatillo == "4"){
 	//let arrayListadoGreenSpot = {};
 		arrayListadoGreenSpot = GuardarListadoGreenSpot();
 		CantidadArreglo = arrayListadoGreenSpot.length; 
@@ -712,9 +733,7 @@ function GuardarOrden(){
 			Array.Total = TotalFormato;
 			Array.FechaPedido = FechaDeOrden;
 			Array.Comentario = $("#txtComentarioPlatillo").val();
-			if ((sede == 'APODACA' || sede == 'CIENEGA DE FLORES') && TipoPlatillo != 3) {
-				Array.Break = 12.50;	
-			}
+			Array.Break = Precio_break;	
 			if (sede == 'CIENEGA DE FLORES' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
 				Array.platillo_menu = platillo_menu;
 			}
@@ -746,12 +765,26 @@ function GuardarOrden(){
 		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
+	if (!window.navigator.onLine) {
+        Swal.fire('La red esta inestable favor de contactar a wilfredo.morales@arzyz.com', "","info");
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").attr("disabled", false);
+        return false;
+    }
 	if (hora_actual <=  hora_estatica_inicio && hora_actual >=  hora_estatica_fin){
         tipo_comedor = 1;
     }else{
 		tipo_comedor = 2;
 	}
-	if((NoEmpleadoLogeado !="" && NombreEmpleado !="" && TipoPlatillo !="0" && TipoPlatillo !="4" && Ubicacion !="0" && Total != "0.00" && Tipo_Empleado != "0")||(CantidadArreglo > 0)){
+	if (TipoPlatillo =="0" && Precio_break == "0") {
+		Swal.fire('Te falta seleccionar platillo o break', "","info");
+		$("#GuardarOrdenS").removeAttr("disabled, disabled");
+		$("#GuardarOrdenS").removeClass("deshabilitar");
+		$("#GuardarOrdenS").attr("disabled", false);
+        return false;
+	}
+	if((NoEmpleadoLogeado !="" && NombreEmpleado !="" && TipoPlatillo !="" && TipoPlatillo !="4" && Ubicacion !="0" && Total != "" && Tipo_Empleado != "0")||(CantidadArreglo > 0)){
 		$.ajax({
 			type: "POST",
 			data: {
@@ -781,6 +814,7 @@ function GuardarOrden(){
 						$("#GuardarOrdenS").removeAttr("disabled, disabled");
 						$("#GuardarOrdenS").removeClass("deshabilitar");
 						$("#GuardarOrdenS").attr("disabled", false);
+						$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
 					});
 				}else if(data.estatus === "pedido_duplicado"){
 					Swal.fire('Solo se puede realizar un pedido al día.', "","info");
@@ -886,6 +920,7 @@ function RechazarEstatusAlimento(id_pedido, estatus_comedor){
 //Función que se utiliza para obtener el tipo de platillos dependiendo de la sede del usuario logeeado.
 function ObtenerTipoPlatillo(){
 	$("#tipo_platillo").hide();
+	$("#break").hide();
 	sede =  $('select[id="txtUbicacion"] option:selected').text();
 	$("#txtTipoPlatillo").html('');
 	 LimpiarCampos();
@@ -900,20 +935,25 @@ function ObtenerTipoPlatillo(){
 
 		case 'APODACA':
 			$("#tipo_platillo").show();
+			$("#break").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="6">Break</option>
+				<option value="5">Platillo Especial 1</option>
+				<option value="6">Platillo Especial 2</option>
+				<option value="7">Platillo Especial 3</option>
 			`);
 		break;
 
 		case 'CIENEGA DE FLORES':
 			$("#tipo_platillo").show();
+			$("#break").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="5">Platillo Unico y Break</option>
-				<option value="6">Break</option>
+				<option value="5">Platillo Especial 1</option>
+				<option value="6">Platillo Especial 2</option>
+				<option value="7">Platillo Especial 3</option>
 			`);
 		break;
 	
@@ -988,6 +1028,16 @@ $("#btn_nomina").on("click", function(e){
 		}
 	});  
 });
+
+// Función de Break
+$("#break").on("click", function(){
+    if($('#txtbreak').prop('checked') ){
+        $("#txtTotalBreak").val("5.00");
+    }else{
+        $("#txtTotalBreak").val("0.00");
+    }
+});
+
 //Función que se utiliza para filtrar por número de empleado y construir la tabla
 $("#txtNumeroEmpleado").on('change',function(e){
 	let Fecha = $("#txtFechaSeleccionado").val(),
@@ -1042,24 +1092,25 @@ $("#txtNumeroEmpleado").on('change',function(e){
 					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
 					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
 					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
+					tablacontenido +="<td data-label= 'Tipo de Platillo'>"+datos[i].Platillo+"</td>"
 
-					switch (datos[i].TipoPlatillo) {
-						case 3:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-						break;
+					// switch (datos[i].TipoPlatillo) {
+					// 	case 3:
+					// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+					// 	break;
 
-						case 5:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
-						break;
+					// 	case 5:
+					// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
+					// 	break;
 
-						case 6:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
-						break;
+					// 	case 6:
+					// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
+					// 	break;
 					
-						default:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-						break;
-					}
+					// 	default:
+					// 		tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+					// 	break;
+					// }
 					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 					// tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
 					if (datos[i]['Ubicacion'] != 0) {
