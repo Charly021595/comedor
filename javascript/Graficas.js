@@ -42,25 +42,38 @@ function buscar_sede(){
 		type: "post",
 		data: {"param":1, "empleado":num_empleado},
 		success: function(result) {
-			let sede  = JSON.parse(result)[0].Sede;
-			switch (sede) {
-				case 'Torre TOP':
-					$("#txtUbicacion").trigger("change").val(1);
-				break;
+			let datos = JSON.parse(result);
+			if (datos.estatus == "success"){
+				let sede  = datos.datos[0].Sede;
+				switch (sede) {
+					case 'T.OP':
+						$("#txtUbicacion").trigger("change").val(1);
+					break;
 
-				case 'Apodaca':
-					$("#txtUbicacion").trigger("change").val(2);
-				break;
+					case 'Torre TOP':
+						$("#txtUbicacion").trigger("change").val(1);
+					break;
 
-				case 'Cienega':
-					$("#txtUbicacion").trigger("change").val(3);
-				break;
-			
-				default:
-					$("#txtUbicacion").trigger("change").val(1);
-				break;
+					case 'APODACA':
+						$("#txtUbicacion").trigger("change").val(2);
+					break;
+
+					case 'CIENEGA DE FLORES':
+						$("#txtUbicacion").trigger("change").val(3);
+					break;
+				
+					default:
+						$("#txtUbicacion").trigger("change").val(0);
+					break;
+				}
+				traer_datos();
+			}else if(datos.estatus == "error_consulta"){
+				Swal.fire( 
+					datos.mensaje,
+					'',
+					'info'
+				);
 			}
-			traer_datos();
 		}
 	});
 }
@@ -71,8 +84,6 @@ function BuscarEmpleadoLogeado(){
 	$("#txtFechaPedido").val(fechaActual2);
 	var empleado = $("#txtNumEmpleadoLogeado").val()
 	if(empleado.replace(/\s/g,"") != ""){
-		
-		//LimpiarCampos();
 		$.ajax({
             type: "POST",
             data: {
@@ -80,21 +91,26 @@ function BuscarEmpleadoLogeado(){
 				empleado: empleado 
             },
             url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
 					for(i=0;i<data.length;i++){
-						
 						var FechaAr =  "Fecha: "+ fechaActual2; 
 						$("#txtFechaDia").val(fechaActual2);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
 					}
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
 				}else{
 					$("#txtFechaDia").val("");
 					$("#txtNombreEmpleadoLogeado").val("");
-					$("#txtNumEmpleadoLogeado").val("")
+					$("#txtNumEmpleadoLogeado").val("");
 				}
-				
 			}
 		});
 	
@@ -121,18 +137,18 @@ function BuscarEmpleadoLogeadoSesion(){
 				empleado: empleado 
             },
             url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
 						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#NombreCont2").text(data[i]['Nombre']);
-						$("#NombreCont").text(data[i]['Nombre']);
+						$("#NombreCont2").text(datos[i]['Nombre']);
+						$("#NombreCont").text(datos[i]['Nombre']);
 						$("#Fecha2").text(FechaAr);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
 					}
 				}
-				
 			}
 		});
 	

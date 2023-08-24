@@ -1350,21 +1350,32 @@ function BuscarEmpleadoLogeadoSesion(){
 				empleado: empleado 
             },
             url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
 						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#NombreCont2").text(data[i]['Nombre']);
-						$("#NombreCont").text(data[i]['Nombre']);
+						$("#NombreCont2").text(datos[i]['Nombre']);
+						$("#NombreCont").text(datos[i]['Nombre']);
 						$("#Fecha2").text(FechaAr);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
 					}
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
+				}else{
+					Swal.fire( 
+						'este empleado no esta dado de alta',
+						'',
+						'info'
+					);
 				}
-				
 			}
 		});
-	
 	}else{
 		Swal.fire( 
 			'Favor de Agregar un numero de empleado.',
@@ -1381,7 +1392,6 @@ $("#buscar_finalizados").click(function(e){
 });
 
 function boton_ver_primer_detalle_finalizados(numero_conciliado){
-	debugger;
 	$('#modal_detalles_segundo').modal('hide');
 	$("#mostrar_tabla_primer_detalle_finalizados").html('');
 	$("#filtro_pirmer_detalle_finalizado").html('');

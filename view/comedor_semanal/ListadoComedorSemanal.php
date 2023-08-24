@@ -364,8 +364,8 @@
 							<div class="col-sm-8">
 								<select class="form-control" id="txtUbicacion" disabled>
 									<option value="0">Seleccione Ubicación</option>
-									<option value="1">Torre TOP</option>
-									<option value="2">Apodaca</option>
+									<option value="1">T.OP</option>
+									<option value="2">APODACA</option>
 									<option value="3">CIENEGA DE FLORES</option>
 								</select>
 							</div>
@@ -528,7 +528,6 @@
 				
 				
 			</div>
-			
 			  <div class="modal-footer">
 				<div class="d-flex flex-row-reverse">
 					<button type="button" class="btn btn-secondary"   data-dismiss="modal">Cerrar</button>
@@ -569,6 +568,8 @@
 <script src="../../bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
 <script src="../../bower_components/moment/min/moment.min.js"></script>
+<script src="../../javascript/moment-with-locales.min.js"></script>
+<script src="../../javascript/moment-timezone.min.js"></script>
 <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- datepicker -->
 <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
@@ -596,26 +597,4 @@
 <script src="../../javascript/ListadoComedorSemanal.js?t=<?=time()?>"></script>
 <script type="text/javascript" src="../../libraries/webcamjs/webcam.min.js"></script>
 </body>
-
-<script>
-	$(function() {
-		$(".exportToExcel").click(function(e){
-			var table = $(this).prev('.table2excel');
-			if(table && table.length){
-				var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
-				$(table).table2excel({
-					exclude: ".noExl",
-					name: "Excel Document Name",
-					filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
-					fileext: ".xls",
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true,
-					preserveColors: preserveColors
-				});
-			}
-		});
-		
-	});
-</script>
 </html>

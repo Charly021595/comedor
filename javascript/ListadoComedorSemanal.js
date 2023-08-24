@@ -7,7 +7,9 @@ bandera_descargar = 0,
 sede = '';
 const hora_estatica_inicio = '07:00:00', 
 hora_estatica_fin = '17:00:00';
-$(document).ready(function(){	
+
+//Nueva versión del document ready funciona igual.
+jQuery(function(){	
 	ObtenerFecha();
 	window.location.hash="no-back-button";
 	window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
@@ -15,7 +17,26 @@ $(document).ready(function(){
 	BuscarEmpleadoLogeadoSesion();
 	buscar_sede();
 });
-
+//Función de la libreria para exportar la informacion de una tabla.
+$(function() {
+	$(".exportToExcel").click(function(e){
+		var table = $(this).prev('.table2excel');
+		if(table && table.length){
+			var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
+			$(table).table2excel({
+				exclude: ".noExl",
+				name: "Excel Document Name",
+				filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
+				fileext: ".xls",
+				exclude_img: true,
+				exclude_links: true,
+				exclude_inputs: true,
+				preserveColors: preserveColors
+			});
+		}
+	});
+});
+//Función de cerrar sesion, destruye la sesión actual del usuario.
 function CerrarSesion(){
 	$.ajax({
 		type: "POST",
@@ -35,7 +56,7 @@ function CerrarSesion(){
 	});
 	
 }
-
+//Función de buscar sede, el usuario logueado se obtiene su sede a la cual pertenece.
 function buscar_sede(){
 	let num_empleado = $("#txtNumEmpleado").val();
 	$.ajax({
@@ -43,32 +64,54 @@ function buscar_sede(){
 		type: "post",
 		data: {"param":1, "empleado":num_empleado},
 		success: function(result) {
-			sede  = JSON.parse(result)[0].Sede;
-			switch (sede) {
-				case 'T.OP':
-					$("#txtUbicacion").trigger("change").val(1);
-					ObenerTipoPlatillo();
-				break;
+			let data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				let datos = data.datos;
+				sede  = datos[0].Sede;
+				switch (sede) {
+					case 'T.OP':
+						$("#txtUbicacion").trigger("change").val(1);
+						ObtenerTipoPlatillo();
+					break;
 
-				case 'APODACA':
-					$("#txtUbicacion").trigger("change").val(2);
-					ObenerTipoPlatillo();
-				break;
+					case 'Torre TOP':
+						$("#txtUbicacion").trigger("change").val(1);
+						ObtenerTipoPlatillo();
+					break;
 
-				case 'CIENEGA DE FLORES':
-					$("#txtUbicacion").trigger("change").val(3);
-					ObenerTipoPlatillo();
-				break;
-			
-				default:
-					$("#txtUbicacion").trigger("change").val(0);
-				break;
+					case 'APODACA':
+						$("#txtUbicacion").trigger("change").val(2);
+						ObtenerTipoPlatillo();
+					break;
+
+					case 'CIENEGA DE FLORES':
+						$("#txtUbicacion").trigger("change").val(3);
+						ObtenerTipoPlatillo();
+					break;
+				
+					default:
+						$("#txtUbicacion").trigger("change").val(0);
+						ObtenerTipoPlatillo();
+					break;
+				}
+				MostrarInforme();
+			}else if(datos.estatus == "error_consulta"){
+				Swal.fire( 
+					datos.mensaje,
+					'',
+					'info'
+				);
+			}else{
+				Swal.fire( 
+					'este empleado no esta dado de alta',
+					'',
+					'info'
+				);
 			}
-			MostrarInforme();
 		}
 	});
 }
-
+//Esta función trae la informacion del usuario logueado y poder mostrarlo en la vista.
 function BuscarEmpleadoLogeadoSesion(){
 	var fechaActualL = new Date(); //Fecha actual
 	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
@@ -83,18 +126,30 @@ function BuscarEmpleadoLogeadoSesion(){
 				empleado: empleado 
             },
             url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
 						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#NombreCont2").text(data[i]['Nombre']);
-						$("#NombreCont").text(data[i]['Nombre']);
+						$("#NombreCont2").text(datos[i]['Nombre']);
+						$("#NombreCont").text(datos[i]['Nombre']);
 						$("#Fecha2").text(FechaAr);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
 					}
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
+				}else{
+					Swal.fire( 
+						'este empleado no esta dado de alta',
+						'',
+						'info'
+					);
 				}
-				
 			}
 		});
 	
@@ -108,135 +163,7 @@ function BuscarEmpleadoLogeadoSesion(){
 	}
 }
 
-function BuscarEmpleadoLogeado(){
-	var fechaActualL = new Date(); //Fecha actual
-	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
-	$("#txtFechaPedido").val(fechaActual2);
-	var empleado = $("#txtNumEmpleadoLogeado").val()
-	if(empleado.replace(/\s/g,"") != ""){
-		
-		//LimpiarCampos();
-		$.ajax({
-            type: "POST",
-            data: {
-                param: 1,
-				empleado: empleado 
-            },
-            url: "../../utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
-						
-						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#txtFechaDia").val(fechaActual2);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
-					}
-				}else{
-					$("#txtFechaDia").val("");
-					$("#txtNombreEmpleadoLogeado").val("");
-					$("#txtNumEmpleadoLogeado").val("")
-				}
-				
-			}
-		});
-	
-	}else{
-		Swal.fire( 
-			'Favor de Agregar un numero de empleado.',
-			'',
-			'error'
-		);
-		//CerrarSesion();
-	}
-}
-
-$("#txtNumEmpleadoLogeado").on('change',function(e){
-	$("#DivComentarioglobal").hide();
-	var fechaActualL = new Date(); //Fecha actual
-	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
-	$("#txtFechaPedido").val(fechaActual2);
-	var empleado = $("#txtNumEmpleadoLogeado").val()
-	if(empleado.replace(/\s/g,"") != ""){
-		$.ajax({
-            type: "POST",
-            data: {
-                param: 1,
-				empleado: empleado 
-            },
-            url: "../../utileria.php",
-            dataType: 'JSON',
-            success: function(data) {
-				if(data.length != 0){
-					for(i=0;i<data.length;i++){
-						
-						var FechaAr =  "Fecha: "+ fechaActual2; 
-						$("#txtFechaDia").val(fechaActual2);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
-						$("#tipo_empleado").val(data[i]['Tipo_Empleado']);
-					}
-					$("#txtTipoPlatillo").trigger("change").val("3");
-					$("#txtNumPlatillo").val(1);
-					$("#txtTotalPlatillo").val(1);
-					$("#txtComentarioPlatillo").val("");
-					TipoPlatillo();
-					if (empleado == 20000) {
-						$("#DivComentarioglobal").show();
-					}
-				}else{
-					Swal.fire( 
-						'El número de empleado proporcionado no coincide con nuestros registros.',
-						'',
-						'info'
-					);
-					$("#txtFechaDia").val("");
-					$("#txtNombreEmpleadoLogeado").val("");
-					$("#txtNumEmpleadoLogeado").val("");
-				}
-			}
-		});
-	
-	}else{
-		Swal.fire( 
-			'Favor de Agregar un numero de empleado.',
-			'',
-			'error'
-		);
-		//CerrarSesion();
-		$("#txtFechaDia").val("");
-		$("#txtNombreEmpleadoLogeado").val("");
-		$("#txtNumEmpleadoLogeado").val("");
-	}
-});
-
-$('#txtNumEmpleadoLogeado').keyup(function (){
-	let NoEmpleadoLogeado = $(this).val().toLowerCase();
-	this.value = (this.value + '').replace(/[^0-9]/g, '');
-	$("#txtNumPlatillo").removeAttr("maxlength");
-	if (NoEmpleadoLogeado.length <= 3 && NoEmpleadoLogeado != '') {
-		return false;	
-	}
-	if (NoEmpleadoLogeado == 20000) {	
-		$("#txtNumPlatillo").attr("maxlength", "2");	
-	}else{
-		$("#txtNumPlatillo").attr("maxlength", "1");
-	}
-});
-
-function Contraseña() {
-	var Contraseña = prompt("Favor de ingresar la contrasea", "");
-	var Respuesta;
-	//Detectamos si el usuario ingreso un valor
-	if (Contraseña == "ComedorArzyz$2021"){
-	 Respuesta = true
-	}
-	//Detectamos si el usuario NO ingreso un valor
-	else {
-	Respuesta = false
-	}
-	return Respuesta;
-}
-
+//Función que se utiliza para obtener la fecha actual.
 function ObtenerFecha(){
 	var date = new Date();
 	let dia = date.getDate(),
@@ -252,13 +179,13 @@ function ObtenerFecha(){
 	let fecha_actual = moment(date).format('DD/MM/YYYY');
 	$("#txtFechaSeleccionado").val(fecha_actual+' - '+fecha_actual);
 }
-
+//Función que se utiliza para descargar la lista de pedidos que se muestran.
 function DescargarTabla(){
 	$("#TablaComedor").table2excel({
 		filename: "Comedor_Plato_Express_"+fecha_completa+'.xls'
 	});
 }
-
+//Función que se utiliza para  validar si se elimina un alimento dentro de editar.
 function ConfirmacionEliminaAlimento(NoAlimento){
 	var NoAlimentos = NoAlimento;
 		Swal.fire({
@@ -286,7 +213,7 @@ function ConfirmacionEliminaAlimento(NoAlimento){
 			}
 		});
 }
-
+//Función que se utiliza para eliminar el alimento de la tabla de alimentos que se muestra al editar un pedido.
 function ElimarAlimento(NoAlimentos){
 	$("#Alimento" + NoAlimentos).remove();
 	var Lineas = $("#ListadoComidaGr tr").length;
@@ -294,38 +221,8 @@ function ElimarAlimento(NoAlimentos){
 		NoAlimento=0;
 	}
 }
-
-$("#btn_nomina").on("click", function(e){
-	$("#btn_nomina").addClass("deshabilitar");
-  	$('#btn_nomina').attr("disabled", true);
-	$('#lbl_pasar_nomina').hide();
-	$("#btn_nomina").css("width", "6%");
-	$('#cargando_pasar_nomina').show();
-	$('#btn_nomina').addClass("nuevo_style_btn_nomina");
-	let fecha = $('#txtFechaSeleccionado').val(),
-	numero_empleado = $('#txtNumeroEmpleado').val();
-	$.ajax({
-		url: "../../utileria.php",
-		type: "post",
-		data: {"param":15, "daterange":fecha, "numero_empleado":numero_empleado},
-		success: function(result) {
-			let datos = JSON.parse(result);
-			if (datos.estatus == "success"){
-				enviar_nomina(datos);
-			}else{
-				Swal.fire(datos.mensaje, "","info");
-				$("#btn_nomina").removeAttr("disabled, disabled");
-				$("#btn_nomina").removeClass("deshabilitar");
-				$('#btn_nomina').attr("disabled", false);
-				$('#lbl_pasar_nomina').show();
-				$("#btn_nomina").css("width", "");
-				$('#cargando_pasar_nomina').hide();
-				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
-			}
-		}
-	});  
-});
-
+//Función que se utiliza para traer todo el listado que no se a mandando a nomina.
+//PS: buscar un mejor metodo para traer los datos de nominas.
 function enviar_nomina(resultados){
 	let datos2 = resultados.data,
 	i = 0
@@ -388,7 +285,7 @@ function enviar_nomina(resultados){
 		}
 	});
 }
-
+//Función que se utiliza para traer la informacion de listado de pedidos.
 function MostrarInforme(){
 	let Fecha = $("#txtFechaSeleccionado").val(),
 	txtUbicacion = $("#txtUbicacion").val();
@@ -411,14 +308,12 @@ function MostrarInforme(){
 	if (txtUbicacion != 0) {
 		$("#header_comida_express").html("");
 		$("#header_comida_express").append(`
+			<th scope='col'>Tipo Pedido</th>
 			<th scope='col'>No. Orden</th>
 			<th scope='col'>No. Empleado</th>
 			<th scope='col'>Empleado</th>
 			<th scope='col'>Tipo de Platillo</th>
 			<th scope='col'>No. Platillo</th>
-			<th scope='col'>Platillo</th>
-			<th scope='col'>Nombre Platillo</th>
-			<th scope='col'>Descripción Platillo</th>
 			<th scope='col'>Comentarios</th>
 			<th scope='col'>Ubicación</th>
 			<th scope='col'>FechaPedido</th>
@@ -444,81 +339,9 @@ function MostrarInforme(){
 				$("#EspacioTabla").show();
 				$("#ContenidoListados").find("tr").remove();
 				datos = data.data;
-				for(let i = 0; i < datos.length; i++){
-					let tablacontenido ="<tr id='tr_"+datos[i].IdPedido+"'>";
-					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
-					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
-					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
-
-					switch (datos[i].TipoPlatillo) {
-						case 3:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-						break;
-
-						case 5:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
-						break;
-
-						case 6:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
-						break;
-					
-						default:
-							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-						break;
-					}
-					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
-					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-					if (datos[i]['Ubicacion'] != 0) {
-						tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].Nombre_Platillo+"</td>"
-						tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Descripcion+"</td>"
-					}
-					tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
-					switch (datos[i]['Ubicacion']) {
-						case 1:
-							tablacontenido +="<td data-label= 'Ubicación'>Torre TOP</td>"
-						break;
-
-						case 2:
-							tablacontenido +="<td data-label= 'Ubicación'>Apodaca</td>"
-						break;
-
-						case 3:
-							tablacontenido +="<td data-label= 'Ubicación'>Cienega</td>"
-						break;
-					
-						default:
-							tablacontenido +="<td data-label= 'Ubicación'></td>"
-						break;
-					}
-					tablacontenido += "<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
-					if (datos[i].EstatusEnviado == 0) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >No Enviado</td>"
-					}else if (datos[i].EstatusEnviado == 1) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >Enviado</td>"
-					}else if (datos[i].EstatusEnviado == 2) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado en Nomina</td>"
-					}else{
-						tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
-					}
-					if (datos[i].EstatusComedor == 0) {
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Pendiente de Procesar</td>"
-					}else if (datos[i].EstatusComedor == 1) {
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Entregado</td>"
-					}else{
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Rechazado</td>"
-					}
-					tablacontenido += "<td data-label='' ><button id='btn_confirmar_pedido_"+datos[i].idComedorSub+"' class='btn mi_btn_success' onclick='ConfirmacionEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+1+")'>Confirmar</button></td>"
-					tablacontenido += "<td data-label='' ><button id='btn_rechazar_pedido_"+datos[i].idComedorSub+"' class='btn btn-danger' onclick='RechazarEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+2+")'>Eliminar</button></td>"
-					tablacontenido +="</tr>";
-					$('#ContenidoListados').append(tablacontenido);
-					if (datos[i].EstatusComedor == 2) {
-						$('#tr_'+datos[i].IdPedido).addClass("clase_rechazada");
-					}
-					deshabilitar_botones(datos[i].idComedorSub, datos[i].EstatusComedor);
-				}
+				construccion_tabla(datos);
 				if (bandera_descargar == 1) {
-					DescargarTabla();
+					DescargarTabla(datos);
 					bandera_descargar = 0;
 				}	
 			}else if (data.estatus == "error_fecha") {
@@ -547,7 +370,83 @@ function MostrarInforme(){
 		}
 	});
 }
+//Función que se utliza para construir la tabla que muestra los pedidos de comida.
+function construccion_tabla(datos){
+	for(let i = 0; i < datos.length; i++){
+		let tablacontenido =  datos[i].PedidoUsuario == 1 ? "<tr id='tr_"+datos[i].IdPedido+"' class='user_pedido'>":"<tr id='tr_"+datos[i].IdPedido+"'>";
+		if (datos[i].PedidoUsuario == 1) {
+			tablacontenido +="<td  id='tipo_pedido' data-label= 'Tipo de Pedido'><i class='fa-solid fa-user color_icon'></i> Usuario</td>"
+		}else{
+			tablacontenido +="<td  id='tipo_pedido' data-label= 'Tipo de Pedido'><i class='fa-solid fa-house color_icon'></i> Admin</td>"
+		}
+		tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
+		tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
+		tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
 
+		switch (datos[i].TipoPlatillo) {
+			case 3:
+				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+			break;
+
+			case 5:
+				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
+			break;
+
+			case 6:
+				tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
+			break;
+		
+			default:
+				tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+			break;
+		}
+		tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
+		tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
+		switch (datos[i]['Ubicacion']) {
+			case 1:
+				tablacontenido +="<td data-label= 'Ubicación'>T.OP</td>"
+			break;
+
+			case 2:
+				tablacontenido +="<td data-label= 'Ubicación'>APODACA</td>"
+			break;
+
+			case 3:
+				tablacontenido +="<td data-label= 'Ubicación'>CIENEGA DE FLORES</td>"
+			break;
+		
+			default:
+				tablacontenido +="<td data-label= 'Ubicación'></td>"
+			break;
+		}
+		tablacontenido += "<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
+		if (datos[i].EstatusEnviado == 0) {
+			tablacontenido += "<td data-label= 'Estatus Enviado' >No Enviado</td>"
+		}else if (datos[i].EstatusEnviado == 1) {
+			tablacontenido += "<td data-label= 'Estatus Enviado' >Enviado</td>"
+		}else if (datos[i].EstatusEnviado == 2) {
+			tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado en Nomina</td>"
+		}else{
+			tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
+		}
+		if (datos[i].EstatusComedor == 0) {
+			tablacontenido += "<td data-label= 'Estatus Comedor'>Pendiente de Procesar</td>"
+		}else if (datos[i].EstatusComedor == 1) {
+			tablacontenido += "<td data-label= 'Estatus Comedor'>Entregado</td>"
+		}else{
+			tablacontenido += "<td data-label= 'Estatus Comedor'>Rechazado</td>"
+		}
+		tablacontenido += "<td data-label='' ><button id='btn_confirmar_pedido_"+datos[i].idComedorSub+"' class='btn mi_btn_success' onclick='ConfirmacionEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+1+")'>Confirmar</button></td>"
+		tablacontenido += "<td data-label='' ><button id='btn_rechazar_pedido_"+datos[i].idComedorSub+"' class='btn btn-danger' onclick='RechazarEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+2+")'>Eliminar</button></td>"
+		tablacontenido +="</tr>";
+		$('#ContenidoListados').append(tablacontenido);
+		if (datos[i].EstatusComedor == 2) {
+			$('#tr_'+datos[i].IdPedido).addClass("clase_rechazada");
+		}
+		deshabilitar_botones(datos[i].idComedorSub, datos[i].EstatusComedor);
+	}
+}
+//Función que deshabilita o habilita botones de eliminar y confirmar
 function deshabilitar_botones(id, estatus_comedor){
 	if (estatus_comedor == 0) {
 		$("#btn_confirmar_pedido_"+id).removeAttr("disabled, disabled");
@@ -563,248 +462,7 @@ function deshabilitar_botones(id, estatus_comedor){
 		$('#btn_rechazar_pedido_'+id).attr("disabled", true);
 	} 
 }
-
-$("#txtNumeroEmpleado").on('change',function(e){
-	let Fecha = $("#txtFechaSeleccionado").val(),
-	numero_empleado = $(this).val().toLowerCase(),
-	txtUbicacion = $("#txtUbicacion").val();
-	regex = /^[a-zA-Z ]+$/;
-	this.value = (this.value + '').replace(/[^0-9]/g, '');
-	if (regex.test(numero_empleado)) {
-		return false;
-	}
-	if (Fecha == "") {
-		Swal.fire( 
-			"El campo fecha no puede ir vacío",
-			'',
-			'info'
-		);
-		return false;
-	}
-	if (numero_empleado.length <= 3 && numero_empleado != '') {
-		return false;	
-	}
-	let formData = new FormData(document.getElementById("form_comedor_semanal"));
-  	formData.append("dato", "valor");
-	formData.append("numero_empleado", numero_empleado);
-	formData.append("ubicacion", txtUbicacion);
-	$("#EspacioTabla").hide();
-	$("#div_tabla").show();
-	$("#loading_comedor").show();
-	$.ajax({
-		url: "../../utileria.php",
-		type: "post",
-		data: formData,
-		dataType: "html",
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function(result) {
-			data = JSON.parse(result);
-			if (data.estatus == "success") {
-				$("#loading_comedor").hide();
-				$("#boton_descarga_excel").show();
-				$("#EspacioTabla").show();
-				$("#ContenidoListados").find("tr").remove();
-				datos = data.data;
-				for(let i = 0; i < datos.length; i++){
-					let tablacontenido ="<tr id='tr_"+datos[i].IdPedido+"'>";
-					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
-					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
-					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
-					if(datos[i].TipoPlatillo == "3"){
-						tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-					}
-					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
-					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-					tablacontenido +="<td data-label= 'Comentarios' style='display:none;'>"+datos[i].Comentarios+"</td>"
-					switch (datos[i]['Ubicacion']) {
-						case 1:
-							tablacontenido +="<td data-label= 'Ubicación'>Torre TOP</td>"
-						break;
-
-						case 2:
-							tablacontenido +="<td data-label= 'Ubicación'>Apodaca</td>"
-						break;
-
-						case 3:
-							tablacontenido +="<td data-label= 'Ubicación'>Cienega</td>"
-						break;
-					
-						default:
-							tablacontenido +="<td data-label= 'Ubicación'></td>"
-						break;
-					}
-					tablacontenido += "<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
-					if (datos[i].EstatusEnviado == 0) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >No Enviado</td>"
-					}else if (datos[i].EstatusEnviado == 1) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >Enviado</td>"
-					}else if (datos[i].EstatusEnviado == 2) {
-						tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado en Nomina</td>"
-					}else{
-						tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
-					}
-					if (datos[i].EstatusComedor == 0) {
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Pendiente de Procesar</td>"
-					}else if (datos[i].EstatusComedor == 1) {
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Entregado</td>"
-					}else{
-						tablacontenido += "<td data-label= 'Estatus Comedor'>Rechazado</td>"
-					}
-					tablacontenido += "<td data-label='' ><button id='btn_confirmar_pedido_"+datos[i].idComedorSub+"' class='btn mi_btn_success' onclick='ConfirmacionEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+1+")'>Confirmar</button></td>"
-					tablacontenido += "<td data-label='' ><button id='btn_rechazar_pedido_"+datos[i].idComedorSub+"' class='btn btn-danger' onclick='RechazarEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+2+")'>Eliminar</button></td>"
-					tablacontenido +="</tr>";
-					$('#ContenidoListados').append(tablacontenido);
-					if (datos[i].EstatusComedor == 2) {
-						$('#tr_'+datos[i].IdPedido).addClass("clase_rechazada");
-					}
-					deshabilitar_botones(datos[i].idComedorSub, datos[i].EstatusComedor);
-				}
-			}else if (data.estatus == "error_fecha") {
-				$("#loading_comedor").hide();
-				$("#EspacioTabla").hide();
-				$("#div_tabla").hide();
-				$("#boton_descarga_excel").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'info'
-				);
-			}else{
-				$("#loading_comedor").hide();
-				$("#EspacioTabla").hide();
-				$("#div_tabla").hide();
-				$("#boton_descarga_excel").hide();
-				Swal.fire( 
-					data.mensaje,
-					'',
-					'error'
-				);
-			}
-		}
-	});
-});
-
-// $("#txtNumeroEmpleado").on("keyup", function() {
-// 	let Fecha = $("#txtFechaSeleccionado").val(),
-// 	numero_empleado = $(this).val().toLowerCase(),
-// 	txtUbicacion = $("#txtUbicacion").val();
-// 	regex = /^[a-zA-Z ]+$/;
-// 	this.value = (this.value + '').replace(/[^0-9]/g, '');
-// 	if (regex.test(numero_empleado)) {
-// 		return false;
-// 	}
-// 	if (Fecha == "") {
-// 		Swal.fire( 
-// 			"El campo fecha no puede ir vacío",
-// 			'',
-// 			'info'
-// 		);
-// 		return false;
-// 	}
-// 	if (numero_empleado.length <= 3 && numero_empleado != '') {
-// 		return false;	
-// 	}
-// 	let formData = new FormData(document.getElementById("form_comedor_semanal"));
-//   	formData.append("dato", "valor");
-// 	formData.append("numero_empleado", numero_empleado);
-// 	formData.append("ubicacion", txtUbicacion);
-// 	$("#EspacioTabla").hide();
-// 	$("#div_tabla").show();
-// 	$("#loading_comedor").show();
-// 	$.ajax({
-// 		url: "../../utileria.php",
-// 		type: "post",
-// 		data: formData,
-// 		dataType: "html",
-// 		cache: false,
-// 		contentType: false,
-// 		processData: false,
-// 		success: function(result) {
-// 			data = JSON.parse(result);
-// 			if (data.estatus == "success") {
-// 				$("#loading_comedor").hide();
-// 				$("#boton_descarga_excel").show();
-// 				$("#EspacioTabla").show();
-// 				$("#ContenidoListados").find("tr").remove();
-// 				datos = data.data;
-// 				for(let i = 0; i < datos.length; i++){
-// 					let tablacontenido ="<tr>";
-// 					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
-// 					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
-// 					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
-// 					if(datos[i].TipoPlatillo == "3"){
-// 						tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
-// 					}
-// 					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
-// 					tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
-// 					tablacontenido +="<td data-label= 'Comentarios' style='display:none;'>"+datos[i].Comentarios+"</td>"
-// 					switch (datos[i]['Ubicacion']) {
-// 						case 1:
-// 							tablacontenido +="<td data-label= 'Ubicación'>Torre TOP</td>"
-// 						break;
-
-// 						case 2:
-// 							tablacontenido +="<td data-label= 'Ubicación'>Apodaca</td>"
-// 						break;
-
-// 						case 3:
-// 							tablacontenido +="<td data-label= 'Ubicación'>Cienega</td>"
-// 						break;
-					
-// 						default:
-// 							tablacontenido +="<td data-label= 'Ubicación'></td>"
-// 						break;
-// 					}
-// 					tablacontenido += "<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
-// 					if (datos[i].EstatusEnviado == 0) {
-// 						tablacontenido += "<td data-label= 'Estatus Enviado' >No Enviado</td>"
-// 					}else if (datos[i].EstatusEnviado == 1) {
-// 						tablacontenido += "<td data-label= 'Estatus Enviado' >Enviado</td>"
-// 					}else if (datos[i].EstatusEnviado == 2) {
-// 						tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado en Nomina</td>"
-// 					}else{
-// 						tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
-// 					}
-// 					if (datos[i].EstatusComedor == 0) {
-// 						tablacontenido += "<td data-label= 'Estatus Comedor'>Pendiente de Procesar</td>"
-// 					}else if (datos[i].EstatusComedor == 1) {
-// 						tablacontenido += "<td data-label= 'Estatus Comedor'>Entregado</td>"
-// 					}else{
-// 						tablacontenido += "<td data-label= 'Estatus Comedor'>Rechazado</td>"
-// 					}
-// 					tablacontenido += "<td data-label='' ><button id='btn_confirmar_pedido_"+datos[i].idComedorSub+"' class='btn mi_btn_success' onclick='ConfirmacionEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+1+")'>Confirmar</button></td>"
-// 					tablacontenido += "<td data-label='' ><button id='btn_rechazar_pedido_"+datos[i].idComedorSub+"' class='btn btn-danger' onclick='RechazarEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+2+")'>Eliminar</button></td>"
-// 					tablacontenido +="</tr>";
-// 					$('#ContenidoListados').append(tablacontenido);
-// 					deshabilitar_botones(datos[i].idComedorSub, datos[i].EstatusComedor);
-// 				}
-// 			}else if (data.estatus == "error_fecha") {
-// 				$("#loading_comedor").hide();
-// 				$("#EspacioTabla").hide();
-// 				$("#div_tabla").hide();
-// 				$("#boton_descarga_excel").hide();
-// 				Swal.fire( 
-// 					data.mensaje,
-// 					'',
-// 					'info'
-// 				);
-// 			}else{
-// 				$("#loading_comedor").hide();
-// 				$("#EspacioTabla").hide();
-// 				$("#div_tabla").hide();
-// 				$("#boton_descarga_excel").hide();
-// 				Swal.fire( 
-// 					data.mensaje,
-// 					'',
-// 					'error'
-// 				);
-// 			}
-// 		}
-// 	});
-// });
-
+//Función que se utiliza para traer el listado de platillos disponibles.
 function TipoPlatillo(){
 	var tipoplatillo = $("#txtTipoPlatillo").val();
 	let Ubicacion = $("#txtUbicacion").val();
@@ -915,10 +573,7 @@ function TipoPlatillo(){
 					for(i=0;i<data.length;i++){
 						//$("#NombreCont2").text(data[i]['Nombre']);
 						//$("#NombreCont").text(data[i]['Nombre']);
-						
-							seleccionar += "<option value='"+data[i]['IdComida']+"'>"+data[i]['Comida']+"</option>";
-							
-						
+						seleccionar += "<option value='"+data[i]['IdComida']+"'>"+data[i]['Comida']+"</option>";
 					}
 					$('#txtProductoSeleccionadoGR').append(seleccionar);
 				}
@@ -926,7 +581,7 @@ function TipoPlatillo(){
 		});
 	}
 }
-
+//Función que se utiliza para vaciar los campos.
 function LimpiarCampos(){
 	$("#txtTipoPlatilloGR").val("");
 	$("#txtPrecioTotal").val("0.00");
@@ -938,11 +593,9 @@ function LimpiarCampos(){
 	$("#txtTotalPlatillo").val("0.00");
 	$("#txtComentarioPlatillo").val("");
 }
-
+//Función que se utiliza para traer la información de un platillo para comida.
 function InfoPlatillo(){
-	//txtProductoSeleccionadoGR
 	var InfoPlatillo = $("#txtProductoSeleccionadoGR").val();
-	//
 	$("#txtComentariosGR").val("");
 	$("#txtNumPlatilloGR").val(1);
 	$("#txtPrecioGR").val("0.00");
@@ -982,7 +635,7 @@ function InfoPlatillo(){
 		$("#txtComentariosGR").val("");
 	}
 }
-
+//Función que se utiliza para validar los platillos y hacer sus calculos.
 function ValidarPlatillos(){
 	let platillos = parseInt($("#txtNumPlatillo").val()),
 	no_empleado = $("#txtNumEmpleadoLogeado").val();
@@ -1002,7 +655,7 @@ function ValidarPlatillos(){
 	let Calculo = Precio * platillos;
 	$("#txtTotalPlatillo").val(parseFloat(Calculo).toFixed(2));
 }
-
+//Función que se utiliza para guardar un pedido solicitado.
 function GuardarOrden(){
 	$("#GuardarOrdenS").addClass("deshabilitar");
   	$('#GuardarOrdenS').attr("disabled", true);
@@ -1024,7 +677,7 @@ function GuardarOrden(){
 	let FechaDeOrden = moment(fechaActualL).format("YYYY-MM-DD HH:mm:ss"),
 	dia_actual = moment(fechaActualL).format('DD'),
 	nombre_dia_actual = moment(fechaActualL).format('dddd'),
-	hora_actual = moment(fechaActualL).format('HH:mm:ss')
+	hora_actual = moment(fechaActualL).tz("America/Mexico_City").format('HH:mm:ss'),
 	tipo_comedor = 0;
 	if (Ubicacion == 1) {
 		switch (nombre_dia_actual) {
@@ -1059,10 +712,10 @@ function GuardarOrden(){
 			Array.Total = TotalFormato;
 			Array.FechaPedido = FechaDeOrden;
 			Array.Comentario = $("#txtComentarioPlatillo").val();
-			if ((sede == 'Apodaca' || sede == 'Cienega') && TipoPlatillo != 3) {
+			if ((sede == 'APODACA' || sede == 'CIENEGA DE FLORES') && TipoPlatillo != 3) {
 				Array.Break = 12.50;	
 			}
-			if (sede == 'Cienega' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
+			if (sede == 'CIENEGA DE FLORES' && (TipoPlatillo == 3 || TipoPlatillo == 5)) {
 				Array.platillo_menu = platillo_menu;
 			}
 			
@@ -1093,13 +746,6 @@ function GuardarOrden(){
 		$("#GuardarOrdenS").attr("disabled", false);
         return false;
     }
-	// if ((platillo_menu == 0 && Ubicacion == 3) || platillo_menu == 0 && Ubicacion == 2) {
-	// 	Swal.fire('El campo menu es obligatorio', "","info");
-	// 	$("#GuardarOrdenS").removeAttr("disabled, disabled");
-	// 	$("#GuardarOrdenS").removeClass("deshabilitar");
-	// 	$("#GuardarOrdenS").attr("disabled", false);
-    //     return false;
-	// }
 	if (hora_actual <=  hora_estatica_inicio && hora_actual >=  hora_estatica_fin){
         tipo_comedor = 1;
     }else{
@@ -1161,7 +807,7 @@ function GuardarOrden(){
 		ValidarPlatillos();
 	}
 }
-
+//Función que se utiliza para monstrar el modal de hacer un pedido como administrador.
 function CargarPedido(){
 	$("#menu_secreto_select").html('');
 	$("#menu_secreto").hide();
@@ -1181,7 +827,7 @@ function CargarPedido(){
 		// TipoPlatillo();
 	// }
 }
-
+//Función que se utiliza para confirmar un alimento.
 function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
 	$.ajax({
 		url: "../../utileria.php",
@@ -1209,7 +855,7 @@ function ConfirmacionEstatusAlimento(id_pedido, estatus_comedor){
 		}
 	});
 }
-
+//Función que se utiliza para rechazar un pedido de comida.
 function RechazarEstatusAlimento(id_pedido, estatus_comedor){
 	$.ajax({
 		url: "../../utileria.php",
@@ -1237,8 +883,8 @@ function RechazarEstatusAlimento(id_pedido, estatus_comedor){
 		}
 	});
 }
-
-function ObenerTipoPlatillo(){
+//Función que se utiliza para obtener el tipo de platillos dependiendo de la sede del usuario logeeado.
+function ObtenerTipoPlatillo(){
 	$("#tipo_platillo").hide();
 	sede =  $('select[id="txtUbicacion"] option:selected').text();
 	$("#txtTipoPlatillo").html('');
@@ -1257,7 +903,6 @@ function ObenerTipoPlatillo(){
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="5">Platillo Unico y Break</option>
 				<option value="6">Break</option>
 			`);
 		break;
@@ -1281,7 +926,7 @@ function ObenerTipoPlatillo(){
 		break;
 	}
 };
-
+//Función que se utiliza para cargar un menu em la plataforma.
 function Menu_secreto(){
 	var date = new Date();
 	let fecha_actual = moment(date).format('YYYY-MM-DD');
@@ -1311,7 +956,189 @@ function Menu_secreto(){
 		}
 	});
 }
+//Función que se utiliza para traer todo el listado que no se a mandando a nomina.
+//PS: buscar un mejor metodo para traer los datos de nominas.
+$("#btn_nomina").on("click", function(e){
+	$("#btn_nomina").addClass("deshabilitar");
+  	$('#btn_nomina').attr("disabled", true);
+	$('#lbl_pasar_nomina').hide();
+	$("#btn_nomina").css("width", "6%");
+	$('#cargando_pasar_nomina').show();
+	$('#btn_nomina').addClass("nuevo_style_btn_nomina");
+	let fecha = $('#txtFechaSeleccionado').val(),
+	numero_empleado = $('#txtNumeroEmpleado').val();
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: {"param":15, "daterange":fecha, "numero_empleado":numero_empleado},
+		success: function(result) {
+			let datos = JSON.parse(result);
+			if (datos.estatus == "success"){
+				enviar_nomina(datos);
+			}else{
+				Swal.fire(datos.mensaje, "","info");
+				$("#btn_nomina").removeAttr("disabled, disabled");
+				$("#btn_nomina").removeClass("deshabilitar");
+				$('#btn_nomina').attr("disabled", false);
+				$('#lbl_pasar_nomina').show();
+				$("#btn_nomina").css("width", "");
+				$('#cargando_pasar_nomina').hide();
+				$('#btn_nomina').addClass("nuevo_style_btn_nomina");
+			}
+		}
+	});  
+});
+//Función que se utiliza para filtrar por número de empleado y construir la tabla
+$("#txtNumeroEmpleado").on('change',function(e){
+	let Fecha = $("#txtFechaSeleccionado").val(),
+	numero_empleado = $(this).val().toLowerCase(),
+	txtUbicacion = $("#txtUbicacion").val();
+	regex = /^[a-zA-Z ]+$/;
+	this.value = (this.value + '').replace(/[^0-9]/g, '');
+	if (regex.test(numero_empleado)) {
+		return false;
+	}
+	if (Fecha == "") {
+		Swal.fire( 
+			"El campo fecha no puede ir vacío",
+			'',
+			'info'
+		);
+		return false;
+	}
+	if (numero_empleado.length <= 3 && numero_empleado != '') {
+		return false;	
+	}
+	let formData = new FormData(document.getElementById("form_comedor_semanal"));
+  	formData.append("dato", "valor");
+	formData.append("numero_empleado", numero_empleado);
+	formData.append("ubicacion", txtUbicacion);
+	$("#EspacioTabla").hide();
+	$("#div_tabla").show();
+	$("#loading_comedor").show();
+	$.ajax({
+		url: "../../utileria.php",
+		type: "post",
+		data: formData,
+		dataType: "html",
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function(result) {
+			data = JSON.parse(result);
+			if (data.estatus == "success") {
+				$("#loading_comedor").hide();
+				$("#boton_descarga_excel").show();
+				$("#EspacioTabla").show();
+				$("#ContenidoListados").find("tr").remove();
+				datos = data.data;
+				for(let i = 0; i < datos.length; i++){
+					let tablacontenido =  datos[i].PedidoUsuario == 1 ? "<tr id='tr_"+datos[i].IdPedido+"' class='user_pedido'>":"<tr id='tr_"+datos[i].IdPedido+"'>";
+					if (datos[i].PedidoUsuario == 1) {
+						tablacontenido +="<td  id='tipo_pedido' data-label= 'Tipo de Pedido'><i class='fa-solid fa-user color_icon'></i> Usuario</td>"
+					}else{
+						tablacontenido +="<td  id='tipo_pedido' data-label= 'Tipo de Pedido'><i class='fa-solid fa-house color_icon'></i> Admin</td>"
+					}
+					tablacontenido +="<td  id='IDPedido"+datos[i].IdPedido+"' data-label= 'No. Orden'>"+datos[i].IdPedido+"</td>"
+					tablacontenido +="<td  data-label= 'No. Empleado'>"+datos[i].NoEmpleado+"</td>"
+					tablacontenido +="<td data-label= 'Empleado'>"+datos[i].NombreEmpleado+"</td>"
 
+					switch (datos[i].TipoPlatillo) {
+						case 3:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+						break;
+
+						case 5:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico y Break</td>"
+						break;
+
+						case 6:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Break</td>"
+						break;
+					
+						default:
+							tablacontenido +="<td data-label= 'Tipo de Platillo'>Platillo Unico</td>"
+						break;
+					}
+					tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
+					// tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Platillo+"</td>"
+					if (datos[i]['Ubicacion'] != 0) {
+						// tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].Nombre_Platillo+"</td>"
+						// tablacontenido +="<td data-label= 'Platillo'>"+datos[i].Descripcion+"</td>"
+					}
+					tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
+					switch (datos[i]['Ubicacion']) {
+						case 1:
+							tablacontenido +="<td data-label= 'Ubicación'>T.OP</td>"
+						break;
+
+						case 2:
+							tablacontenido +="<td data-label= 'Ubicación'>APODACA</td>"
+						break;
+
+						case 3:
+							tablacontenido +="<td data-label= 'Ubicación'>CIENEGA DE FLORES</td>"
+						break;
+					
+						default:
+							tablacontenido +="<td data-label= 'Ubicación'></td>"
+						break;
+					}
+					tablacontenido += "<td data-label= 'FechaPedido' >"+datos[i].FechaPedido+"</td>"
+					if (datos[i].EstatusEnviado == 0) {
+						tablacontenido += "<td data-label= 'Estatus Enviado' >No Enviado</td>"
+					}else if (datos[i].EstatusEnviado == 1) {
+						tablacontenido += "<td data-label= 'Estatus Enviado' >Enviado</td>"
+					}else if (datos[i].EstatusEnviado == 2) {
+						tablacontenido += "<td data-label= 'Estatus Enviado' >Procesado en Nomina</td>"
+					}else{
+						tablacontenido += "<td data-label= 'Estatus Enviado' ></td>"
+					}
+					if (datos[i].EstatusComedor == 0) {
+						tablacontenido += "<td data-label= 'Estatus Comedor'>Pendiente de Procesar</td>"
+					}else if (datos[i].EstatusComedor == 1) {
+						tablacontenido += "<td data-label= 'Estatus Comedor'>Entregado</td>"
+					}else{
+						tablacontenido += "<td data-label= 'Estatus Comedor'>Rechazado</td>"
+					}
+					tablacontenido += "<td data-label='' ><button id='btn_confirmar_pedido_"+datos[i].idComedorSub+"' class='btn mi_btn_success' onclick='ConfirmacionEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+1+")'>Confirmar</button></td>"
+					tablacontenido += "<td data-label='' ><button id='btn_rechazar_pedido_"+datos[i].idComedorSub+"' class='btn btn-danger' onclick='RechazarEstatusAlimento("+JSON.stringify(datos[i].IdPedido)+","+2+")'>Eliminar</button></td>"
+					tablacontenido +="</tr>";
+					$('#ContenidoListados').append(tablacontenido);
+					if (datos[i].EstatusComedor == 2) {
+						$('#tr_'+datos[i].IdPedido).addClass("clase_rechazada");
+					}
+					deshabilitar_botones(datos[i].idComedorSub, datos[i].EstatusComedor);
+				}
+				if (bandera_descargar == 1) {
+					DescargarTabla();
+					bandera_descargar = 0;
+				}
+			}else if (data.estatus == "error_fecha") {
+				$("#loading_comedor").hide();
+				$("#EspacioTabla").hide();
+				$("#div_tabla").hide();
+				$("#boton_descarga_excel").hide();
+				Swal.fire( 
+					data.mensaje,
+					'',
+					'info'
+				);
+			}else{
+				$("#loading_comedor").hide();
+				$("#EspacioTabla").hide();
+				$("#div_tabla").hide();
+				$("#boton_descarga_excel").hide();
+				Swal.fire( 
+					data.mensaje,
+					'',
+					'error'
+				);
+			}
+		}
+	});
+});
+//Las funciónes de aqui adelante son para el input rango de fechas  funcione correctamente.
 $('input[name="daterange"]').daterangepicker({
     autoUpdateInput: false,
     locale: {
@@ -1378,4 +1205,82 @@ $("#txtNumPlatillo").on("keyup", function() {
 		return false;
 	}
 	ValidarPlatillos();
+});
+
+$("#txtNumEmpleadoLogeado").on('change',function(e){
+	$("#DivComentarioglobal").hide();
+	var fechaActualL = new Date(); //Fecha actual
+	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
+	$("#txtFechaPedido").val(fechaActual2);
+	var empleado = $("#txtNumEmpleadoLogeado").val()
+	if(empleado.replace(/\s/g,"") != ""){
+		$.ajax({
+            type: "POST",
+            data: {
+                param: 1,
+				empleado: empleado 
+            },
+            url: "../../utileria.php",
+            success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
+						var FechaAr =  "Fecha: "+ fechaActual2; 
+						$("#txtFechaDia").val(fechaActual2);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
+						$("#tipo_empleado").val(datos[i]['Tipo_Empleado']);
+					}
+					$("#txtTipoPlatillo").trigger("change").val("3");
+					$("#txtNumPlatillo").val(1);
+					$("#txtTotalPlatillo").val(1);
+					$("#txtComentarioPlatillo").val("");
+					TipoPlatillo();
+					if (empleado == 20000) {
+						$("#DivComentarioglobal").show();
+					}
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
+				}else{
+					Swal.fire( 
+						'El número de empleado proporcionado no coincide con nuestros registros.',
+						'',
+						'info'
+					);
+					$("#txtFechaDia").val("");
+					$("#txtNombreEmpleadoLogeado").val("");
+					$("#txtNumEmpleadoLogeado").val("");
+				}
+			}
+		});
+	
+	}else{
+		Swal.fire( 
+			'Favor de Agregar un numero de empleado.',
+			'',
+			'error'
+		);
+		//CerrarSesion();
+		$("#txtFechaDia").val("");
+		$("#txtNombreEmpleadoLogeado").val("");
+		$("#txtNumEmpleadoLogeado").val("");
+	}
+});
+
+$('#txtNumEmpleadoLogeado').keyup(function (){
+	let NoEmpleadoLogeado = $(this).val().toLowerCase();
+	this.value = (this.value + '').replace(/[^0-9]/g, '');
+	$("#txtNumPlatillo").removeAttr("maxlength");
+	if (NoEmpleadoLogeado.length <= 3 && NoEmpleadoLogeado != '') {
+		return false;	
+	}
+	if (NoEmpleadoLogeado == 20000) {	
+		$("#txtNumPlatillo").attr("maxlength", "2");	
+	}else{
+		$("#txtNumPlatillo").attr("maxlength", "1");
+	}
 });

@@ -3,6 +3,8 @@ var NoDatosBioquimicos = 0;
 var sede = '';
 const hora_estatica_inicio = '07:00:00', 
 hora_estatica_fin = '17:00:00';
+const hora_estatica_inicio_green_spot = '07:00:00', 
+hora_estatica_fin_green_spot = '09:30:00';
 
 $(document).ready(function () {
 	//var empleado = $("#txtNumEmpleado").val();
@@ -19,26 +21,41 @@ function buscar_sede(){
 		type: "post",
 		data: {"param":1, "empleado":num_empleado},
 		success: function(result) {
-			sede  = JSON.parse(result)[0].Sede;
-			switch (sede) {
-				case 'T.OP':
-					$("#txtUbicacion").val(1);
-				break;
-
-				case 'APODACA':
-					$("#txtUbicacion").val(2);
-				break;
-
-				case 'CIENEGA DE FLORES':
-					$("#txtUbicacion").val(3);
-				break;
-			
-				default:
-					$("#txtUbicacion").val(0);
-				break;
+			let data = JSON.parse(result);
+			if (data.estatus == 'success') {
+				let datos = data.datos;
+				sede  = datos[0].Sede;
+				switch (sede) {
+					case 'T.OP':
+						$("#txtUbicacion").val(1);
+					break;
+	
+					case 'APODACA':
+						$("#txtUbicacion").val(2);
+					break;
+	
+					case 'CIENEGA DE FLORES':
+						$("#txtUbicacion").val(3);
+					break;
+				
+					default:
+						$("#txtUbicacion").val(0);
+					break;
+				}
+				ObenerTipoPlatillo();
+			}else if(datos.estatus == "error_consulta"){
+				Swal.fire( 
+					datos.mensaje,
+					'',
+					'info'
+				);
+			}else{
+				Swal.fire( 
+					'este empleado no esta dado de alta',
+					'',
+					'info'
+				);
 			}
-			
-			ObenerTipoPlatillo();
 		}
 	});
 }
@@ -81,8 +98,6 @@ function BuscarEmpleadoLogeado(){
 	$("#txtFechaPedido").val(fechaActual2);
 	let empleado = $("#txtNumEmpleado").val()
 	if(empleado.replace(/\s/g,"") != ""){
-		
-		//LimpiarCampos();
 		$.ajax({
             type: "POST",
             data: {
@@ -90,23 +105,34 @@ function BuscarEmpleadoLogeado(){
 				empleado: empleado 
             },
             url: "utileria.php",
-            dataType: 'JSON',
-             success: function(data) {
-				if(data.length){
-					for(i=0;i<data.length;i++){
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success') {
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
 						let FechaAr =  "Fecha: "+ fechaActual2;
-						$("#NombreCont2").text(data[i]['Nombre']);
-						$("#NombreCont").text(data[i]['Nombre']);
-						$("#tipo_empleado").val(data[i]['Tipo_Empleado']);
+						$("#NombreCont2").text(datos[i]['Nombre']);
+						$("#NombreCont").text(datos[i]['Nombre']);
+						$("#tipo_empleado").val(datos[i]['Tipo_Empleado']);
 						$("#Fecha2").text(FechaAr);
-						$("#txtNombreEmpleadoLogeado").val(data[i]['Nombre']);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
 					}
 					buscar_sede();
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
+				}else{
+					Swal.fire( 
+						'este empleado no esta dado de alta',
+						'',
+						'info'
+					);
 				}
-				
 			}
 		});
-	
 	}else{
 		Swal.fire('Favor de Agregar un numero de empleado.', "","info");
 		CerrarSesion();
@@ -193,7 +219,12 @@ function GuardarOrden(){
 	if(TipoPlatillo == "4"){
 	//let arrayListadoGreenSpot = {};
 		arrayListadoGreenSpot = GuardarListadoGreenSpot();
-		CantidadArreglo = arrayListadoGreenSpot.length; 
+		CantidadArreglo = arrayListadoGreenSpot.length;
+		if ((hora_actual < hora_estatica_inicio_green_spot || hora_actual >  hora_estatica_fin_green_spot)){
+			Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+			$("#GuardarOrden").prop("disabled", true);
+			return false;
+    	}  
 	}else{
 		// 
 		let TotalFormato = parseFloat( $("#txtTotalPlatillo").val()).toFixed(2) //$("#txtTotalPlatillo").val(parseFloat(Calculo).toFixed(2));
@@ -296,7 +327,8 @@ function GuardarOrden(){
 			pedidoporcomedor:0,
 			comentario_global:comentario_global,
 			platillo_menu:platillo_menu,
-			tipo_comedor:tipo_comedor
+			tipo_comedor:tipo_comedor,
+			envio_usuario:1
 		},
 		url: "utileria.php", 
 		success: function(result) {
@@ -399,6 +431,8 @@ function TipoPlatillo(){
 	let txtUbicacion = $("#txtUbicacion").val();
 	let tipoplatillo = $("#txtTipoPlatillo").val();
 	let empleado = $("#txtNumEmpleado").val();
+	let date = new Date();
+	let hora_actual = moment(date).format('HH:mm:ss');
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
@@ -483,6 +517,12 @@ function TipoPlatillo(){
 		// $("#txtTotalPlatillo").val("49.50");
 		$("#txtTotalPlatillo").show();
 	}else{
+		// if ((hora_actual < hora_estatica_inicio_green_spot || hora_actual >  hora_estatica_fin_green_spot)){
+		// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+		// 	$("#GuardarOrden").addClass("deshabilitar");
+		// 	$('#GuardarOrden').attr("disabled", true);
+		// 	return false;
+    	// }
 		$("#ComidaGR").css("display", "");
 		$("#DivCantidad").css("display", "none");
 		// $("#DivTotal").css("display", "none");
@@ -559,7 +599,6 @@ function InfoPlatillo(){
 					for(i=0;i<data.length;i++){
 						$("#txtPrecioGR").val(data[i]['Precio']);
 						$("#txtCaloriasGR").val(data[i]['Calorias']);
-					
 					}
 				ValidarPlatillosGR();
 				}
@@ -663,7 +702,7 @@ function ObenerTipoPlatillo(){
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
 				<option value="3"> Platillo Unico</option>
-				<option value="4">Platillo Especial</option>
+				<option value="4">Green Spot</option>
 			`);
 		break;
 	}
@@ -692,7 +731,9 @@ function Menu_secreto(){
 					`);
 				}	
 			}else{
-				Swal.fire("No hay menu", "no hay platillos cargados en esta sede","info");
+				if (sede != 'T.OP') {
+					Swal.fire("No hay menu", "no hay platillos cargados en esta sede","info");	
+				}
 			}
 		}
 	});

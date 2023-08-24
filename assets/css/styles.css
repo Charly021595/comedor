@@ -221,6 +221,16 @@ button.cerrar{
     width: 85%;
 }
 
+.color_icon{
+    /* color: #093255; */
+    color: #00FF00;
+}
+
+.user_pedido{
+    background: #0cb7f2 !important;
+    color: #fff;
+}
+
 /* .scroll_tablas_detalle::-webkit-scrollbar {
     width: 12px;
 }

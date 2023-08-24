@@ -108,7 +108,6 @@
 					
 					</ul>
 				</li>
-				
 				</ul>
 			</div>
 			</nav>
@@ -122,14 +121,6 @@
 			<!-- sidebar menu: : style can be found in sidebar.less -->
 			<ul class="sidebar-menu" data-widget="tree">
 				<li class="header">ARZYZ WEB </li>
-				<!-- <li>
-					<a href="../ListadoComedorGreenSpot.php">
-					<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span> Green Spot</span>
-					<span class="pull-right-container">
-					
-					</span>
-					</a>
-				</li> -->
 				<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857'){ ?>
 				<li>
 					<a href="../../dashboard.php">
@@ -148,14 +139,6 @@
 					</span>
 					</a>
 				</li>
-				<!-- <li>
-					<a href="../ListadoComedor.php">
-					<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Comedor Plato Express</span>
-					<span class="pull-right-container">
-					
-					</span>
-					</a>
-				</li> -->
 				<li>
 					<a href="ListadoComedorSemanal.php">
 					<img src="../../assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Comedor Plato Express</span>
@@ -285,6 +268,7 @@
 										<table  id='TablaComedor' class='table table-bordered table-hover TablaResponsiva'>
 											<thead>
 												<tr class='table-header'>
+													<th scope='col'>Tipo Pedido</th>
 													<th scope='col'>No. Orden</th>
 													<th scope='col'>No. Empleado</th>
 													<th scope='col' >Empleado</th>
@@ -366,14 +350,6 @@
 														<option value="0"> Seleccione el tipo de platillo</option>
 														<option value="4">Platillo Especial</option>
 													</select>
-												</div>
-											</div>
-											<div class="form-group row" id="DivCantidad">
-												<label for="lblNombreVisita" class="col-sm-3 col-form-label">No. Platillos:</label>
-												<div class="col-sm-8">
-													
-													<input type="number" class="form-control" id="txtNumPlatillo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" value="1" onchange="ValidarPlatillos()">
-												
 												</div>
 											</div>
 											<!-- ---------- -->
@@ -673,6 +649,8 @@
 	<script src="../../bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
 	<!-- daterangepicker -->
 	<script src="../../bower_components/moment/min/moment.min.js"></script>
+	<script src="../../javascript/moment-with-locales.min.js"></script>
+  	<script src="../../javascript/moment-timezone.min.js"></script>
 	<script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<!-- datepicker -->
 	<script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
@@ -703,25 +681,4 @@
 	
 		
 </body>
-<script>
-			$(function() {
-				$(".exportToExcel").click(function(e){
-					var table = $(this).prev('.table2excel');
-					if(table && table.length){
-						var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
-						$(table).table2excel({
-							exclude: ".noExl",
-							name: "Excel Document Name",
-							filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
-							fileext: ".xls",
-							exclude_img: true,
-							exclude_links: true,
-							exclude_inputs: true,
-							preserveColors: preserveColors
-						});
-					}
-				});
-				
-			});
-		</script>
 </html>

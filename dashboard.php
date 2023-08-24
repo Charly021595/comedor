@@ -94,7 +94,6 @@
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
-				 
                   <div class="col-xs-12 text-center">
                     <a onclick="CerrarSesion();">Cerrar Sesion</a>
                   </div>
@@ -228,7 +227,7 @@
 							<div class="col-sm-8">
 								<select class="form-control" id="txtUbicacion">
 									<option value="0">Seleccione Ubicación</option>
-									<option value="1">Torre TOP</option>
+									<option value="1">T.OP</option>
 									<option value="2">Apodaca</option>
 									<option value="3">Cienega</option>
 								</select>

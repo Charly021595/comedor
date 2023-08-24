@@ -6,57 +6,72 @@
 	$param = $_POST['param'];	
 	switch($param) {
 		case '1': //Consulta
-				$empleado = $_POST['empleado'];
-				$query = array();
-				include './db/conectar2.php';
-				$sql = "{call RHMet_ObtenerDatosEmpleado(?)}";
-				$params = array($empleado);
-				$stmt = sqlsrv_query($conn, $sql, $params);
-				if ( $stmt === false) {
-					die( print_r( sqlsrv_errors(), true) );
-				}	
-				while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+			$data = array();
+			$empleado = $_POST['empleado'];
+			$query = array();
+			include './db/conectar2.php';
+			$sql = "{call RHMet_ObtenerDatosEmpleado(?)}";
+			$params = array($empleado);
+			$stmt = sqlsrv_query($conn, $sql, $params);
+			if ( $stmt === false) {
+				die( print_r( sqlsrv_errors(), true) );
+			}	
+			while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
 
-					$NombreEmpleado =  utf8_encode ($row['NombreCompleto']);
-					$record = array(
-						"Empleado" => utf8_encode($row['Empleado']),
-						"Nombre" =>utf8_encode( $row['NombreCompleto'])!= null ? utf8_encode ($row['NombreCompleto']):"",
-						"Sede" =>utf8_encode( $row['Sede'])!= null ? utf8_encode ($row['Sede']):"",
-						"Tipo_Empleado" => $row['Turno'] != null ? $row['Turno'] : 0
-					);
-					array_push($query, $record);
-				}
-				/*
-				session_start();
-				$_SESSION['Empleado'] =$empleado;
-				$_SESSION['NombreEmpleado'] =$NombreEmpleado;
-				*/
-				ob_clean();//clears the output buffer
-				echo json_encode($query);
-				sqlsrv_free_stmt($stmt);	
-	
-			break;
+				$NombreEmpleado =  utf8_encode ($row['NombreCompleto']);
+				$record = array(
+					"Empleado" => utf8_encode($row['Empleado']),
+					"Nombre" =>utf8_encode( $row['NombreCompleto'])!= null ? utf8_encode ($row['NombreCompleto']):"",
+					"Sede" =>utf8_encode( $row['Sede'])!= null ? utf8_encode ($row['Sede']):"",
+					"Tipo_Empleado" => $row['Turno'] != null ? $row['Turno'] : 0
+				);
+				array_push($query, $record);
+			}
+			/*
+			session_start();
+			$_SESSION['Empleado'] =$empleado;
+			$_SESSION['NombreEmpleado'] =$NombreEmpleado;
+			*/
+			if (count($query) != 0) {
+				$data = array(
+					"estatus" => "success",
+					"datos" => $query
+				);
+			}else{
+				$data = array(
+					"estatus" => "error",
+					"mensaje" => "ocurrio un error"
+				);
+			}
+			ob_clean();//clears the output buffer
+			echo json_encode($data);
+			sqlsrv_free_stmt($stmt);	
+		break;
 		case '2':
 			$data = array();
-			$NoEmpleado = $_POST['NoEmpleadoLogeado'];
-			$NombreEmpleado =  utf8_decode($_POST['NombreEmpleado']);
-			$TipoPlatillo = $_POST['TipoPlatillo'];
-			$Ubicacion =  (int)$_POST['Ubicacion'];
-			$FechaDeOrden =  $_POST['FechaDeOrden'];
+			$NoEmpleado = isset($_POST['NoEmpleadoLogeado']) ? $_POST['NoEmpleadoLogeado'] : 0;
+			$NombreEmpleado =  isset($_POST['NombreEmpleado']) ? utf8_decode($_POST['NombreEmpleado']) : '';
+			$TipoPlatillo = isset($_POST['TipoPlatillo']) ? $_POST['TipoPlatillo'] : 0;
+			$Ubicacion =  isset($_POST['Ubicacion']) ? (int)$_POST['Ubicacion'] : 0;
+			$FechaDeOrden =  isset($_POST['FechaDeOrden']) ? $_POST['FechaDeOrden'] : '';
 			$arrayListadoPlatilloUnico = isset($_POST['arrayListadoPlatilloUnico']) ? json_decode($_POST['arrayListadoPlatilloUnico'], true) : 0;
 			$arrayListadoGreenSpot = isset($_POST['arrayListadoGreenSpot']) ? json_decode($_POST['arrayListadoGreenSpot'], true) : 0;
-			$Tipo_Empleado =  $_POST['Tipo_Empleado'];
+			$Tipo_Empleado =  isset($_POST['Tipo_Empleado']) ? $_POST['Tipo_Empleado'] : 0;
 			$validar = true;
-			$pedidoporcomedor =  $_POST['pedidoporcomedor'];
+			$pedidoporcomedor =  isset($_POST['pedidoporcomedor']) ? $_POST['pedidoporcomedor'] : 0;
 			$comentario_global =  isset($_POST['comentario_global']) ? utf8_decode($_POST['comentario_global']) : '';
 			$platillo_menu =  isset($_POST['platillo_menu']) ? $_POST['platillo_menu'] : 0;
 			$tipo_comedor =  isset($_POST['tipo_comedor']) ? $_POST['tipo_comedor'] : 0;
+			$envio_usuario =  isset($_POST['envio_usuario']) ? $_POST['envio_usuario'] : 0;
 			$estatus_comedor = $TipoPlatillo != 4 ? 1 : 0;
+			if ($envio_usuario == 1) {
+				$estatus_comedor = 0;
+			}
 			
 			include './db/conectar.php';
-			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000) {
-				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?)}";
-				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $tipo_comedor);
+			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 3) && $NoEmpleado != 20000 && $Ubicacion != 3) {
+				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?, ?)}";
+				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $tipo_comedor, $TipoPlatillo);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
 				if ($stmt_validar_cantidad_platillos === false) {
 					$validar = false;
@@ -82,8 +97,8 @@
 				}
 			}
 			if (($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 3) || ($arrayListadoGreenSpot != 0 && $TipoPlatillo == 4) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 5) || ($arrayListadoPlatilloUnico != 0 && $TipoPlatillo == 6)) {
-				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?,?,?,?)}";
-				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado,$platillo_menu,$tipo_comedor,$estatus_comedor);
+				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?,?,?,?,?)}";
+				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado,$platillo_menu,$tipo_comedor,$estatus_comedor, $envio_usuario);
 				$stmt = sqlsrv_query($conn, $sql, $params);
 				if ( $stmt === false) {
 					$validar = false;
@@ -118,9 +133,9 @@
 								$Platillo  = $row3['Platillo'];
 								
 								include './db/conectar.php';
-								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?)}";
+								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
 								// $params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo);
-								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break);
+								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break,$envio_usuario);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								if ( $stmt === false) {
 									$validar = false;
@@ -155,9 +170,9 @@
 								$FechaPedido = $FechaDeOrden;
 									
 								include './db/conectar.php';
-								$sql = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?)}";
+								$sql = "{call RHCom_GuardaPedidoComedorGreenSpot(?,?,?,?,?,?,?,?,?,?,?,?)}";
 								$params = array($IdPedidoInsertado,$Posicion,$IdPlatillo,$Platillo,$Comentario,$TipoPlatillo,
-												$KCal,$Cantidad,$Precios,$Total,$FechaPedido);
+												$KCal,$Cantidad,$Precios,$Total,$FechaPedido,$envio_usuario);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								if ( $stmt === false) {
 									$validar = false;
@@ -190,8 +205,8 @@
 								$Platillo  = $row3['Platillo'];
 								
 								include './db/conectar.php';
-								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?)}";
-								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break);
+								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
+								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break,$envio_usuario);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								
 								if ( $stmt === false && $stmt2 === false) {
@@ -225,9 +240,9 @@
 								$Platillo  = $row3['Platillo'];
 								
 								include './db/conectar.php';
-								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?)}";
+								$sql = "{call RHCom_GuardaPedidoComedorSubsidiado(?,?,?,?,?,?,?,?,?,?)}";
 								// $params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo);
-								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break);
+								$params = array($IdPedidoInsertado,$Precio,$NoPlatillos,$TipoPlatillo,$Total,$FechaPedido,$Comentario,$Platillo,$Break,$envio_usuario);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								if ( $stmt === false) {
 									$validar = false;
@@ -524,7 +539,8 @@
 						"NoPlatillo" => $row['NoPlatillo'],
 						"idComedorSub" => utf8_encode($row['idComedorSub']),
 						"Nombre_Platillo" => utf8_encode($row['Nombre_Platillo']),
-						"Descripcion" => utf8_encode($row['Descripcion'])
+						"Descripcion" => utf8_encode($row['Descripcion']),
+						"PedidoUsuario" => utf8_encode($row['PedidoUsuario'])
 					);
 					array_push($query, $record);
 				}
@@ -604,7 +620,8 @@
 						"Kcal" =>utf8_encode($row['Kcal']),
 						"Precio" => $row['Precio'],
 						"total" => $row['total'],
-						"IdPedido" => utf8_encode($row['IdPedido'])
+						"IdPedido" => utf8_encode($row['IdPedido']),
+						"PedidoUsuario" => utf8_encode($row['PedidoUsuario'])
 					);
 					array_push($query, $record);
 				}
