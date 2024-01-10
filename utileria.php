@@ -64,16 +64,32 @@
 			$tipo_comedor =  isset($_POST['tipo_comedor']) ? $_POST['tipo_comedor'] : 0;
 			$envio_usuario =  isset($_POST['envio_usuario']) ? $_POST['envio_usuario'] : 0;
 			$estatus_comedor = $TipoPlatillo != 4 ? 1 : 0;
+			$hora_actual =  isset($_POST['hora_actual']) ? $_POST['hora_actual'] : 0;
+			$hora_estatica_inicio_green_spot = "07:30:00";
+			$hora_estatica_fin_green_spot = "08:40:00";
+			$fecha_validar = explode(" ", $FechaDeOrden); 
 			if ($envio_usuario == 1) {
 				$estatus_comedor = 0;
 			}
+
+			// if($_SESSION['RHComedor'] != '8999' && $_SESSION['RHComedor'] != '4857' && $_SESSION['RHComedor'] != '99999999' 
+			// && $_SESSION['RHComedor'] != '100000000' && $_SESSION['RHComedor'] != '100000001'){
+			// 	if (($hora_actual < $hora_estatica_inicio_green_spot || $hora_actual > $hora_estatica_fin_green_spot)){
+			// 		$data = array(
+			// 			"estatus" => "error",
+			// 			"mensaje" => "Los Pedidos de green spot estan cerrados. <br/> Los horarios son de 07:30:00 a 08:40:00"
+			// 		);
+			// 		echo json_encode($data); 
+			// 		die();
+			// 	}
+			// }
 			
 			include './db/conectar.php';
 			if (($TipoPlatillo == 5 || $TipoPlatillo == 6 || $TipoPlatillo == 7 || $TipoPlatillo == 3) && $NoEmpleado != 20000 && $Ubicacion != 3) {
 				$sql_validar_cantidad_platillos = "{call RHCom_ValidarPedidos(?, ?, ?, ?, ?)}";
-				$params_validar_cantidad_platillos = array(date("Y-m-d", strtotime($FechaDeOrden)), $NoEmpleado, $Ubicacion, $tipo_comedor, $TipoPlatillo);
+				$params_validar_cantidad_platillos = array($fecha_validar[0], $NoEmpleado, $Ubicacion, $tipo_comedor, $TipoPlatillo);
 				$stmt_validar_cantidad_platillos = sqlsrv_query($conn, $sql_validar_cantidad_platillos, $params_validar_cantidad_platillos);
-				if ($stmt_validar_cantidad_platillos === false) {
+				if($stmt_validar_cantidad_platillos === false) {
 					$validar = false;
 					$mensaje = sqlsrv_errors();
 					$data = array(
@@ -100,7 +116,7 @@
 				$sql = "{call RHCom_GuardaPedido(?,?,?,?,?,?,?,?,?,?,?)}";
 				$params = array($NoEmpleado,$NombreEmpleado,$TipoPlatillo,$FechaDeOrden,$Ubicacion,$pedidoporcomedor,$Tipo_Empleado,$platillo_menu,$tipo_comedor,$estatus_comedor, $envio_usuario);
 				$stmt = sqlsrv_query($conn, $sql, $params);
-				if ( $stmt === false) {
+				if($stmt === false){
 					$validar = false;
 					$mensaje = sqlsrv_errors();
 					$data = array(
@@ -111,6 +127,20 @@
 					echo json_encode($data);
 					die();	
 				}else{
+					$sp_actualizar_cantidad = "{call RHCom_ActualizaCantidadPlatillo(?)}";
+					$params_actualizar_cantidad = array($platillo_menu);
+					$stmt_actualizar_cantidad = sqlsrv_query($conn, $sp_actualizar_cantidad, $params_actualizar_cantidad);
+					if($stmt_actualizar_cantidad === false){
+						$validar = false;
+						$mensaje = sqlsrv_errors();
+						$data = array(
+							"estatus" => 'error_guardar_pedido',
+							"Validar" => $validar,
+							"mensaje" => $mensaje[0]['message']
+						);
+						echo json_encode($data);
+						die();	
+					}
 					while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
 						$record = array(
 								"IdPedido"  => $row['IdPedido']
@@ -2768,14 +2798,15 @@
 								if ($excel->getActiveSheet()->getCell('A'. $i)->getValue() == null) {
 									break;
 								}
-								$nombre_platillo = $excel->getActiveSheet()->getCell('A'. $i)->getValue();
-								$descripcion = $excel->getActiveSheet()->getCell('B'. $i)->getValue();
-								$sede = $excel->getActiveSheet()->getCell('C'. $i)->getValue();
+								$nombre_platillo = utf8_decode($excel->getActiveSheet()->getCell('A'. $i)->getValue());
+								$descripcion = utf8_decode($excel->getActiveSheet()->getCell('B'. $i)->getValue());
+								$sede = utf8_decode($excel->getActiveSheet()->getCell('C'. $i)->getValue());
 								$fecha = $excel->getActiveSheet()->getCell('D'. $i)->getValue();
+								$cantidad_platillo = utf8_decode($excel->getActiveSheet()->getCell('E'. $i)->getValue());
 								$nueva_fecha = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($fecha));
 
-								$sql = "{call RHCom_Guardar_Menu(?,?,?,?,?)}";
-								$params = array($nombre_platillo, $descripcion, $sede, $nueva_fecha, $estatus);
+								$sql = "{call RHCom_Guardar_Menu(?,?,?,?,?,?)}";
+								$params = array($nombre_platillo, $descripcion, $sede, $nueva_fecha, $estatus, $cantidad_platillo);
 								$stmt = sqlsrv_query($conn, $sql, $params);
 								if ($stmt === false) {
 									$validar = false;
@@ -2880,6 +2911,47 @@
 					$data = array(
 						"estatus" => "error",
 						"mensaje" => "ocurrio un error"
+					);
+				}
+			}
+			ob_clean();//clears the output buffer
+			echo json_encode($data); 
+		break;
+		case '32':
+			$query = array();
+			$data = array();
+			include './db/conectar.php';
+			$id_platillo = isset($_POST['id_platillo']) ? $_POST['id_platillo'] : 0;
+			$validar = true;
+
+			$sql = "{call RHCom_ValidarPlatillosMenu(?)}";
+			$params = array($id_platillo);
+			$stmt = sqlsrv_query($conn, $sql, $params);
+			if ($stmt === false) {
+				$mensaje = sqlsrv_errors();
+				$data = array(
+					"estatus" => 'error_platillos_menu',
+					"Validar" => $validar,
+					"mensaje" => $mensaje[0]['message']
+				);
+				echo json_encode($data);
+				die();	
+			}else{
+				while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
+					$record = array(
+						"CantidadPlatillo" => $row['CantidadPlatillo'] != null ? $row['CantidadPlatillo']: 0
+					);
+				}
+	
+				if ($record['CantidadPlatillo'] != 0) {
+					$data = array(
+						"estatus" => "success",
+						"mensaje" => "Si hay platillo."
+					);
+				}else{
+					$data = array(
+						"estatus" => "error",
+						"mensaje" => "El menu solicitado ya se terminó."
 					);
 				}
 			}

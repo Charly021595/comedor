@@ -306,6 +306,7 @@
 										<th scope='col'>No. Platillo</th>
 										<th scope='col'>Platillo</th>
 										<th scope='col'>Comentarios</th>
+										<th scope='col'>Menu</th>
 										<th scope='col'>Ubicación</th>
 										<th scope='col'>FechaPedido</th>
 										<th scope='col'>Estatus Enviado</th>

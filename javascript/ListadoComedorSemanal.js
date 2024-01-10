@@ -162,7 +162,6 @@ function BuscarEmpleadoLogeadoSesion(){
 		CerrarSesion();
 	}
 }
-
 //Función que se utiliza para obtener la fecha actual.
 function ObtenerFecha(){
 	var date = new Date();
@@ -315,6 +314,7 @@ function MostrarInforme(){
 			<th scope='col'>Tipo de Platillo</th>
 			<th scope='col'>No. Platillo</th>
 			<th scope='col'>Comentarios</th>
+			<th scope='col'>Menu</th>
 			<th scope='col'>Ubicación</th>
 			<th scope='col'>FechaPedido</th>
 			<th scope='col'>Estatus Enviado</th>
@@ -403,6 +403,7 @@ function construccion_tabla(datos){
 		// }
 		tablacontenido +="<td data-label= 'No. Platillo'>"+datos[i].NoPlatillo+"</td>"
 		tablacontenido +="<td data-label= 'Comentarios'>"+datos[i].Comentarios+"</td>"
+		tablacontenido +="<td data-label= 'Nombre_Menu'>"+datos[i].Nombre_Platillo+"</td>"
 		switch (datos[i]['Ubicacion']) {
 			case 1:
 				tablacontenido +="<td data-label= 'Ubicación'>T.OP</td>"
@@ -677,6 +678,7 @@ function ValidarPlatillos(){
 }
 //Función que se utiliza para guardar un pedido solicitado.
 function GuardarOrden(){
+	debugger;
 	$("#GuardarOrdenS").addClass("deshabilitar");
   	$('#GuardarOrdenS').attr("disabled", true);
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
@@ -1290,9 +1292,9 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
 					if (empleado == 20000) {
 						$("#DivComentarioglobal").show();
 					}
-				}else if(datos.estatus == "error_consulta"){
+				}else if(data.estatus == "error_consulta"){
 					Swal.fire( 
-						datos.mensaje,
+						data.mensaje,
 						'',
 						'info'
 					);

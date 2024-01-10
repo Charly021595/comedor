@@ -4,7 +4,8 @@ var sede = '';
 const hora_estatica_inicio = '07:00:00', 
 hora_estatica_fin = '17:00:00';
 const hora_estatica_inicio_green_spot = '07:00:00', 
-hora_estatica_fin_green_spot = '09:30:00';
+hora_estatica_fin_green_spot = '08:40:00';
+// hora_estatica_fin_green_spot = '17:40:00';
 
 $(document).ready(function () {
 	//var empleado = $("#txtNumEmpleado").val();
@@ -12,6 +13,16 @@ $(document).ready(function () {
 	validarvisitas();
 	//buscar_sede();
 });
+
+function limpiar_datos(){
+	$("#txtNumPlatillo").val('');
+	$("#txtTipoPlatillo").val('0').trigger('change');
+	$("#txtUbicacion").val('0').trigger('change');
+	$("#txtTotalPlatillo").val('');
+	$("#txtPrecioPlatillo").val('');
+	$("#txtTotalBreak").val('');
+	$("#menu_secreto_select").val(0)
+}
 
 function buscar_sede(){
 	$("#txtTipoPlatillo").html('');
@@ -182,6 +193,7 @@ function ValidarPlatillosGR(){
 }
 
 function GuardarOrden(){
+	$("#avisos").hide();
 	let NoEmpleadoLogeado = $("#txtNumEmpleadoLogeado").val();
 	let NombreEmpleado =  $("#txtNombreEmpleadoLogeado").val();
 	let NoPlatillos = $("#txtNumPlatillo").val();
@@ -293,17 +305,22 @@ function GuardarOrden(){
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	if (CantidadArreglo === 0 || CantidadArreglo === "" && TipoPlatillo == "4") {
+	if ((CantidadArreglo === 0 || CantidadArreglo === "") && TipoPlatillo == "4") {
         Swal.fire('No tienes platillos ingresados', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
+	// if (CantidadArreglo === "") {
+    //     Swal.fire('No tienes platillos ingresados', "","info");
+	// 	$("#GuardarOrden").prop("disabled", false);
+    //     return false;
+    // }
 	if (NoEmpleadoLogeado == 20000 && comentario_global == "") {
         Swal.fire('El comentario es obligatorio', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
     }
-	if ((platillo_menu == 0 && Ubicacion == 3) || platillo_menu == 0 && Ubicacion == 2) {
+	if ((platillo_menu == 0 && Ubicacion == 1) || (platillo_menu == 0 && Ubicacion == 3) || platillo_menu == 0 && Ubicacion == 2) {
 		Swal.fire('El campo menu es obligatorio', "","info");
 		$("#GuardarOrden").prop("disabled", false);
         return false;
@@ -336,30 +353,107 @@ function GuardarOrden(){
 			comentario_global:comentario_global,
 			platillo_menu:platillo_menu,
 			tipo_comedor:tipo_comedor,
-			envio_usuario:1
+			envio_usuario:1,
+			hora_actual:hora_actual 
 		},
 		url: "utileria.php", 
 		success: function(result) {
 			data = JSON.parse(result);
 			if (data.estatus === "success") {
-				Swal.fire('El pedido de la comida ha sido guardado correctamente.', "Pedido de comida Guardado.","success")
-				.then(function(){
-					location.reload();
-					$("#GuardarOrden").removeAttr("disabled, disabled");
-					$("#GuardarOrden").removeClass("deshabilitar");
-					$("#GuardarOrden").attr("disabled", false);
-					$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
-				});
+				// if (TipoPlatillo == 4) {
+				// 	Swal.fire({
+				// 		title: "Pedido Realizado",
+				// 		text: "Tu pedido se realizo con exito pasa por el dentro de 25 min.",
+				// 		icon: 'success',
+				// 		allowOutsideClick: false,
+				// 		confirmButtonText: "Aceptar",
+				// 	}).then(function(){
+				// 		// location.reload();
+				// 		limpiar_datos();
+				// 		$("#GuardarOrden").removeAttr("disabled, disabled");
+				// 		$("#GuardarOrden").removeClass("deshabilitar");
+				// 		$("#GuardarOrden").attr("disabled", false);
+				// 		$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
+				// 		$("#avisos").show();
+				// 	});
+				// }else{
+				// 	Swal.fire({
+				// 		title: "Pedido Realizado",
+				// 		text: "Tu pedido se realizo con exito pasa por el.",
+				// 		icon: 'success',
+				// 		allowOutsideClick: false,
+				// 		confirmButtonText: "Aceptar",
+				// 	}).then(function(){
+				// 		// location.reload();
+				// 		limpiar_datos();
+				// 		$("#GuardarOrden").removeAttr("disabled, disabled");
+				// 		$("#GuardarOrden").removeClass("deshabilitar");
+				// 		$("#GuardarOrden").attr("disabled", false);
+				// 		$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
+				// 		$("#avisos").show();
+				// 	});
+				// }
+
+				switch (TipoPlatillo) {
+					case "4":
+						Swal.fire({
+							title: "Pedido Realizado",
+							text: "Tu pedido se realizo con exito pasa por el dentro de 25 min.",
+							icon: 'success',
+							allowOutsideClick: false,
+							confirmButtonText: "Aceptar",
+						}).then(function(){
+							// location.reload();
+							limpiar_datos();
+							$("#GuardarOrden").removeAttr("disabled, disabled");
+							$("#GuardarOrden").removeClass("deshabilitar");
+							$("#GuardarOrden").attr("disabled", false);
+							$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
+							$("#avisos").show();
+						});
+					break;
+				
+					default:
+						$("#avisos").hide();
+						Swal.fire({
+							title: "Pedido Realizado",
+							text: "Tu pedido se realizo con exito pasa por el.",
+							icon: 'success',
+							allowOutsideClick: false,
+							confirmButtonText: "Aceptar",
+						}).then(function(){
+							// location.reload();
+							limpiar_datos();
+							$("#GuardarOrden").removeAttr("disabled, disabled");
+							$("#GuardarOrden").removeClass("deshabilitar");
+							$("#GuardarOrden").attr("disabled", false);
+							$("#txtbreak").val(parseFloat(Precio_break).toFixed(2));
+							// $("#avisos").hide();
+						});
+					break;
+				}
+
 			}else if(data.estatus === "pedido_duplicado"){
 				Swal.fire('Solo se puede realizar un pedido al día.', "","info");
 				$("#GuardarOrden").removeAttr("disabled, disabled");
 				$("#GuardarOrden").removeClass("deshabilitar");
 				$("#GuardarOrden").prop("disabled", false);
+				$("#avisos").hide();
 			}else{
-				Swal.fire('La información no pudo ser guardada.', "","error");
-				$("#GuardarOrden").removeAttr("disabled, disabled");
-				$("#GuardarOrden").removeClass("deshabilitar");
-				$("#GuardarOrden").prop("disabled", false);
+				Swal.fire({
+                    title: "Aviso",
+                    html: data.mensaje,
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    confirmButtonText: "Aceptar",
+                }).then(function(){
+					// location.reload();
+					limpiar_datos();
+					$("#GuardarOrden").removeAttr("disabled, disabled");
+					$("#GuardarOrden").removeClass("deshabilitar");
+					$("#GuardarOrden").prop("disabled", false);
+					$("#avisos").hide();
+				});
 			}
 		}
 	});
@@ -451,6 +545,17 @@ function TipoPlatillo(){
 	let hora_actual = moment(date).tz("America/Mexico_City").format('HH:mm:ss');
 	$("#txtProductoSeleccionadoGR").empty();
 	$("#ListadoComidaGr").find("tr").remove();
+	if (txtUbicacion == 0) {
+		Swal.fire({
+			title: "Aviso",
+			text: 'El campo ubicación es requerido.',
+			icon: 'info',
+			allowOutsideClick: false,
+			confirmButtonText: "Aceptar",
+		});
+		LimpiarCampos();
+        return false;
+    }
 	 LimpiarCampos();
 	if(tipoplatillo !="4"){
 		$("#ComidaGR").css("display", "none");
@@ -544,7 +649,12 @@ function TipoPlatillo(){
 		}
 		// $("#txtTotalPlatillo").val("49.50");
 		$("#txtTotalPlatillo").show();
+	}else if(tipoplatillo == ""){
+		$("#ComidaGR").css("display", "none");
+		$('#txtProductoSeleccionadoGR').html("<option value='0'> Seleccione el Platillo</option>");
+		$('#ListadoComidaGr').html("");
 	}else{
+		$("#break").hide();
 		if ((hora_actual < hora_estatica_inicio_green_spot || hora_actual >  hora_estatica_fin_green_spot)){
 			Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
 			$("#GuardarOrden").addClass("deshabilitar");
@@ -570,14 +680,13 @@ function TipoPlatillo(){
             url: "utileria.php",
             dataType: 'JSON',
              success: function(data) {
+				console.log(data);
 				if(data.length){
 					let seleccionar = "<option value='0'> Seleccione el Platillo</option>"
 					for(i=0;i<data.length;i++){
 						//$("#NombreCont2").text(data[i]['Nombre']);
 						//$("#NombreCont").text(data[i]['Nombre']);
-						
-							seleccionar += "<option value='"+data[i]['IdComida']+"'>"+data[i]['Comida']+"</option>";
-							
+						seleccionar += "<option value='"+data[i]['IdComida']+"'>"+data[i]['Comida']+"</option>";
 						
 					}
 					$('#txtProductoSeleccionadoGR').append(seleccionar);
@@ -707,6 +816,11 @@ function ObenerTipoPlatillo(){
 				<option value="3"> Platillo Unico</option>
 				<option value="4">Green Spot</option>
 			`);
+			// $("#txtTipoPlatillo").append(`
+			// 	<option value="0"> Seleccione el tipo de platillo</option>
+			// 	<option value="4">Green Spot</option>
+			// `);
+			$("#break").hide();
 		break;
 
 		case 'APODACA':
@@ -719,6 +833,11 @@ function ObenerTipoPlatillo(){
 				<option value="6">Platillo Especial 2</option>
 				<option value="7">Platillo Especial 3</option>
 			`);
+			// $("#txtTipoPlatillo").append(`
+			// 	<option value="0"> Seleccione el tipo de platillo</option>
+			// 	<option value="4">Green Spot</option>
+			// `);
+			$("#break").show();
 		break;
 
 		case 'CIENEGA DE FLORES':
@@ -731,14 +850,19 @@ function ObenerTipoPlatillo(){
 				<option value="6">Platillo Especial 2</option>
 				<option value="7">Platillo Especial 3</option>
 			`);
+			// $("#txtTipoPlatillo").append(`
+			// 	<option value="0"> Seleccione el tipo de platillo</option>
+			// 	<option value="4">Green Spot</option>
+			// `);
 		break;
 	
 		default:
 			$("#tipo_platillo").show();
 			$("#txtTipoPlatillo").append(`
 				<option value="0"> Seleccione el tipo de platillo</option>
-				<option value="3"> Platillo Unico</option>
+				<option value="4">Green Spot</option>
 			`);
+			$("#break").hide();
 		break;
 	}
 };
@@ -754,7 +878,6 @@ function Menu_secreto(){
 		data: {"param":31, "fecha_actual":fecha_actual, "sede":sede},
 		success: function(result) {
 			let data = JSON.parse(result);
-			console.log(data);
 			if (data.estatus == 'success') {
 				$("#menu_secreto").show();
 				$("#menu_secreto_select").append(`
@@ -786,6 +909,40 @@ $("#txtUbicacion").on('change',function(e){
 	$("#menu_secreto_select").html('');
 	$("#menu_secreto").hide();
 	ObenerTipoPlatillo();
+	TipoPlatillo();
+});
+
+$("#menu_secreto_select").on('change',function(e){
+	let id_platillo = $('#menu_secreto_select').val();
+	if (id_platillo == 0) {
+		Swal.fire({
+			title: "Aviso",
+			text: 'Debes seleccionar menu',
+			icon: 'info',
+			allowOutsideClick: false,
+			confirmButtonText: "Aceptar",
+		});
+        return false;
+	}
+	$.ajax({
+		url: "utileria.php",
+		type: "post",
+		data: {"param":32, "id_platillo":id_platillo},
+		success: function(result) {
+			let datos = JSON.parse(result);
+			if (datos.estatus == "error"){
+				Swal.fire({
+                    title: "Aviso",
+                    text: datos.mensaje,
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    confirmButtonText: "Aceptar",
+                }).then(function(){
+					$('#menu_secreto_select').val('0');
+				});
+			}
+		}
+	});  
 });
 
 $("#txtNumPlatillo").on("keyup", function() {
@@ -818,7 +975,7 @@ $("#btn_nomina").on("click", function(e){
 	let fecha = $('#txtFechaSeleccionado').val(),
 	numero_empleado = $('#txtNumeroEmpleado').val();
 	$.ajax({
-		url: "../../utileria.php",
+		url: "utileria.php",
 		type: "post",
 		data: {"param":15, "daterange":fecha, "numero_empleado":numero_empleado},
 		success: function(result) {

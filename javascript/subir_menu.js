@@ -1,6 +1,7 @@
 let bandera = 0;
 
 $(document).ready(function () {
+	BuscarEmpleadoLogeadoSesion();
 	BuscarEmpleadoLogeado();
 });
 
@@ -104,6 +105,57 @@ function BuscarEmpleadoLogeado(){
 	
 	}else{
 		Swal.fire('Favor de Agregar un numero de empleado.', "","info");
+		CerrarSesion();
+	}
+}
+
+function BuscarEmpleadoLogeadoSesion(){
+	var fechaActualL = new Date(); //Fecha actual
+	var fechaActual2 = moment(fechaActualL).format("YYYY-MM-DD");
+	$("#txtFechaPedido").val(fechaActual2);
+	var empleado = $("#txtNumEmpleado").val()
+	if(empleado.replace(/\s/g,"") != ""){
+		//LimpiarCampos();
+		$.ajax({
+            type: "POST",
+            data: {
+                param: 1,
+				empleado: empleado 
+            },
+            url: "../../utileria.php",
+             success: function(result) {
+				let data = JSON.parse(result);
+				if (data.estatus == 'success'){
+					let datos = data.datos;
+					for(i=0;i<datos.length;i++){
+						var FechaAr =  "Fecha: "+ fechaActual2; 
+						$("#NombreCont2").text(datos[i]['Nombre']);
+						$("#NombreCont").text(datos[i]['Nombre']);
+						$("#Fecha2").text(FechaAr);
+						$("#txtNombreEmpleadoLogeado").val(datos[i]['Nombre']);
+					}
+				}else if(datos.estatus == "error_consulta"){
+					Swal.fire( 
+						datos.mensaje,
+						'',
+						'info'
+					);
+				}else{
+					Swal.fire( 
+						'este empleado no esta dado de alta',
+						'',
+						'info'
+					);
+				}
+			}
+		});
+	
+	}else{
+		Swal.fire( 
+			'Favor de Agregar un numero de empleado.',
+			'',
+			'error'
+		);
 		CerrarSesion();
 	}
 }

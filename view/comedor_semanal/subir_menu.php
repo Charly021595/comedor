@@ -82,37 +82,37 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-	  <div class="navbar-custom-menu">
+      <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-             <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
+            <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
               <span id="NombreCont2"></span> &nbsp &nbsp <span id="Fecha2"></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header" style="height: 60px;">
-               
+              
                 <p>
-                 <p id="NombreCont">
+                <p id="NombreCont">
                 </p>
               </li>
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
-				 
+        
                   <div class="col-xs-12 text-center">
                     <a onclick="CerrarSesion();">Cerrar Sesion</a>
                   </div>
                 </div>
                 <!-- /.row -->
               </li>
-             
+            
             </ul>
           </li>
-        
-        </ul>
-      </div>
+          
+          </ul>
+        </div>
     </nav>
 	 
   </header>

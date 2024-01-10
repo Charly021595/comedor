@@ -169,7 +169,7 @@
 		<?php } ?>
 		<?php if($_SESSION['RHComedor'] == '8999' || $_SESSION['RHComedor'] == '4857' || $_SESSION['RHComedor'] == '99999999'){ ?>
 		<li>
-			<a href="GraficasComedor.php">
+			<a href="view/comedor_semanal/GraficasComedor.php">
 			<img src="assets/img/microsoftteams_image__9__mR8_icon.ico"> <span>Graficas Comedor</span>
 			<span class="pull-right-container">
 			
@@ -194,7 +194,7 @@
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
-      <div class="row">
+      <div class="row form-group">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
@@ -237,10 +237,6 @@
 							<label for="lblNombreVisita" class="col-sm-3 col-form-label">Tipo de platillo:</label>
 							<div class="col-sm-8">
 								<select class="form-control" name="txtTipoPlatillo" id="txtTipoPlatillo" onchange="TipoPlatillo()">
-									<!--
-									<option value="1"> Platillo Caliente</option>
-									<option value="2"> Platillo Frío</option>
-									-->
 								</select>
 							</div>
 						</div>
@@ -416,6 +412,19 @@
                 </div>
             </div>
       </div>
+	  <div class="row form-group" id="avisos" style="display: none;">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">Avisos</div>
+				<div class="panel-body">
+					<div class="alert alert-info" role="alert" style="text-align: center;">
+						<h3>Tu pedido se esta preparando en estos momentos pasa por el dentro de 25 min.</h3> </br>
+						<h3>Gracias por esperar.</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>
       <!-- /.row -->
 	
 	 <!-- Modal -->

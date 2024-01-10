@@ -611,9 +611,9 @@ $("#txtNumEmpleadoLogeado").on('change',function(e){
 function CargarPedido(){
 	let fechaActualL = new Date();
 	let hora_actual = moment(fechaActualL).tz("America/Mexico_City").format('HH:mm:ss');
-	if ((hora_actual < hora_estatica_inicio || hora_actual > hora_estatica_fin)){
-		Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
-	}else{
+	// if ((hora_actual < hora_estatica_inicio || hora_actual > hora_estatica_fin)){
+	// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+	// }else{
 		$("#div_mostrar_tabla_pedido").hide();
 		$("#txtNumEmpleadoLogeado").val("");
 		$("#txtNombreEmpleadoLogeado").val("");
@@ -629,7 +629,7 @@ function CargarPedido(){
 			$("#txtTipoPlatillo").trigger("change").val(4);
 			TipoPlatillo();
 		}
-	}
+	// }
 }
 //Función que se utiliza para traer el listado de platillos disponibles
 function TipoPlatillo(){
@@ -641,12 +641,12 @@ function TipoPlatillo(){
 	$("#ListadoComidaGr").find("tr").remove();
 	 LimpiarCampos();
 	if(tipoplatillo !="4"){
-		if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
-			Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
-			$("#GuardarOrden").addClass("deshabilitar");
-			$('#GuardarOrden').attr("disabled", true);
-			return false;
-    	}
+		// if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
+		// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+		// 	$("#GuardarOrden").addClass("deshabilitar");
+		// 	$('#GuardarOrden').attr("disabled", true);
+		// 	return false;
+    	// }
 
 		$("#ComidaGR").css("display", "none");
 		$("#DivCantidad").css("display", "");
@@ -671,12 +671,12 @@ function TipoPlatillo(){
 		// $("#DivPrecio").css("display", "none");
 		$("#DivComentario").css("display", "none");
 		$("#txtNumPlatillo").val("0");
-		if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
-			Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
-			$("#GuardarOrden").addClass("deshabilitar");
-			$('#GuardarOrden').attr("disabled", true);
-			return false;
-    	}
+		// if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
+		// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+		// 	$("#GuardarOrden").addClass("deshabilitar");
+		// 	$('#GuardarOrden').attr("disabled", true);
+		// 	return false;
+    	// }
 		$.ajax({
             type: "POST",
             data: {
@@ -1242,12 +1242,12 @@ function GuardarOrden(){
 	//
 	arrayListadoGreenSpot = GuardarListadoGreenSpot();
 	CantidadArreglo = arrayListadoGreenSpot.length;
-	if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
-		Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
-		$("#GuardarOrden").addClass("deshabilitar");
-		$('#GuardarOrden').attr("disabled", true);
-		return false;
-	}
+	// if ((hora_actual < hora_estatica_inicio || hora_actual >  hora_estatica_fin)){
+	// 	Swal.fire('Los Pedidos de green spot estan cerrados', "","info");
+	// 	$("#GuardarOrden").addClass("deshabilitar");
+	// 	$('#GuardarOrden').attr("disabled", true);
+	// 	return false;
+	// }
 	//
 	if (NoEmpleadoLogeado == "") {
         Swal.fire('El número de empleado es requerido', "","info");
